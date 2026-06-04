@@ -39,7 +39,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .app-logo span{color:var(--accent)}
 .header-divider{width:1px;height:24px;background:var(--border);margin:0 4px}
 .header-tabs{display:flex;gap:4px}
-.tab-btn{padding:6px 14px;border-radius:var(--radius-sm);border:none;background:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:.15s}
+.tab-btn{width:130px;padding:6px 14px;border-radius:var(--radius-sm);border:none;background:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:.15s;white-space:nowrap;text-align:center;flex-shrink:0}
 .tab-btn:hover{background:var(--surface2);color:var(--text)}
 .tab-btn.active{background:var(--accent);color:#fff}
 .header-spacer{flex:1}
@@ -56,9 +56,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .sidebar.collapsed{width:48px;padding:12px 0;overflow-y:hidden}
 .sidebar.collapsed .sidebar-content{opacity:0;pointer-events:none;transition:opacity .1s}
 .sidebar-content{transition:opacity .2s .05s}
-.sidebar-toggle{position:absolute;top:12px;right:10px;width:26px;height:26px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text3);transition:.15s;z-index:10;flex-shrink:0}
+.sidebar-toggle{width:26px;height:26px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text3);transition:.15s;flex-shrink:0}
 .sidebar-toggle:hover{background:var(--surface2);color:var(--text);border-color:var(--border2)}
-.sidebar.collapsed .sidebar-toggle{right:50%;transform:translateX(50%);top:12px}
 .sidebar-collapsed-icons{display:none;flex-direction:column;align-items:center;gap:14px;padding-top:48px}
 .sidebar.collapsed .sidebar-collapsed-icons{display:flex}
 .collapsed-stat{display:flex;flex-direction:column;align-items:center;gap:2px}
@@ -71,7 +70,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .filter-select{padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;cursor:pointer}
 
 /* ─── WBS Table ─── */
-.wbs-container{flex:1;overflow:auto;padding:20px}
+.wbs-container{flex:1;overflow:auto;padding:0 20px 20px}
 .wbs-table{width:100%;border-collapse:separate;border-spacing:0;min-width:900px}
 .wbs-table th{background:var(--surface2);padding:9px 12px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:2px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:10}
 .wbs-table th:first-child{border-radius:var(--radius) 0 0 0}
@@ -152,8 +151,9 @@ td.td-cell{padding:8px 12px;white-space:nowrap}
 .today-line{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);z-index:10;pointer-events:none}
 
 /* ─── Detail Panel ─── */
-.detail-panel{position:fixed;right:0;top:56px;width:360px;height:calc(100vh - 56px);background:var(--surface);border-left:1px solid var(--border);box-shadow:var(--shadow-md);transform:translateX(100%);transition:.25s cubic-bezier(.4,0,.2,1);overflow-y:auto;z-index:200}
+.detail-panel{position:fixed;right:0;top:56px;width:320px;height:calc(100vh - 56px);background:var(--surface);border-left:1px solid var(--border);box-shadow:var(--shadow-md);transform:translateX(100%);transition:.25s cubic-bezier(.4,0,.2,1);overflow:hidden;z-index:200;display:flex;flex-direction:column}
 .detail-panel.open{transform:translateX(0)}
+.detail-panel .detail-body{flex:1;overflow-y:auto}
 .detail-header{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px}
 .detail-title-wrap{flex:1}
 .detail-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;line-height:1.3}
@@ -220,7 +220,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 .proj-edit-input{border:1px solid var(--accent);border-radius:3px;padding:2px 6px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;flex:1;min-width:0}
 
 /* ─── User switcher ─── */
-.user-btn{display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border:1px solid var(--border);border-radius:20px;background:var(--surface);cursor:pointer;transition:.15s;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text)}
+.user-btn{display:flex;align-items:center;padding:3px;border:1px solid var(--border);border-radius:50%;background:var(--surface);cursor:pointer;transition:.15s}
 .user-btn:hover{background:var(--surface2);border-color:var(--border2)}
 .user-btn .avatar-lg{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
 
@@ -278,7 +278,22 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 .drop-indicator.visible{display:block}
 .sort-toggle-btn.active{background:var(--warn-light)!important;border-color:var(--warn)!important;color:var(--warn)!important}
 
-/* ─── 参照モード / 編集モード ─── */
+/* ─── 起動時ストレージ選択画面 ─── */
+.startup-screen{position:fixed;inset:0;background:var(--bg);z-index:1200;display:flex;align-items:center;justify-content:center}
+.startup-card{background:var(--surface);border-radius:16px;box-shadow:var(--shadow-md);width:520px;max-width:95vw;padding:40px 36px}
+.startup-logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);margin-bottom:6px}
+.startup-logo span{color:var(--accent)}
+.startup-sub{font-size:13px;color:var(--text3);margin-bottom:28px}
+.startup-mode-btn{display:flex;align-items:center;gap:16px;padding:18px 20px;border:2px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:.15s;margin-bottom:12px;background:var(--surface);width:100%;text-align:left}
+.startup-mode-btn:hover{border-color:var(--accent);background:var(--accent-light);transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.1)}
+.startup-mode-btn.mode-ls:hover{border-color:var(--text2);background:var(--surface2)}
+.startup-mode-icon{font-size:32px;flex-shrink:0;line-height:1}
+.startup-mode-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
+.startup-mode-desc{font-size:12px;color:var(--text3);line-height:1.5}
+.startup-continue{margin-top:8px;padding:14px 20px;border:2px solid #6EE7B7;border-radius:var(--radius);background:#ECFDF5;cursor:pointer;transition:.15s;width:100%;text-align:left;display:flex;align-items:center;gap:12px}
+.startup-continue:hover{background:#D1FAE5;border-color:#34D399}
+.startup-divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--text3);font-size:12px}
+.startup-divider::before,.startup-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .readonly-banner{display:none;align-items:center;gap:8px;padding:4px 12px;background:#FFFBEB;border:1px solid #FCD34D;border-radius:var(--radius-sm);font-size:12px;font-weight:500;color:#92400E;white-space:nowrap}
 .readonly-banner.visible{display:flex}
 .checkin-btn{background:#059669!important;border-color:#059669!important;color:#fff!important}
@@ -293,7 +308,37 @@ body.readonly-mode .gantt-bar[data-action]{cursor:default!important;pointer-even
 body.readonly-mode .gantt-resize-handle{pointer-events:none}
 body.readonly-mode .add-child-btn,body.readonly-mode .add-sibling-btn{opacity:.2;pointer-events:none}
 body.readonly-mode #sort-toggle-btn{opacity:.4;pointer-events:none}
-body.readonly-mode .detail-actions button:not(.btn-primary+button):first-child{opacity:.4;pointer-events:none}
+body.readonly-mode .detail-actions button{opacity:.4;pointer-events:none}
+/* プロジェクト追加・削除ボタンもロック */
+body.readonly-mode #new-project-btn,
+body.readonly-mode #new-project-btn-sidebar{opacity:.4;pointer-events:none}
+body.readonly-mode .proj-delete-btn{opacity:.2;pointer-events:none}
+/* 詳細パネルの入力フィールドをすべてロック */
+body.readonly-mode .detail-field input,
+body.readonly-mode .detail-field select,
+body.readonly-mode .detail-field textarea{
+  pointer-events:none;
+  background:var(--surface2)!important;
+  color:var(--text3)!important;
+  cursor:not-allowed;
+  border-color:var(--border)!important;
+  box-shadow:none!important;
+}
+body.readonly-mode .detail-field input[type=range]{opacity:.4}
+/* 詳細パネル上部に参照モードバナーを表示 */
+body.readonly-mode #detail-readonly-notice{display:flex!important}
+#detail-readonly-notice{
+  display:none;
+  align-items:center;
+  gap:8px;
+  padding:8px 16px;
+  background:#FFFBEB;
+  border-bottom:1px solid #FCD34D;
+  font-size:12px;
+  color:#92400E;
+  font-weight:500;
+  flex-shrink:0;
+}
 
 /* ─── Storage mode indicator ─── */
 .storage-indicator{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface2);cursor:pointer;transition:.15s;white-space:nowrap}
@@ -347,32 +392,9 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
 <header class="app-header">
   <div class="app-logo">WBS<span>Manager</span></div>
   <div class="header-divider"></div>
-  <!-- Project selector -->
-  <div class="proj-selector" title="プロジェクトを切り替え">
-    <div class="proj-color-dot" id="header-proj-dot" style="background:#2563EB"></div>
-    <select id="header-proj-select" onchange="switchProject(this.value)"></select>
-  </div>
-  <button class="btn btn-sm" onclick="openNewProjectModal()" title="新規プロジェクト作成" style="padding:5px 8px">
-    <svg class="icon-svg" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-  </button>
-  <div class="header-divider"></div>
   <div class="header-tabs">
     <button class="tab-btn active" onclick="switchTab('list')">📋 リスト</button>
     <button class="tab-btn" onclick="switchTab('gantt')">📊 ガントチャート</button>
-    <button class="tab-btn" id="lightning-btn"
-      onclick="toggleLightningLine()"
-      title="イナズマ線を表示"
-      style="display:none;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text3);padding:5px 10px;font-size:12px">
-      ⚡ イナズマ線
-    </button>
-    <!-- スケール切替 -->
-    <div id="gantt-scale-btns" style="display:none;margin-left:4px;display:none;gap:2px">
-      <button class="tab-btn gantt-scale-btn" data-scale="day"     onclick="setGanttScale('day')"     style="padding:5px 8px;font-size:11px">日</button>
-      <button class="tab-btn gantt-scale-btn" data-scale="week"    onclick="setGanttScale('week')"    style="padding:5px 8px;font-size:11px">週</button>
-      <button class="tab-btn gantt-scale-btn" data-scale="month"   onclick="setGanttScale('month')"   style="padding:5px 8px;font-size:11px">月</button>
-      <button class="tab-btn gantt-scale-btn" data-scale="quarter" onclick="setGanttScale('quarter')" style="padding:5px 8px;font-size:11px">四半期</button>
-      <button class="tab-btn gantt-scale-btn" data-scale="year"    onclick="setGanttScale('year')"    style="padding:5px 8px;font-size:11px">年</button>
-    </div>
   </div>
   <div class="header-spacer"></div>
   <!-- 参照モードバナー（CSVモード時のみ表示） -->
@@ -383,19 +405,19 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
   <!-- 編集開始/完了ボタン（CSVモード時のみ表示） -->
   <button class="btn btn-sm checkin-btn" id="checkin-btn" style="display:none" onclick="checkin()">✏️ 編集開始</button>
   <button class="btn btn-sm checkout-btn" id="checkout-btn" style="display:none" onclick="checkout()">✅ 編集完了</button>
-  <!-- Storage indicator -->
-  <div class="storage-indicator mode-ls" id="storage-indicator" onclick="openStorageModal()" title="ストレージ設定">
+  <!-- Storage indicator：接続中はフォルダ名表示のみ、未接続時のみクリック可 -->
+  <div class="storage-indicator mode-ls" id="storage-indicator" title="ストレージ設定">
     <div class="storage-dot" id="storage-dot" style="background:var(--text3)"></div>
     <span id="storage-label">💾 ローカル</span>
   </div>
   <div class="header-actions">
-    <button class="btn btn-sm" onclick="exportCSV()">
-      <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      エクスポート
+    <!-- エクスポート：上向き矢印 -->
+    <button class="btn btn-sm" onclick="exportCSV()" title="CSVエクスポート" style="padding:6px 10px">
+      <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
     </button>
-    <button class="btn btn-sm" onclick="triggerImport()">
-      <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      インポート
+    <!-- インポート：下向き矢印 -->
+    <button class="btn btn-sm" onclick="triggerImport()" title="CSVインポート" style="padding:6px 10px">
+      <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 16 12 21 17 16"/><line x1="12" y1="21" x2="12" y2="9"/></svg>
     </button>
     <input type="file" id="import-file-input" accept=".csv" style="display:none" onchange="importCSV(event)">
     <button class="btn btn-sm" onclick="openHelpModal()" title="操作マニュアル">
@@ -406,11 +428,9 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       タスク追加
     </button>
     <div class="header-divider"></div>
-    <!-- User switcher button -->
-    <button class="user-btn" id="user-btn" onclick="toggleUserPanel()">
+    <!-- User switcher button：アイコンのみ（名前なし） -->
+    <button class="user-btn" id="user-btn" onclick="toggleUserPanel()" title="ユーザー切替">
       <div class="avatar-lg" id="header-user-avatar" style="background:#9B9890">?</div>
-      <span id="header-user-name">ゲスト</span>
-      <span style="color:var(--text3);font-size:10px;margin-left:2px">▾</span>
     </button>
   </div>
 </header>
@@ -418,10 +438,9 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
 <div class="app-body">
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
-    <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" title="サイドバーを折りたたむ">◀</button>
-
     <!-- Collapsed mini-view -->
     <div class="sidebar-collapsed-icons">
+      <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" title="サイドバーを展開">▶</button>
       <div class="collapsed-stat" title="総タスク数">
         <div class="collapsed-stat-num" id="stat-total-mini">0</div>
         <div class="collapsed-stat-dot" style="background:var(--text3)"></div>
@@ -442,9 +461,12 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <div class="sidebar-section" style="margin-top:4px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
           <div class="sidebar-label" style="margin-bottom:0">プロジェクト</div>
-          <button class="btn btn-sm" onclick="openNewProjectModal()" style="padding:3px 8px;font-size:11px;gap:4px">
-            <svg class="icon-svg" viewBox="0 0 24 24" style="width:11px;height:11px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>新規
-          </button>
+          <div style="display:flex;align-items:center;gap:6px">
+            <button id="new-project-btn-sidebar" class="btn btn-sm" onclick="openNewProjectModal()" style="padding:3px 8px;font-size:11px;gap:4px">
+              <svg class="icon-svg" viewBox="0 0 24 24" style="width:11px;height:11px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>新規
+            </button>
+            <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" title="サイドバーを折りたたむ">◀</button>
+          </div>
         </div>
         <div id="sidebar-proj-list"></div>
       </div>
@@ -504,6 +526,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       </div>
       <select class="filter-select" id="filter-status" onchange="renderAll()">
         <option value="">全ステータス</option>
+        <option value="not-done">完了以外</option>
         <option value="todo">未着手</option>
         <option value="doing">進行中</option>
         <option value="done">完了</option>
@@ -517,6 +540,11 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <button class="btn btn-sm sort-toggle-btn" id="sort-toggle-btn" onclick="toggleSortMode()" title="並替モードのON/OFF">
         ⠿ 並替モード
       </button>
+      <!-- 非表示タスク表示切替 -->
+      <label id="show-hidden-label" style="display:none;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer;user-select:none">
+        <input type="checkbox" id="show-hidden-check" onchange="renderAll()" style="width:14px;height:14px;cursor:pointer">
+        <span>🚫 非表示タスクを表示（<span id="show-hidden-count">0</span>件）</span>
+      </label>
       <div id="sort-mode-hint" style="display:none;align-items:center;gap:6px;font-size:11px;color:var(--warn);background:var(--warn-light);border:1px solid var(--warn);border-radius:var(--radius-sm);padding:4px 10px">
         <span>⠿</span>
         <span>並替モードON：左端の <b>⠿</b> をドラッグして順序を変更。上下25%で同列、中央25%で子になります。</span>
@@ -549,67 +577,122 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
 
     <!-- Gantt View -->
     <div id="gantt-view" class="gantt-wrapper" style="display:none">
-      <div id="gantt-inner"></div>
+      <!-- ガントツールバー（スケール選択・イナズマ線） -->
+      <div id="gantt-toolbar" style="display:flex;align-items:center;gap:8px;padding:0 0 12px 0;flex-shrink:0;flex-wrap:wrap">
+        <!-- スケール選択 -->
+        <div style="display:flex;gap:2px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px">
+          <button class="gantt-scale-btn" data-scale="day"     onclick="setGanttScale('day')"     style="padding:5px 14px;font-size:12px;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;background:none;color:var(--text3);transition:.15s">日</button>
+          <button class="gantt-scale-btn" data-scale="week"    onclick="setGanttScale('week')"    style="padding:5px 14px;font-size:12px;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;background:none;color:var(--text3);transition:.15s">週</button>
+          <button class="gantt-scale-btn" data-scale="month"   onclick="setGanttScale('month')"   style="padding:5px 14px;font-size:12px;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;background:none;color:var(--text3);transition:.15s">月</button>
+          <button class="gantt-scale-btn" data-scale="quarter" onclick="setGanttScale('quarter')" style="padding:5px 14px;font-size:12px;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;background:none;color:var(--text3);transition:.15s">四半期</button>
+          <button class="gantt-scale-btn" data-scale="year"    onclick="setGanttScale('year')"    style="padding:5px 14px;font-size:12px;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;background:none;color:var(--text3);transition:.15s">年</button>
+        </div>
+        <!-- イナズマ線トグル -->
+        <button id="lightning-btn"
+          onclick="toggleLightningLine()"
+          title="イナズマ線を表示/非表示"
+          style="display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text3);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:.15s;white-space:nowrap">
+          ⚡ イナズマ線
+        </button>
+      </div>
+      <div id="gantt-inner" style="flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden"></div>
     </div>
   </div>
 </div>
 
 <!-- Detail Panel -->
 <div class="detail-panel" id="detail-panel">
-  <div class="detail-header">
-    <div class="detail-title-wrap">
-      <div class="detail-title" id="dp-title">-</div>
-      <div class="detail-wbs-id" id="dp-id">-</div>
-    </div>
-    <button class="detail-close" onclick="closeDetail()">✕</button>
+  <div id="detail-readonly-notice">
+    👁 参照モード — 編集するには「✏️ 編集開始」を押してください
   </div>
-  <div class="detail-body">
-    <div class="detail-section">
-      <div class="detail-section-label">基本情報</div>
-      <div class="detail-field"><label>種別</label>
-        <select id="dp-type" onchange="dpUpdate('type',this.value)">
+  <!-- ヘッダー -->
+  <div class="detail-header" style="padding:10px 14px 8px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px">
+    <div style="flex:1;min-width:0">
+      <div class="detail-title" id="dp-title" style="font-size:14px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">-</div>
+      <div class="detail-wbs-id" id="dp-id" style="font-size:11px;color:var(--text3);margin-top:1px">-</div>
+    </div>
+    <button class="detail-close" onclick="closeDetail()" style="flex-shrink:0">✕</button>
+  </div>
+  <!-- ボディ：コンパクトグリッドレイアウト -->
+  <div class="detail-body" style="padding:10px 14px;display:flex;flex-direction:column;gap:8px;overflow-y:auto">
+
+    <!-- 種別・ステータス 横並び -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="detail-field" style="margin:0">
+        <label style="font-size:10px">種別</label>
+        <select id="dp-type" onchange="dpUpdate('type',this.value)" style="padding:5px 8px;font-size:12px">
           <option value="task">📄 タスク</option>
-          <option value="folder">📁 フォルダ（グループ）</option>
+          <option value="folder">📁 フォルダ</option>
         </select>
       </div>
-      <div class="detail-field"><label>タスク名</label><input id="dp-name" type="text" oninput="dpUpdate('name',this.value)"></div>
-      <div class="detail-field"><label>成果物定義</label><textarea id="dp-deliverable" oninput="dpUpdate('deliverable',this.value)"></textarea></div>
-      <div class="detail-field"><label>備考</label><textarea id="dp-note" oninput="dpUpdate('note',this.value)"></textarea></div>
-    </div>
-    <div class="detail-section">
-      <div class="detail-section-label">スケジュール</div>
-      <div class="detail-field"><label>開始日</label><input id="dp-start" type="date" oninput="dpUpdate('start',this.value)"></div>
-      <div class="detail-field"><label>終了日</label><input id="dp-end" type="date" oninput="dpUpdate('end',this.value)"></div>
-      <div class="detail-field">
-        <label>担当者</label>
-        <select id="dp-assignee-select" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--surface);outline:none;margin-bottom:6px" onchange="onAssigneeSelectChange('dp')">
-          <option value="">（未割当）</option>
-        </select>
-        <input id="dp-assignee" type="text" list="dp-assignee-list" autocomplete="off" placeholder="または直接入力" oninput="onAssigneeInputChange('dp');dpUpdate('assignee',this.value)">
-        <datalist id="dp-assignee-list"></datalist>
-        <div style="font-size:10px;color:var(--text3);margin-top:3px">ユーザー一覧から選択 または 直接入力</div>
-      </div>
-    </div>
-    <div class="detail-section">
-      <div class="detail-section-label">ステータス・進捗</div>
-      <div class="detail-field"><label>ステータス</label>
-        <select id="dp-status" onchange="dpUpdate('status',this.value)">
+      <div class="detail-field" style="margin:0">
+        <label style="font-size:10px">ステータス</label>
+        <select id="dp-status" onchange="dpUpdate('status',this.value)" style="padding:5px 8px;font-size:12px">
           <option value="todo">未着手</option>
           <option value="doing">進行中</option>
           <option value="done">完了</option>
           <option value="block">ブロック中</option>
         </select>
       </div>
-      <div class="detail-field"><label>進捗率: <span id="dp-prog-val">0</span>%</label>
-        <input id="dp-progress" type="range" min="0" max="100" step="5" oninput="document.getElementById('dp-prog-val').textContent=this.value;dpUpdate('progress',parseInt(this.value))">
+    </div>
+
+    <!-- タスク名 -->
+    <div class="detail-field" style="margin:0">
+      <label style="font-size:10px">タスク名</label>
+      <input id="dp-name" type="text" oninput="dpUpdate('name',this.value)" style="padding:5px 8px;font-size:13px">
+    </div>
+
+    <!-- 開始日・終了日 横並び -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="detail-field" style="margin:0">
+        <label style="font-size:10px">開始日</label>
+        <input id="dp-start" type="date" oninput="dpUpdate('start',this.value)" style="padding:5px 8px;font-size:12px">
+      </div>
+      <div class="detail-field" style="margin:0">
+        <label style="font-size:10px">終了日</label>
+        <input id="dp-end" type="date" oninput="dpUpdate('end',this.value)" style="padding:5px 8px;font-size:12px">
       </div>
     </div>
-    <div class="detail-section">
-      <div class="detail-section-label">依存関係</div>
-      <div class="detail-field"><label>前タスクNo (カンマ区切り)</label><input id="dp-deps" type="text" placeholder="例: 1.1, 1.2" oninput="dpUpdateDeps(this.value)"></div>
+
+    <!-- 担当者（1つの入力欄：登録ユーザーがドロップダウン候補に出る） -->
+    <div class="detail-field" style="margin:0">
+      <label style="font-size:10px">担当者</label>
+      <input id="dp-assignee" type="text" list="dp-assignee-list" autocomplete="off"
+        placeholder="名前を入力または選択"
+        oninput="onAssigneeInputChange('dp');dpUpdate('assignee',this.value)"
+        style="padding:5px 8px;font-size:12px">
+      <datalist id="dp-assignee-list"></datalist>
     </div>
+
+    <!-- 進捗率 -->
+    <div class="detail-field" style="margin:0">
+      <label style="font-size:10px;display:flex;justify-content:space-between">
+        <span>進捗率</span><span id="dp-prog-val" style="font-weight:700;color:var(--accent)">0</span><span>%</span>
+      </label>
+      <input id="dp-progress" type="range" min="0" max="100" step="5" oninput="document.getElementById('dp-prog-val').textContent=this.value;dpUpdate('progress',parseInt(this.value))" style="width:100%;margin-top:4px">
+    </div>
+
+    <!-- 成果物定義 -->
+    <div class="detail-field" style="margin:0">
+      <label style="font-size:10px">成果物定義</label>
+      <textarea id="dp-deliverable" oninput="dpUpdate('deliverable',this.value)" style="height:52px;font-size:12px;resize:vertical;padding:5px 8px"></textarea>
+    </div>
+
+    <!-- 備考 -->
+    <div class="detail-field" style="margin:0">
+      <label style="font-size:10px">備考</label>
+      <textarea id="dp-note" oninput="dpUpdate('note',this.value)" style="height:44px;font-size:12px;resize:vertical;padding:5px 8px"></textarea>
+    </div>
+
+    <!-- 依存関係 -->
+    <div class="detail-field" style="margin:0">
+      <label style="font-size:10px">前タスクNo（カンマ区切り）</label>
+      <input id="dp-deps" type="text" placeholder="例: 1.1, 1.2" oninput="dpUpdateDeps(this.value)" style="padding:5px 8px;font-size:12px">
+    </div>
+
   </div>
-  <div class="detail-actions">
+  <!-- アクション -->
+  <div class="detail-actions" style="padding:8px 14px;border-top:1px solid var(--border)">
     <button class="btn btn-sm" style="color:var(--danger)" onclick="deleteSelectedTask()">🗑 削除</button>
     <div style="flex:1"></div>
     <button class="btn btn-sm btn-primary" onclick="closeDetail()">閉じる</button>
@@ -648,14 +731,10 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       </div>
       <div class="form-field">
         <label>担当者</label>
-        <div style="display:flex;gap:8px;align-items:center">
-          <select id="m-assignee-select" style="flex:1;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--surface);outline:none" onchange="onAssigneeSelectChange('m')">
-            <option value="">（未割当）</option>
-          </select>
-          <input id="m-assignee" type="text" placeholder="または直接入力" list="m-assignee-list" autocomplete="off" style="flex:1;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--surface);outline:none" oninput="onAssigneeInputChange('m')">
-          <datalist id="m-assignee-list"></datalist>
-        </div>
-        <div style="font-size:10px;color:var(--text3);margin-top:3px">ユーザー一覧から選択 または 直接入力</div>
+        <input id="m-assignee" type="text" placeholder="名前を入力または選択" list="m-assignee-list" autocomplete="off"
+          style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--surface);outline:none;box-sizing:border-box"
+          oninput="onAssigneeInputChange('m')">
+        <datalist id="m-assignee-list"></datalist>
       </div>
       <div class="form-field"><label>開始日</label><input id="m-start" type="date"></div>
       <div class="form-field"><label>終了日</label><input id="m-end" type="date"></div>
@@ -736,31 +815,82 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
   </div>
 </div>
 
-<!-- ═══ Login screen ═══ -->
-<div class="login-screen" id="login-screen">
-  <div class="login-card">
-    <div class="login-logo">WBS<span>Manager</span></div>
-    <!-- CSV再接続バナー（CSVモード時のみ表示） -->
-    <div id="login-csv-banner" style="display:none;margin-bottom:20px;padding:12px 14px;background:#ECFDF5;border:1px solid #6EE7B7;border-radius:var(--radius);font-size:12px;color:#065F46">
-      <div style="font-weight:600;margin-bottom:6px">☁️ OneDriveモードが有効です</div>
-      <div id="login-csv-desc" style="color:#047857;margin-bottom:10px">前回使用したフォルダに再接続してデータを読み込みます。</div>
-      <!-- ワンクリック再接続ボタン（IDBにハンドルがある場合） -->
-      <button id="login-quick-reconnect-btn" class="btn btn-sm" onclick="quickReconnect()" style="display:none;background:#059669;color:#fff;border-color:#059669;width:100%;justify-content:center;margin-bottom:6px">
-        ⚡ ワンクリックで再接続（前回のフォルダ）
+<!-- ═══ 起動ウィザード ═══ -->
+<div class="startup-screen" id="startup-screen" style="display:none">
+  <div class="startup-card">
+    <div class="startup-logo">WBS<span>Manager</span></div>
+    <div class="startup-sub" id="startup-sub">データの保存先を選択してください</div>
+
+    <!-- ── Step 1：ストレージ選択（通常はここで完結） ── -->
+    <div id="startup-step1">
+      <!-- 前回の選択が記憶されている場合：続行ボタン -->
+      <div id="startup-continue-section" style="display:none">
+        <button class="startup-continue" onclick="startupContinue()">
+          <span id="startup-continue-icon" style="font-size:24px">💾</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--text)" id="startup-continue-title">前回と同じ設定で続行</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:2px" id="startup-continue-desc">ローカルストレージで続行します</div>
+          </div>
+          <svg style="margin-left:auto;flex-shrink:0" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <div class="startup-divider">または別の設定で開始</div>
+      </div>
+
+      <!-- 💾 ローカルストレージ -->
+      <button class="startup-mode-btn mode-ls" onclick="startupSelectMode('localStorage')">
+        <div class="startup-mode-icon">💾</div>
+        <div>
+          <div class="startup-mode-title">ローカルストレージ</div>
+          <div class="startup-mode-desc">このPC・このブラウザ内にデータを保存します。<br>設定不要ですぐ使えます。他のPCとは共有できません。</div>
+        </div>
       </button>
-      <!-- 通常の再選択ボタン -->
-      <button class="btn btn-sm" onclick="reconnectCsvAndLogin()" style="background:#047857;color:#fff;border-color:#047857;width:100%;justify-content:center">
-        📂 フォルダを選択して接続
+
+      <!-- ☁️ OneDrive（フォルダ未記憶時：フォルダ選択へ） -->
+      <button class="startup-mode-btn" id="startup-onedrive-btn" onclick="startupSelectMode('csvFile')">
+        <div class="startup-mode-icon">☁️</div>
+        <div>
+          <div class="startup-mode-title">OneDrive（チーム共有）</div>
+          <div class="startup-mode-desc" id="startup-onedrive-btn-desc">OneDrive / SharePoint同期フォルダに保存します。<br>チームメンバーとリアルタイムに近い形でデータを共有できます。<br><span style="color:var(--accent);font-weight:600">※ Chrome / Edge のみ対応</span></div>
+        </div>
       </button>
-      <div style="margin-top:8px;font-size:11px;color:#6EE7B7;text-align:center">または下のユーザーを選択してlocalStorageのデータで続行</div>
+
+      <!-- ⚡ OneDriveワンクリック再接続（前回フォルダあり時のみ表示） -->
+      <div id="startup-quick-section" style="display:none;margin-top:8px">
+        <button class="startup-continue" style="border-color:#6EE7B7;background:#ECFDF5" onclick="startupQuickReconnect()">
+          <span style="font-size:24px">⚡</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#065F46" id="startup-quick-title">ワンクリックで再接続</div>
+            <div style="font-size:12px;color:#047857;margin-top:2px" id="startup-quick-desc">前回のフォルダに接続します</div>
+          </div>
+          <svg style="margin-left:auto;flex-shrink:0" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <!-- 接続中ステータス -->
+      <div id="startup-connecting" style="display:none;text-align:center;padding:16px;font-size:13px;color:var(--text3)">
+        接続中...
+      </div>
     </div>
-    <div class="login-sub">ログインするユーザーを選択してください</div>
-    <div class="login-user-grid" id="login-user-grid"></div>
-    <button class="btn" style="width:100%;justify-content:center" onclick="openAddUserModal(true)">
-      <svg class="icon-svg" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      新しいユーザーを追加してログイン
-    </button>
+
+    <!-- ── Step 2：ユーザー選択（前回ユーザーなし時のみ表示） ── -->
+    <div id="startup-step2" style="display:none">
+      <div id="startup-mode-badge" style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:16px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)"></div>
+      <div class="login-sub">ログインするユーザーを選択してください</div>
+      <div class="login-user-grid" id="startup-user-grid"></div>
+      <button class="btn" style="width:100%;justify-content:center;margin-top:8px" onclick="startupAddUser()">
+        <svg class="icon-svg" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        新しいユーザーを追加してログイン
+      </button>
+      <button class="btn btn-sm" onclick="startupBackToStep1()" style="width:100%;justify-content:center;margin-top:12px;color:var(--text3)">
+        ← ストレージ選択に戻る
+      </button>
+    </div>
   </div>
+</div>
+
+<!-- ═══ Login screen（後方互換のため残す） ═══ -->
+<div id="login-screen" style="display:none">
+  <div id="login-user-grid"></div>
 </div>
 
 <!-- ═══ Storage settings modal ═══ -->
@@ -838,11 +968,10 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <h2>📋 事前準備</h2>
 
       <h3>推奨ブラウザ</h3>
-      <p>WBS ManagerはChrome または Edge での利用を推奨します。OneDrive連携（File System Access API）はSafariでは動作しません。</p>
+      <p>Chrome または Edge での利用を推奨します。OneDrive連携（File System Access API）はSafariやFirefoxでは動作しません。</p>
 
-      <h3>OneDrive共有を使う場合の事前準備</h3>
-      <p>複数人でプロジェクトデータを共有するには、SharePointのフォルダをOneDriveにショートカット追加する方法が最も簡単です。</p>
-
+      <h3>SharePointフォルダをOneDriveに同期する</h3>
+      <p>複数人でデータを共有するには、SharePointのフォルダをOneDriveにショートカット追加します。</p>
       <div class="help-step">
         <div class="help-step-num">1</div>
         <div class="help-step-body">
@@ -853,54 +982,53 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <div class="help-step">
         <div class="help-step-num">2</div>
         <div class="help-step-body">
-          <b>ドキュメントライブラリのフォルダを選択する</b>
-          <p>左メニューの「ドキュメント」または任意のライブラリを開き、WBSデータを置きたいフォルダに移動します。新しいフォルダを作成する場合は「＋ 新規」→「フォルダー」から作成します（例：<code>WBSData</code>）。</p>
+          <b>WBSデータ用フォルダを用意する</b>
+          <p>ドキュメントライブラリでWBSデータを置くフォルダに移動します。新規作成する場合は「＋ 新規」→「フォルダー」から作成します（例：<code>WBSData</code>）。</p>
         </div>
       </div>
       <div class="help-step">
         <div class="help-step-num">3</div>
         <div class="help-step-body">
           <b>「OneDriveへのショートカットを追加」をクリック</b>
-          <p>フォルダを右クリック → 「OneDriveへのショートカットを追加」を選択します。または上部メニューの「☁ OneDriveへのショートカットを追加」ボタンをクリックします。</p>
+          <p>フォルダを右クリック → 「OneDriveへのショートカットを追加」を選択します。</p>
         </div>
       </div>
       <div class="help-step">
         <div class="help-step-num">4</div>
         <div class="help-step-body">
           <b>OneDriveデスクトップアプリで同期を確認する</b>
-          <p>タスクバーのOneDriveアイコン（雲マーク）をクリックし、同期が完了しているか確認します。エクスプローラーを開き、OneDriveフォルダ内にSharePointのフォルダが表示されれば成功です。</p>
+          <p>タスクバーのOneDriveアイコン（雲マーク）をクリックし、同期完了を確認します。エクスプローラーでOneDriveフォルダ内にSharePointのフォルダが表示されれば成功です。</p>
         </div>
       </div>
       <div class="help-step">
         <div class="help-step-num">5</div>
         <div class="help-step-body">
           <b>チームメンバー全員が同じ手順を実施する</b>
-          <p>共有したいメンバー全員がSharePointフォルダへのアクセス権限を持ち、同じ手順でOneDriveにショートカットを追加します。これにより全員のPCに同じフォルダが同期されます。</p>
+          <p>共有したいメンバー全員が同じ手順でOneDriveにショートカットを追加することで、全員のPCに同じフォルダが同期されます。</p>
         </div>
       </div>
+      <div class="help-note">💡 OneDriveデスクトップアプリがインストールされていない場合は、Microsoft公式サイトからダウンロードし、会社のMicrosoft 365アカウントでサインインしてください。</div>
 
-      <div class="help-note">💡 OneDriveデスクトップアプリがインストールされていない場合は、Microsoft公式サイトからダウンロードしてサインインしてください。会社のMicrosoft 365アカウントでサインインします。</div>
-
-      <h3>WBS Managerのセットアップ</h3>
+      <h3>WBS Manager 初回セットアップ</h3>
       <div class="help-step">
         <div class="help-step-num">1</div>
         <div class="help-step-body">
           <b>HTMLファイルをデスクトップに保存する</b>
-          <p><code>wbs-tool.html</code> をデスクトップまたは任意のフォルダに保存し、Chrome または Edge でダブルクリックして開きます。</p>
+          <p><code>wbs-tool.html</code> をデスクトップに保存し、Chrome または Edge でダブルクリックして開きます。</p>
         </div>
       </div>
       <div class="help-step">
         <div class="help-step-num">2</div>
         <div class="help-step-body">
-          <b>ユーザー登録を行う</b>
-          <p>初回起動時はサンプルユーザーで自動ログインされます。右上のユーザーアイコン → 「管理」からメンバー全員のユーザーを登録しておくと便利です。</p>
+          <b>起動ウィザードでストレージを選択する</b>
+          <p>起動時に表示されるウィザードで「☁️ OneDrive（チーム共有）」を選択すると、フォルダ選択ダイアログが開きます。手順4で同期したフォルダを指定してください。</p>
         </div>
       </div>
       <div class="help-step">
         <div class="help-step-num">3</div>
         <div class="help-step-body">
-          <b>ストレージをOneDriveに切り替える</b>
-          <p>ヘッダーの「💾 ローカル」→「☁️ OneDrive（フォルダ指定）」を選択 → 「📂 OneDriveフォルダを選択」で手順4で同期したフォルダを指定します。</p>
+          <b>ユーザーを選択してログインする</b>
+          <p>ユーザー選択画面が表示されます（前回ログインしたユーザーがある場合は自動ログインされます）。ユーザーが未登録の場合は「新しいユーザーを追加してログイン」から登録してください。</p>
         </div>
       </div>
     </div>
@@ -913,32 +1041,44 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <table class="help-table">
         <tr><th>操作</th><th>方法</th></tr>
         <tr><td>最上位タスクを追加</td><td>ヘッダーの「＋ タスク追加」ボタン</td></tr>
-        <tr><td>同じ階層に追加</td><td>行の「＋同列」ボタン</td></tr>
-        <tr><td>子タスクを追加</td><td>行の「＋子」ボタン（青色）</td></tr>
-        <tr><td>コンテキストメニュー</td><td>行を右クリック</td></tr>
+        <tr><td>同じ階層に追加</td><td>行左端の同列アイコン（＋横線）</td></tr>
+        <tr><td>子タスクを追加</td><td>行左端の子追加アイコン（青・インデント矢印）</td></tr>
+        <tr><td>右クリックメニュー</td><td>行を右クリック → 同階層追加 / 子追加 / 削除</td></tr>
       </table>
+      <div class="help-note">💡 子タスクを追加すると、親タスクの開始日・終了日が自動的に継承されます（設定されている場合）。</div>
 
       <h3>フォルダとタスクの違い</h3>
       <ul>
-        <li><b>📁 フォルダ</b>：グループ（フェーズ）を表します。進捗率は子タスクから自動計算されます。</li>
+        <li><b>📁 フォルダ</b>：フェーズやグループを表します。進捗率は子タスクの期間加重平均で自動計算されます。</li>
         <li><b>📄 タスク</b>：実際の作業単位です。進捗率を手動で入力します。</li>
       </ul>
-      <p>タスク追加モーダルの「種別」で選択できます。後から詳細パネルで変更も可能です。</p>
+
+      <h3>タスクの非表示</h3>
+      <p>行左端の👁アイコンをクリックするとタスクを非表示にできます（データは保持されます）。非表示タスクがある場合、ツールバーに「🚫 非表示タスクを表示（N件）」チェックボックスが表示されます。チェックを入れると半透明で一覧表示され、再度👁アイコンで個別に再表示できます。</p>
 
       <h3>並び替え</h3>
-      <p>ツールバーの「⠿ 並替モード」をONにすると、行左端の <b>⠿</b> ハンドルをドラッグして順序を変更できます。ターゲット行の上25%にドロップすると同列の上に、下25%では同列の下に、中央50%では子として挿入されます。</p>
-
-      <h3>依存関係の設定</h3>
+      <p>ツールバーの「⠿ 並替モード」をONにすると、行左端の ⠿ ハンドルをドラッグして順序を変更できます。</p>
       <ul>
-        <li>リストビューで行をドラッグ → 別の行にドロップ（並替モードOFF時）</li>
-        <li>詳細パネルの「前タスクNo」に番号をカンマ区切りで入力</li>
-        <li>同じ依存をもう一度ドロップすると削除できます</li>
+        <li>ドロップ位置の上25%：同列の上に挿入</li>
+        <li>ドロップ位置の下25%：同列の下に挿入</li>
+        <li>ドロップ位置の中央50%：子として挿入</li>
       </ul>
+
+      <h3>タスク詳細の編集</h3>
+      <p>行をクリックすると右側に詳細パネルが開きます。種別・タスク名・開始日/終了日（横並び）・担当者・ステータス・進捗率・成果物・備考・依存関係を編集できます。担当者は登録ユーザーが候補として表示される1つの入力欄で、自由入力も可能です。</p>
+
+      <h3>ステータスフィルタ</h3>
+      <table class="help-table">
+        <tr><th>選択肢</th><th>表示対象</th></tr>
+        <tr><td>全ステータス</td><td>すべてのタスク</td></tr>
+        <tr><td>完了以外</td><td>未着手・進行中・ブロック中</td></tr>
+        <tr><td>未着手 / 進行中 / 完了 / ブロック中</td><td>個別ステータスで絞り込み</td></tr>
+      </table>
 
       <h3>CSV インポート / エクスポート</h3>
       <ul>
-        <li><b>エクスポート</b>：「エクスポート」ボタンでCSVを保存。内部ID・No・依存関係（ID/No両方）が含まれます。</li>
-        <li><b>インポート</b>：「インポート」ボタンでCSVを選択。内部IDがあればアップサート（部分更新）または上書きを選択できます。</li>
+        <li><b>エクスポート（↑アイコン）</b>：内部ID・No・依存関係（ID/No両方）・親IDを含むCSVを保存</li>
+        <li><b>インポート（↓アイコン）</b>：内部ID列があればアップサート（部分更新）または上書きを選択可能。旧フォーマット（ID列なし）は全体上書き</li>
       </ul>
     </div>
 
@@ -947,15 +1087,19 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <h2>📊 ガントチャート</h2>
 
       <h3>表示スケールの切替</h3>
+      <p>ガントチャートビュー内のサブバーでスケールを切り替えます。切り替えるたびに Today が画面中央に自動スクロールされます。</p>
       <table class="help-table">
-        <tr><th>ボタン</th><th>単位</th><th>用途</th></tr>
-        <tr><td>日</td><td>1日単位</td><td>直近の詳細スケジュール確認</td></tr>
-        <tr><td>週</td><td>1週単位</td><td>月次の進捗管理</td></tr>
-        <tr><td>月</td><td>1ヶ月単位</td><td>フェーズ全体の把握</td></tr>
-        <tr><td>四半期</td><td>3ヶ月単位</td><td>年間計画の確認</td></tr>
-        <tr><td>年</td><td>1年単位</td><td>複数年プロジェクトの俯瞰</td></tr>
+        <tr><th>スケール</th><th>1列の幅</th><th>用途</th></tr>
+        <tr><td>日</td><td>1日</td><td>直近の詳細スケジュール確認</td></tr>
+        <tr><td>週</td><td>7日（月曜始まり）</td><td>月次の進捗管理</td></tr>
+        <tr><td>月</td><td>1ヶ月</td><td>フェーズ全体の把握</td></tr>
+        <tr><td>四半期</td><td>3ヶ月（<b>4月始まり年度</b>）</td><td>年度計画の確認</td></tr>
+        <tr><td>年</td><td>1年</td><td>複数年プロジェクトの俯瞰</td></tr>
       </table>
-      <p>ガントチャートを開くと自動的にTodayが画面中央に表示されます。</p>
+      <div class="help-note">💡 四半期はQ1=4〜6月、Q2=7〜9月、Q3=10〜12月、Q4=翌年1〜3月（4月始まり年度）です。</div>
+
+      <h3>タスク選択時のスクロール</h3>
+      <p>ガントチャート表示中にタスク名をクリックすると、そのタスクの開始日が画面左1/4に来るよう自動スクロールします。</p>
 
       <h3>バーの操作</h3>
       <ul>
@@ -963,19 +1107,20 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
         <li><b>バー左端をドラッグ</b>：開始日のみ変更</li>
         <li><b>バー右端をドラッグ</b>：終了日のみ変更</li>
       </ul>
+      <p>ドラッグ中はツールチップに日付と日数をリアルタイム表示します。</p>
 
       <h3>依存関係の矢印</h3>
       <ul>
-        <li><b>グレー点線</b>：正常な依存関係（前工程終了後に後工程が開始）</li>
-        <li><b>赤い点線</b>：期間重複あり（前工程終了前に後工程が開始）</li>
+        <li><b>グレー点線</b>：正常な依存関係</li>
+        <li><b>赤い点線</b>：期間重複あり（前工程終了前に後工程が開始している）</li>
       </ul>
 
       <h3>イナズマ線</h3>
-      <p>「⚡ イナズマ線」ボタンで表示/非表示を切り替えます。今日時点で期間が進行中のタスクの実績進捗点を縦につなぎ、遅れ・進みを視覚化します。</p>
+      <p>「⚡ イナズマ線」ボタンで表示/非表示を切り替えます。今日時点で進行中・期限超過のタスクの実績進捗点を縦につなぎ、遅れ・進みを視覚化します。スケール切替にも追従します。</p>
       <ul>
         <li><b>🔵 青（今日ラインより右）</b>：進んでいる</li>
         <li><b>🔴 赤（今日ラインより左）</b>：遅れている</li>
-        <li><b>◆ 菱形</b>：始点・終点（今日ライン上）または期間超過の遅延タスク</li>
+        <li><b>◆ 菱形（赤）</b>：期間超過かつ未完了の遅延タスク</li>
       </ul>
     </div>
 
@@ -983,53 +1128,40 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
     <div class="help-body" id="help-tab-share" style="display:none">
       <h2>☁️ OneDrive共有モード</h2>
 
-      <h3>ストレージモードの切替</h3>
-      <p>ヘッダーのストレージインジケーター（「💾 ローカル」または「☁️ フォルダ名」）をクリックするとストレージ設定モーダルが開きます。</p>
+      <h3>起動ウィザード</h3>
+      <p>起動時に毎回ストレージ選択画面が表示されます。</p>
       <table class="help-table">
-        <tr><th>モード</th><th>説明</th></tr>
-        <tr><td>💾 ローカルストレージ</td><td>ブラウザに保存。共有不可。設定不要。</td></tr>
-        <tr><td>☁️ OneDrive</td><td>OneDrive同期フォルダに保存。複数人で共有可能。</td></tr>
+        <tr><th>ボタン</th><th>動作</th></tr>
+        <tr><td>前回と同じ設定で続行</td><td>前回のモード・ユーザーで自動ログイン</td></tr>
+        <tr><td>⚡ ワンクリックで再接続</td><td>前回のOneDriveフォルダに1クリックで接続・自動ログイン</td></tr>
+        <tr><td>💾 ローカルストレージ</td><td>このPCのブラウザ内に保存するモードで起動</td></tr>
+        <tr><td>☁️ OneDrive（チーム共有）</td><td>フォルダ選択ダイアログを開いて接続</td></tr>
       </table>
+      <div class="help-note">💡 前回ログインしたユーザーが有効な場合は、モード選択後に自動ログインされます。</div>
 
-      <h3>初回接続の手順</h3>
-      <div class="help-step">
-        <div class="help-step-num">1</div>
-        <div class="help-step-body">
-          <b>ストレージ設定を開く</b>
-          <p>ヘッダーの「💾 ローカル」をクリック → 「☁️ OneDrive」を選択</p>
-        </div>
-      </div>
-      <div class="help-step">
-        <div class="help-step-num">2</div>
-        <div class="help-step-body">
-          <b>OneDriveフォルダを選択する</b>
-          <p>「📂 OneDriveフォルダを選択」をクリック → エクスプローラーが開く → SharePointと同期したフォルダ（例：<code>OneDrive - 会社名 &gt; WBSData</code>）を選択して「フォルダーの選択」をクリック</p>
-        </div>
-      </div>
-      <div class="help-step">
-        <div class="help-step-num">3</div>
-        <div class="help-step-body">
-          <b>「適用」をクリック</b>
-          <p>既存データがあれば読み込むか上書きするかを選択します。</p>
-        </div>
-      </div>
-
-      <h3>2回目以降の起動（ワンクリック再接続）</h3>
-      <p>2回目以降はログイン画面に「⚡ ワンクリックで再接続」ボタンが表示されます。クリックするとブラウザの許可ダイアログが出るので「許可」を押すだけで自動接続されます。エクスプローラーは開きません。</p>
-
-      <h3>編集モードと参照モード</h3>
+      <h3>編集モードと参照モード（OneDriveモード時）</h3>
       <div class="help-warn">⚠ OneDriveモードでは起動直後は「参照モード」です。編集するには必ず「✏️ 編集開始」を押してください。</div>
       <table class="help-table">
-        <tr><th>状態</th><th>バナー表示</th><th>編集</th></tr>
-        <tr><td>参照モード（起動直後）</td><td>👁 参照モード（黄）</td><td>不可</td></tr>
-        <tr><td>他ユーザー編集中</td><td>🔒 ○○が編集中（赤）</td><td>不可</td></tr>
-        <tr><td>編集モード</td><td>なし</td><td>可能</td></tr>
+        <tr><th>状態</th><th>バナー</th><th>編集可否</th></tr>
+        <tr><td>参照モード（起動直後）</td><td>👁 参照モード（黄）</td><td>❌ 不可</td></tr>
+        <tr><td>他ユーザー編集中</td><td>🔒 ○○が編集中（赤）</td><td>❌ 不可</td></tr>
+        <tr><td>編集モード</td><td>なし</td><td>✅ 可能</td></tr>
       </table>
       <ul>
         <li><b>✏️ 編集開始</b>：最新データを読み込み、ロックを取得して編集可能になります</li>
-        <li><b>✅ 編集完了</b>：データを保存し、ロックを解放します。必ず押してから離席してください</li>
+        <li><b>✅ 編集完了</b>：データを保存し、ロックを解放します。離席前に必ず押してください</li>
       </ul>
-      <p>ポーリング（30秒ごと）で他ユーザーの編集状態とデータ更新を自動確認します。参照モード中にデータが更新された場合は自動リロードされます。</p>
+
+      <h3>参照モードで無効化される操作</h3>
+      <ul>
+        <li>タスクの追加・編集・削除・ドラッグ</li>
+        <li>詳細パネルの入力フィールドすべて</li>
+        <li>プロジェクトの追加・削除</li>
+        <li>ガントチャートのバードラッグ</li>
+      </ul>
+
+      <h3>自動更新</h3>
+      <p>30秒ごとにOneDriveフォルダをポーリングし、他ユーザーの編集状態・データ更新を自動確認します。参照モード中にデータが更新された場合は自動リロードされます。</p>
     </div>
 
     <!-- ── Tips ── -->
@@ -1037,28 +1169,30 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <h2>💡 Tips</h2>
 
       <h3>フォルダ日程の矛盾を検知</h3>
-      <p>子タスクの日程がフォルダの期間を超えている場合、リストとガントチャートの両方で <b style="color:var(--danger)">⚠</b> マークが表示されます。サイドバーにも矛盾件数が表示されます。</p>
+      <p>子タスクの日程がフォルダの期間を超えている場合、リスト・ガントチャート両方で <b style="color:var(--danger)">⚠</b> マークが表示されます。サイドバーにも矛盾件数が表示されます。</p>
 
       <h3>フォルダの進捗率は自動計算</h3>
       <p>フォルダの進捗率は子タスクの期間で重み付けした加重平均で自動計算されます。手動入力は不要です。</p>
 
-      <h3>サイドバーの折りたたみ</h3>
-      <p>サイドバー右上の「◀」ボタンで折りたたむと画面を広く使えます。折りたたみ中も総タスク数・完了数・期限超過数はミニ表示で確認できます。</p>
+      <h3>タスクを一時的に非表示にする</h3>
+      <p>行左端の👁アイコンで完了済みタスクや確認不要なタスクを非表示にできます。ツールバーの「🚫 非表示タスクを表示」チェックボックスで一覧確認・個別再表示が可能です。非表示状態はデータとして保存されます。</p>
 
-      <h3>キーボードショートカット</h3>
-      <table class="help-table">
-        <tr><th>キー</th><th>動作</th></tr>
-        <tr><td>Esc</td><td>モーダル・コンテキストメニューを閉じる</td></tr>
-        <tr><td>右クリック</td><td>タスク行のコンテキストメニュー（追加・編集・削除）</td></tr>
-      </table>
+      <h3>サイドバーの折りたたみ</h3>
+      <p>サイドバーの「◀」ボタン（新規ボタン右隣）でサイドバーを折りたたみ、作業エリアを広くできます。折りたたみ中も総タスク数・完了数・期限超過数のミニ表示で状況を確認できます。</p>
+
+      <h3>ユーザーの切替</h3>
+      <p>画面右上のアバターアイコンをクリックするとユーザーパネルが開き、ログインユーザーを切り替えられます。ユーザーの追加・編集・削除もここから行います。</p>
+
+      <h3>プロジェクトの管理</h3>
+      <p>サイドバーの「プロジェクト」セクションからプロジェクトの追加（新規ボタン）・切替・削除・名前変更ができます。OneDriveモードの参照モード中はプロジェクトの追加・削除はできません。</p>
 
       <h3>CSVエクスポート形式</h3>
       <div class="help-code">ID, No, タスク名, 種別, 成果物, ステータス, 担当者,
 開始日, 終了日, 進捗率, 依存関係（ID）, 依存関係（No）, 親ID, 備考</div>
-      <p>内部IDが含まれるため、エクスポート→編集→インポートでもアップサートによる部分更新が可能です。</p>
+      <p>内部IDが含まれるため、エクスポート→外部編集→インポートでもアップサート（部分更新）が可能です。</p>
 
       <h3>データのリセット</h3>
-      <p>ストレージ設定モーダル下部の「🔄 サンプルデータでリセット」でデータを初期状態に戻せます。</p>
+      <p>ストレージ設定モーダル（ヘッダーの「💾 ローカル」または「⚠ 未接続」をクリック）の下部にある「🔄 サンプルデータでリセット」でデータを初期状態に戻せます。</p>
     </div>
   </div>
 </div>
@@ -1204,20 +1338,33 @@ function getSavedCsvDirName(){
 
 // ── インジケーター更新 ──
 function updateStorageIndicator(){
-  const el  = document.getElementById('storage-indicator');
-  const dot = document.getElementById('storage-dot');
-  const label = document.getElementById('storage-label');
+  const el   = document.getElementById('storage-indicator');
+  const dot  = document.getElementById('storage-dot');
+  const label= document.getElementById('storage-label');
   if(!el) return;
+
   if(storageMode==='csvFile'&&csvDirHandle){
+    // 接続中：フォルダ名表示のみ・クリック不可
     el.className='storage-indicator mode-csv';
+    el.style.cursor='default';
+    el.onclick=null;
+    el.title=csvDirHandle.name+' に接続中';
     dot.style.background='#059669';
     label.textContent='☁️ '+csvDirHandle.name;
   } else if(storageMode==='csvFile'&&!csvDirHandle){
+    // 未接続：⚠表示・クリックでストレージ設定を開く
     el.className='storage-indicator mode-error';
+    el.style.cursor='pointer';
+    el.onclick=()=>openStorageModal();
+    el.title='未接続 — クリックして接続設定を開く';
     dot.style.background='#DC2626';
-    label.textContent='☁️ 再接続待ち';
+    label.textContent='⚠ 未接続';
   } else {
+    // localStorageモード：表示のみ・クリック不可
     el.className='storage-indicator mode-ls';
+    el.style.cursor='default';
+    el.onclick=null;
+    el.title='ローカルストレージモード';
     dot.style.background='#9B9890';
     label.textContent='💾 ローカル';
   }
@@ -1255,6 +1402,8 @@ function applyLoadedData(d){
     },0);
     if(maxUid >= _userUid) _userUid = maxUid+1;
   }
+  // 非表示セットを再構築（task.hiddenフラグから）
+  if(typeof syncHiddenSet==='function') syncHiddenSet();
 }
 
 // ── CSVへの書き込み ──
@@ -1265,18 +1414,10 @@ async function saveToCsvDir(data){
     const w  = await fh.createWritable();
     await w.write(JSON.stringify(data, null, 2));
     await w.close();
-    // ロックファイル更新
-    const cu = currentUser();
-    const lock = {
-      lockedBy: cu ? cu.name : 'Unknown',
-      userId: currentUserId,
-      lockedAt: new Date().toISOString(),
-      expires: new Date(Date.now() + 3600000).toISOString()
-    };
-    const lh = await csvDirHandle.getFileHandle('wbs_lock.json', {create:true});
-    const lw = await lh.createWritable();
-    await lw.write(JSON.stringify(lock, null, 2));
-    await lw.close();
+    // ロックファイルは編集モードのときのみ更新（writeLockFileで統一フォーマット）
+    if(isEditMode){
+      await writeLockFile(true);
+    }
   }catch(e){ console.warn('CSV save failed:', e); }
 }
 
@@ -1301,77 +1442,25 @@ async function checkLockFile(){
   if(!csvDirHandle) return null;
   try{
     const lh=await csvDirHandle.getFileHandle('wbs_lock.json');
+    // キャッシュを避けるため毎回新しいFileオブジェクトを取得
     const file=await lh.getFile();
+    // ファイルの最終更新時刻をもとにした新鮮なテキストを取得
     const text=await file.text();
     const lock=JSON.parse(text);
+    // locked が明示的に false なら必ずnull（チェックアウト済み）
     if(!lock.locked) return null;
+    // userId が null/空 ならロック無効
+    if(!lock.userId) return null;
+    // 有効期限切れ
     if(lock.expires&&new Date(lock.expires)<new Date()) return null;
+    // 自分のロックは無視
     if(lock.userId===currentUserId) return null;
     return lock;
   }catch(e){ return null; }
 }
 
-function updateLoginCsvBanner(){
-  const banner=document.getElementById('login-csv-banner');
-  if(!banner) return;
-  if(storageMode==='csvFile'){
-    banner.style.display='block';
-    const savedName=getSavedCsvDirName();
-    const descEl=document.getElementById('login-csv-desc');
-    const quickBtn=document.getElementById('login-quick-reconnect-btn');
-    if(csvDirHandle){
-      // IDBからハンドル復元済み → ワンクリックボタンを表示
-      if(descEl) descEl.textContent='「'+(csvDirHandle.name||savedName||'OneDriveフォルダ')+'」にワンクリックで再接続できます。';
-      if(quickBtn) quickBtn.style.display='flex';
-    } else {
-      if(descEl) descEl.textContent=(savedName?'前回のフォルダ「'+savedName+'」に':'OneDriveフォルダに')+'接続してデータを読み込みます。';
-      if(quickBtn) quickBtn.style.display='none';
-    }
-  } else {
-    banner.style.display='none';
-  }
-}
 
 // ── CSV再接続 → データ読み込み → ログイン画面更新 ──
-async function reconnectCsvAndLogin(){
-  if(!('showDirectoryPicker' in window)){
-    alert('このブラウザはFile System Access APIに対応していません。\nChrome または Edge をご使用ください。');
-    return;
-  }
-  try{
-    const handle=await window.showDirectoryPicker({mode:'readwrite'});
-    csvDirHandle=handle;
-    await saveHandleToIDB(handle); // IDBに保存
-    const ok=await loadFromCsvDir();
-    if(ok){
-      syncTasks();
-      saveStorageMeta();
-      updateStorageIndicator();
-      isEditMode=false;
-      updateEditModeUI();
-      if(currentUserId&&users.find(u=>u.id===currentUserId)){
-        hideLoginScreen();
-        updateUserUI();
-        updateProjectUI();
-        renderAll();
-      } else {
-        renderLoginScreen();
-        updateLoginCsvBanner();
-      }
-    } else {
-      const confirmed=confirm('フォルダにデータが見つかりませんでした。\n現在のデータをこのフォルダに書き出しますか？');
-      if(confirmed){
-        saveStorageMeta();
-        saveToLS();
-        updateStorageIndicator();
-        alert('✅ データを書き出しました。ユーザーを選択してください。');
-        renderLoginScreen();
-      }
-    }
-  }catch(e){
-    if(e.name!=='AbortError') alert('フォルダの選択に失敗しました: '+e.message);
-  }
-}
 
 // ── ストレージ設定モーダル ──
 function openStorageModal(){
@@ -1484,57 +1573,6 @@ async function tryRestoreHandleFromIDB(){
 }
 
 // ── ワンクリック再接続（許可ダイアログのみ） ──
-async function quickReconnect(){
-  if(!csvDirHandle){
-    // IDBにハンドルがない場合はフォルダ選択
-    await reconnectCsvAndLogin();
-    return;
-  }
-  try{
-    const granted=await verifyHandlePermission(csvDirHandle);
-    if(!granted){
-      showToastNotice('⚠ フォルダへのアクセスが拒否されました。再度フォルダを選択してください。','warn');
-      csvDirHandle=null;
-      await clearHandleFromIDB();
-      renderLoginScreen();
-      updateLoginCsvBanner();
-      return;
-    }
-    // 許可OK → データ読み込み
-    const ok=await loadFromCsvDir();
-    if(ok){
-      syncTasks();
-      saveStorageMeta();
-      updateStorageIndicator();
-      isEditMode=false;
-      updateEditModeUI();
-      if(currentUserId&&users.find(u=>u.id===currentUserId)){
-        hideLoginScreen();
-        updateUserUI();
-        updateProjectUI();
-        renderAll();
-        showToastNotice('☁️ OneDriveに再接続しました','success');
-      } else {
-        renderLoginScreen();
-        updateLoginCsvBanner();
-      }
-    } else {
-      // データなし → 現在のデータを書き出す
-      const confirmed=confirm('フォルダにデータが見つかりませんでした。\n現在のデータをこのフォルダに書き出しますか？');
-      if(confirmed){
-        saveStorageMeta();
-        saveToLS();
-        updateStorageIndicator();
-        showToastNotice('✅ データを書き出しました','success');
-        renderLoginScreen();
-      }
-    }
-  }catch(e){
-    if(e.name!=='AbortError'){
-      showToastNotice('⚠ 再接続に失敗しました: '+e.message,'warn');
-    }
-  }
-}
 
 // ── フォルダ選択時にIDBにも保存 ──
 async function selectCsvFolder(){
@@ -1652,25 +1690,28 @@ let isEditMode=false; // CSVモードでの編集フラグ
 
 // ── 参照/編集モードUI更新 ──
 function updateEditModeUI(){
-  const isCsv=(storageMode==='csvFile'&&csvDirHandle);
+  // CSVモードかどうかはstorageModeだけで判定（csvDirHandleの有無に依存しない）
+  const isCsvMode=storageMode==='csvFile';
   const banner=document.getElementById('readonly-banner');
   const checkinBtn=document.getElementById('checkin-btn');
   const checkoutBtn=document.getElementById('checkout-btn');
-  if(!isCsv){
-    banner.classList.remove('visible');
+  if(!isCsvMode){
+    // localStorageモード：常に編集可能
+    if(banner) banner.classList.remove('visible');
     if(checkinBtn) checkinBtn.style.display='none';
     if(checkoutBtn) checkoutBtn.style.display='none';
     document.body.classList.remove('readonly-mode');
     isEditMode=true;
     return;
   }
+  // CSVモード：isEditModeフラグで制御
   if(isEditMode){
-    banner.classList.remove('visible');
+    if(banner) banner.classList.remove('visible');
     if(checkinBtn) checkinBtn.style.display='none';
     if(checkoutBtn) checkoutBtn.style.display='inline-flex';
     document.body.classList.remove('readonly-mode');
   } else {
-    banner.classList.add('visible');
+    if(banner) banner.classList.add('visible');
     if(checkinBtn) checkinBtn.style.display='inline-flex';
     if(checkoutBtn) checkoutBtn.style.display='none';
     document.body.classList.add('readonly-mode');
@@ -1678,7 +1719,13 @@ function updateEditModeUI(){
 }
 
 async function checkin(){
-  if(storageMode!=='csvFile'||!csvDirHandle) return;
+  if(storageMode!=='csvFile'){return;}
+  if(!csvDirHandle){
+    // フォルダ未接続の場合はフォルダ選択を促す
+    showToastNotice('⚠ OneDriveフォルダを先に接続してください（ストレージ設定から選択）','warn');
+    openStorageModal();
+    return;
+  }
   const lock=await checkLockFile();
   if(lock){
     const proceed=confirm('⚠ 現在 '+lock.lockedBy+' が編集中です\n（'+new Date(lock.lockedAt).toLocaleString('ja-JP')+'〜）\n\n強制的に編集を開始しますか？（推奨しません）');
@@ -1712,13 +1759,22 @@ async function writeLockFile(locked){
           lockedBy:cu?cu.name:'Unknown',
           userId:currentUserId,
           lockedAt:new Date().toISOString(),
-          expires:new Date(Date.now()+7200000).toISOString() // 2時間
+          expires:new Date(Date.now()+7200000).toISOString()
         }
-      : {locked:false, lockedBy:null, userId:null, lockedAt:null, expires:null};
+      : {
+          // チェックアウト：locked を明示的に false、全フィールドをnullクリア
+          locked:false,
+          lockedBy:null,
+          userId:null,
+          lockedAt:null,
+          expires:null,
+          clearedAt:new Date().toISOString() // デバッグ用タイムスタンプ
+        };
     const lh=await csvDirHandle.getFileHandle('wbs_lock.json',{create:true});
     const lw=await lh.createWritable();
     await lw.write(JSON.stringify(lock,null,2));
     await lw.close();
+    console.log('Lock written:', lock);
   }catch(e){ console.warn('lock write failed',e); }
 }
 
@@ -1736,14 +1792,11 @@ function showToastNotice(msg, type='info'){
   setTimeout(()=>{if(el.parentNode){el.style.opacity='0';setTimeout(()=>el.remove(),300);}},6000);
 }
 
-// ── 参照モードでの操作ブロック（保存をスキップ） ──
+// ── 保存（参照モード中はCSVへの書き込みを完全にブロック） ──
 function saveToLS(){
-  if(storageMode==='csvFile'&&csvDirHandle&&!isEditMode){
-    // 参照モードでは保存しない（localStorageのみ書く）
-    try{
-      const data={projects,currentProjectId,_projUid,_uid,users,currentUserId,_savedAt:Date.now()};
-      localStorage.setItem(LS_KEY,JSON.stringify(data));
-    }catch(e){}
+  // CSVモードの参照モード中：localStorageへも書き込まない
+  // （localStorageのキャッシュがCSVより新しいタイムスタンプになるのを防ぐ）
+  if(storageMode==='csvFile'&&!isEditMode){
     return;
   }
   const data={projects,currentProjectId,_projUid,_uid,users,currentUserId,_savedAt:Date.now()};
@@ -1775,20 +1828,19 @@ const DEFAULT_USERS=()=>[
 
 // ── Login screen ──
 function showLoginScreen(){
-  renderLoginScreen();
-  document.getElementById('login-screen').style.display='flex';
+  // startup-screenが表示中ならStep2のユーザーグリッドを更新して終了
+  if(document.getElementById('startup-screen').style.display!=='none'){
+    startupRenderUsers();
+    return;
+  }
+  // アプリ動作中にcurrentUserIdが無効になった場合→startup画面を再表示
+  showStartupScreen();
+  // Step2（ユーザー選択）を直接表示
+  startupShowStep2();
 }
 function hideLoginScreen(){
   document.getElementById('login-screen').style.display='none';
-}
-function renderLoginScreen(){
-  const grid=document.getElementById('login-user-grid');
-  grid.innerHTML=users.map(u=>`
-    <div class="login-user-card" onclick="loginAs('${u.id}')">
-      <div class="l-avatar" style="background:${u.color}">${initials(u.name)}</div>
-      <div class="l-name">${u.name}</div>
-      <div class="l-role">${u.role||'─'}</div>
-    </div>`).join('');
+  document.getElementById('startup-screen').style.display='none';
 }
 function loginAs(uid){
   currentUserId=uid;
@@ -1806,7 +1858,8 @@ function updateUserUI(){
   const u=currentUser();
   document.getElementById('header-user-avatar').style.background=u?u.color:'#9B9890';
   document.getElementById('header-user-avatar').textContent=u?initials(u.name):'?';
-  document.getElementById('header-user-name').textContent=u?u.name:'ゲスト';
+  const nameEl=document.getElementById('header-user-name');
+  if(nameEl) nameEl.textContent=u?u.name:'ゲスト';
   renderUserList();
 }
 
@@ -1959,50 +2012,22 @@ function deleteUser(uid,e){
 
 // ── Assignee select options (inject into modals) ──
 function updateAssigneeOptions(){
-  const userOptions='<option value="">（未割当）</option>'
-    +users.map(u=>'<option value="'+u.name+'">'+u.name+(u.role?' ('+u.role+')':'')+'</option>').join('');
   const datalistHtml=users.map(u=>'<option value="'+u.name+'">').join('');
-
-  // セレクトを更新
-  ['m-assignee-select','dp-assignee-select'].forEach(id=>{
-    const sel=document.getElementById(id);
-    if(!sel)return;
-    const cur=sel.value;
-    sel.innerHTML=userOptions;
-    sel.value=cur; // 現在値を維持
-  });
-  // datalistを更新
   ['m-assignee-list','dp-assignee-list'].forEach(id=>{
     const dl=document.getElementById(id);
     if(dl) dl.innerHTML=datalistHtml;
   });
 }
 
-// セレクトで選択 → テキスト入力に反映
 function onAssigneeSelectChange(prefix){
-  const sel=document.getElementById(prefix+'-assignee-select');
-  const inp=document.getElementById(prefix+'-assignee');
-  if(!sel||!inp)return;
-  inp.value=sel.value;
-  if(prefix==='dp') dpUpdate('assignee',sel.value);
+  // セレクト廃止につき何もしない（後方互換のため残す）
 }
-// テキスト入力で変更 → セレクトに反映（一致するユーザーがあれば選択）
 function onAssigneeInputChange(prefix){
-  const inp=document.getElementById(prefix+'-assignee');
-  const sel=document.getElementById(prefix+'-assignee-select');
-  if(!inp||!sel)return;
-  const matched=users.find(u=>u.name===inp.value.trim());
-  sel.value=matched?matched.name:'';
+  // テキスト入力のみ（セレクト同期不要）
 }
-// 担当者フィールドを値でセット（セレクト・入力欄両方同期）
 function setAssigneeField(prefix, value){
   const inp=document.getElementById(prefix+'-assignee');
-  const sel=document.getElementById(prefix+'-assignee-select');
   if(inp) inp.value=value||'';
-  if(sel){
-    const matched=users.find(u=>u.name===value);
-    sel.value=matched?matched.name:'';
-  }
 }
 
 // ── Init users ──
@@ -2020,7 +2045,6 @@ function initUsers(){
   // 保存済みユーザーがある場合
   if(!currentUserId || !users.find(u=>u.id===currentUserId)){
     // currentUserIdが無効 → ログイン画面表示
-    updateLoginCsvBanner();
     showLoginScreen();
   } else {
     hideLoginScreen();
@@ -2100,11 +2124,13 @@ function initProjects(){
 
 // ── Switch project ──
 function switchProject(pid){
-  saveCurrentTasks(); // save before switching
+  saveCurrentTasks();
   currentProjectId=pid;
   syncTasks();
   collapsedSet.clear();
   selectedTaskId=null;
+  hiddenTaskIds=new Set(); // プロジェクト切替時に非表示状態リセット（task.hiddenはタスクデータに保持）
+  updateHiddenBtn();
   document.getElementById('detail-panel').classList.remove('open');
   updateProjectUI();
   renderAll();
@@ -2120,10 +2146,11 @@ function updateProjectUI(){
   const p=currentProject();
   if(!p)return;
 
-  // header select
+  // header select（削除済みのため null チェック）
   const sel=document.getElementById('header-proj-select');
-  sel.innerHTML=projects.map(pr=>`<option value="${pr.id}"${pr.id===currentProjectId?' selected':''}>${pr.name}</option>`).join('');
-  document.getElementById('header-proj-dot').style.background=p.color;
+  if(sel) sel.innerHTML=projects.map(pr=>`<option value="${pr.id}"${pr.id===currentProjectId?' selected':''}>${pr.name}</option>`).join('');
+  const dot=document.getElementById('header-proj-dot');
+  if(dot) dot.style.background=p.color;
 
   // sidebar list
   const list=document.getElementById('sidebar-proj-list');
@@ -2137,7 +2164,7 @@ function updateProjectUI(){
       <span class="proj-count">${doneCount}/${taskCount}</span>
       <div class="proj-actions">
         <button class="icon-btn" title="名前を編集" onclick="startRenameProject('${pr.id}',event)" style="font-size:12px;width:22px;height:22px">✏️</button>
-        ${projects.length>1?`<button class="icon-btn" title="削除" onclick="deleteProject('${pr.id}',event)" style="font-size:12px;width:22px;height:22px;color:var(--danger)">🗑</button>`:''}
+        ${projects.length>1?`<button class="icon-btn proj-delete-btn" title="削除" onclick="deleteProject('${pr.id}',event)" style="font-size:12px;width:22px;height:22px;color:var(--danger)">🗑</button>`:''}
       </div>
     </div>`;
   }).join('');
@@ -2170,6 +2197,10 @@ function finishRenameProject(pid){
 // ── Delete project ──
 function deleteProject(pid,e){
   e.stopPropagation();
+  if(!isEditMode&&storageMode==='csvFile'){
+    showToastNotice('⚠ 参照モードではプロジェクトを削除できません。「✏️ 編集開始」を押してください。','warn');
+    return;
+  }
   const p=projects.find(x=>x.id===pid);
   if(!p)return;
   if(!confirm(`「${p.name}」を削除しますか？\nこのプロジェクトのすべてのタスクが削除されます。`))return;
@@ -2184,6 +2215,10 @@ function deleteProject(pid,e){
 // ── New project modal ──
 let selectedNewProjColor=PROJ_COLORS[0];
 function openNewProjectModal(){
+  if(!isEditMode&&storageMode==='csvFile'){
+    showToastNotice('⚠ 参照モードではプロジェクトを追加できません。「✏️ 編集開始」を押してください。','warn');
+    return;
+  }
   document.getElementById('np-name').value='';
   document.getElementById('np-desc').value='';
   document.getElementById('np-template').value='blank';
@@ -2271,6 +2306,8 @@ function isAncestorCollapsed(task){
 }
 function buildTreeOrder(parentId=null,result=[]){
   tasks.filter(t=>t.parentId===parentId).forEach(t=>{
+    // 非表示タスク：チェックボックスOFFなら完全スキップ、ONなら半透明で表示
+    if(t.hidden&&!isShowHidden()) return;
     result.push(t);
     if(!collapsedSet.has(t.id))buildTreeOrder(t.id,result);
   });
@@ -2292,7 +2329,8 @@ function renderList(){
   let html='';
   treeOrder.forEach(t=>{
     if(q&&!t.name.toLowerCase().includes(q)&&!(t.deliverable||'').toLowerCase().includes(q))return;
-    if(fs&&t.status!==fs)return;
+    if(fs==='not-done'&&t.status==='done')return;
+    if(fs&&fs!=='not-done'&&t.status!==fs)return;
     if(fa&&t.assignee!==fa)return;
 
     const lvl=getLevel(t.id);
@@ -2324,10 +2362,11 @@ function renderList(){
     const taskConflictReasons=!isFolder?getTaskConflictReasons(t.id,conflictMap):[];
     const taskHasConflict=taskConflictReasons.length>0;
 
-    // row bg tint for folders
+    // row bg tint for folders + 非表示タスクは半透明
     const rowBg=isFolder
       ?(folderHasConflict?'background:rgba(220,38,38,.04)':'background:rgba(37,99,235,.03)')
       :(taskHasConflict?'background:rgba(220,38,38,.03)':'');
+    const rowOpacity=t.hidden?'opacity:0.35;':'';
     const nameFw=isFolder?'font-weight:600':'';
 
     // status (フォルダは薄く)
@@ -2373,7 +2412,7 @@ function renderList(){
     const startCellHtml=`<span class="date-text" style="${dateCellStyle}" title="${taskHasConflict?taskConflictReasons.join('\n'):''}">${formatDate(t.start)}</span>`;
     const endCellHtml=`<span class="${endClass}" style="${dateCellStyle}" title="${taskHasConflict?taskConflictReasons.join('\n'):''}">${formatDate(t.end)}</span>`;
 
-    html+=`<tr class="task-row level-${lvl}${isSelected?' selected':''}" data-id="${t.id}" style="${rowBg}"
+    html+=`<tr class="task-row level-${lvl}${isSelected?' selected':''}" data-id="${t.id}" style="${rowBg};${rowOpacity}"
       onclick="selectTask('${t.id}')"
       oncontextmenu="openCtxMenu(event,'${t.id}')"
       draggable="true"
@@ -2382,7 +2421,7 @@ function renderList(){
       ondragleave="onRowDragLeave(event,'${t.id}')"
       ondrop="onRowDrop(event,'${t.id}')"
       ondragend="onRowDragEnd(event)">
-      <td class="td-cell" style="padding:4px 8px;width:80px;white-space:nowrap">
+      <td class="td-cell" style="padding:4px 8px;width:100px;white-space:nowrap">
         <div class="drag-handle" title="ドラッグして並べ替え" onmousedown="event.stopPropagation()">⠿</div>
         <div class="row-actions" style="opacity:1;gap:1px;display:inline-flex;align-items:center">
           <!-- 同列追加 -->
@@ -2401,6 +2440,14 @@ function renderList(){
               <rect x="5" y="9" width="9" height="4" rx="1"/>
               <line x1="12" y1="7.5" x2="12" y2="9"/>
               <line x1="10.5" y1="8.2" x2="13.5" y2="8.2"/>
+            </svg>
+          </button>
+          <!-- 非表示トグル -->
+          <button class="icon-btn" title="${hiddenTaskIds.has(t.id)?'再表示':'非表示にする'}" onclick="toggleHideTask('${t.id}',event)" style="width:26px;height:26px;color:${hiddenTaskIds.has(t.id)?'var(--warn)':'var(--text3)'}">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              ${hiddenTaskIds.has(t.id)
+                ? '<path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/><line x1="2" y1="2" x2="14" y2="14" stroke-width="1.8"/>'
+                : '<path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/>'}
             </svg>
           </button>
           <!-- 削除 -->
@@ -2439,7 +2486,46 @@ function renderList(){
   updateAssigneeFilter();
 }
 
-// ─── Gantt ───
+// ── 非表示タスク管理 ──
+// task.hidden = true でタスクを非表示化（データとして保持）
+// ツールバーのチェックボックスで「非表示タスクも表示する」切替
+
+let hiddenTaskIds=new Set(); // buildTreeOrder用に使用（task.hiddenから都度構築）
+
+function toggleHideTask(id,e){
+  if(e) e.stopPropagation();
+  const t=tasks.find(x=>x.id===id);
+  if(!t) return;
+  t.hidden=!t.hidden;
+  if(t.hidden&&selectedTaskId===id){
+    selectedTaskId=null;
+    document.getElementById('detail-panel').classList.remove('open');
+  }
+  // hiddenTaskIdsを再構築
+  syncHiddenSet();
+  updateHiddenBtn();
+  saveToLS();
+  renderAll();
+}
+
+function syncHiddenSet(){
+  hiddenTaskIds=new Set(tasks.filter(t=>t.hidden).map(t=>t.id));
+}
+
+function updateHiddenBtn(){
+  const label=document.getElementById('show-hidden-label');
+  const cnt=document.getElementById('show-hidden-count');
+  if(!label) return;
+  const n=tasks.filter(t=>t.hidden).length;
+  label.style.display=n>0?'flex':'none';
+  if(cnt) cnt.textContent=n;
+}
+
+// チェックボックスの状態（非表示タスクも表示するか）
+function isShowHidden(){
+  const cb=document.getElementById('show-hidden-check');
+  return cb&&cb.checked;
+}
 const DAY_W=28,ROW_H=38,LABEL_W=320,HDR_MONTH=24,HDR_DAY=22;
 
 // ── Gantt state ──
@@ -2457,7 +2543,9 @@ const SCALE_COL_W={day:28, week:56, month:112, quarter:224, year:336};
 function setGanttScale(scale){
   ganttScale=scale;
   document.querySelectorAll('.gantt-scale-btn').forEach(b=>{
-    b.classList.toggle('active',b.dataset.scale===scale);
+    const isActive=b.dataset.scale===scale;
+    b.style.background=isActive?'var(--accent)':'';
+    b.style.color=isActive?'#fff':'var(--text3)';
   });
   const scrollEl=document.getElementById('gantt-root');
   const prevSX=scrollEl?scrollEl.scrollLeft:0;
@@ -2472,38 +2560,70 @@ function setGanttScale(scale){
 }
 
 // スケール別：日付→X座標（チャートエリア内ピクセル）
+// 日付 → チャートエリア内の正確なX座標（列の左端からのピクセル）
 function ganttScaleDateToX(dt){
-  if(!ganttMinD)return 0;
+  if(!ganttMinD) return 0;
   const d=new Date(typeof dt==='string'?dt:d2s(dt));
   d.setHours(0,0,0,0);
   const cw=SCALE_COL_W[ganttScale];
+
   if(ganttScale==='day'){
-    return Math.round((d-ganttMinD)/86400000)*cw+cw/2;
+    // 1列 = 1日。日付の左端を返す
+    return Math.round((d-ganttMinD)/86400000)*cw;
   }
+
   if(ganttScale==='week'){
+    // 1列 = 7日。週の月曜を基点にした日数比率
     const base=new Date(ganttMinD);
     const dow=base.getDay(); base.setDate(base.getDate()-(dow===0?6:dow-1));
     const diffD=Math.round((d-base)/86400000);
-    return Math.floor(diffD/7)*cw+cw/2;
+    const weekIdx=Math.floor(diffD/7);
+    const dayInWeek=diffD-weekIdx*7;
+    return weekIdx*cw + Math.round(dayInWeek/7*cw);
   }
+
   if(ganttScale==='month'){
-    const mo=(d.getFullYear()-ganttMinD.getFullYear())*12+(d.getMonth()-ganttMinD.getMonth());
-    const daysInMo=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
-    return mo*cw+Math.round((d.getDate()-1)/daysInMo*cw)+cw/14;
+    // 1列 = 1ヶ月。月の日数で比例配分
+    const moOff=(d.getFullYear()-ganttMinD.getFullYear())*12+(d.getMonth()-ganttMinD.getMonth());
+    const daysInMonth=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+    const dayFrac=(d.getDate()-1)/daysInMonth; // 0.0〜1.0
+    return moOff*cw + Math.round(dayFrac*cw);
   }
+
   if(ganttScale==='quarter'){
-    const qMin=ganttMinD.getFullYear()*4+Math.floor(ganttMinD.getMonth()/3);
-    const qCur=d.getFullYear()*4+Math.floor(d.getMonth()/3);
-    const qOff=qCur-qMin;
-    const mInQ=d.getMonth()%3;
-    return qOff*cw+Math.round(mInQ/3*cw)+cw/6;
+    // 4月始まり年度ベースの四半期
+    // Q1=4〜6月, Q2=7〜9月, Q3=10〜12月, Q4=1〜3月
+    const toFiscal=dt=>{
+      const m=dt.getMonth(); // 0=1月
+      const fq=m>=3?Math.floor((m-3)/3):3; // 0〜3
+      const fy=m>=3?dt.getFullYear():dt.getFullYear()-1;
+      return {fy,fq};
+    };
+    const fiscalQStartDate=(fy,fq)=>{
+      // fq=0→4月, 1→7月, 2→10月, 3→翌年1月
+      const startMonth=[3,6,9,0][fq];
+      const startYear=fq===3?fy+1:fy;
+      return new Date(startYear,startMonth,1);
+    };
+    const {fy:fyMin,fq:fqMin}=toFiscal(ganttMinD);
+    const qIdxMin=fyMin*4+fqMin;
+    const {fy,fq}=toFiscal(d);
+    const qOff=(fy*4+fq)-qIdxMin;
+    const qStart=fiscalQStartDate(fy,fq);
+    const qEnd=fiscalQStartDate(fq===3?fy+1:fy,((fq+1)%4));
+    const qDays=Math.round((qEnd-qStart)/86400000);
+    const dInQ=Math.round((d-qStart)/86400000);
+    return qOff*cw + Math.round(dInQ/qDays*cw);
   }
+
   if(ganttScale==='year'){
+    // 1列 = 1年。年内の日数で比例配分
     const yOff=d.getFullYear()-ganttMinD.getFullYear();
-    const dayOfYear=Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);
-    const isLeap=y=>y%4===0&&(y%100!==0||y%400===0);
-    const diy=isLeap(d.getFullYear())?366:365;
-    return yOff*cw+Math.round(dayOfYear/diy*cw);
+    const yStart=new Date(d.getFullYear(),0,1);
+    const yEnd=new Date(d.getFullYear(),11,31);
+    const yDays=Math.round((yEnd-yStart)/86400000)+1;
+    const dInY=Math.round((d-yStart)/86400000);
+    return yOff*cw + Math.round(dInY/yDays*cw);
   }
   return 0;
 }
@@ -2552,16 +2672,32 @@ function buildScaleColumns(minD,maxD){
       cur.setMonth(cur.getMonth()+1);
     }
   } else if(ganttScale==='quarter'){
-    let y=minD.getFullYear(),q=Math.floor(minD.getMonth()/3);
-    const endY=maxD.getFullYear(),endQ=Math.floor(maxD.getMonth()/3);
-    while(y<endY||(y===endY&&q<=endQ)){
-      const key=String(y);
+    // 4月始まり年度ベース Q1=4〜6月, Q2=7〜9月, Q3=10〜12月, Q4=1〜3月
+    const toFiscal=dt=>{
+      const m=dt.getMonth();
+      const fq=m>=3?Math.floor((m-3)/3):3;
+      const fy=m>=3?dt.getFullYear():dt.getFullYear()-1;
+      return {fy,fq};
+    };
+    const fiscalQStartDate=(fy,fq)=>{
+      const startMonth=[3,6,9,0][fq];
+      const startYear=fq===3?fy+1:fy;
+      return new Date(startYear,startMonth,1);
+    };
+    const isTodayInFQ=(fy,fq)=>{
+      const {fy:tfy,fq:tfq}=toFiscal(today);
+      return fy===tfy&&fq===tfq;
+    };
+    let {fy,fq}=toFiscal(minD);
+    const {fy:endFy,fq:endFq}=toFiscal(maxD);
+    while(fy<endFy||(fy===endFy&&fq<=endFq)){
+      const key=String(fy);
       if(!upper.length||upper[upper.length-1].key!==key)
-        upper.push({key,label:y+'年',count:0});
+        upper.push({key,label:fy+'年度',count:0});
       upper[upper.length-1].count++;
-      const isTdy=y===today.getFullYear()&&q===Math.floor(today.getMonth()/3);
-      lower.push({label:'Q'+(q+1),isTdy,isWk:false,date:new Date(y,q*3,1)});
-      q++;if(q>3){q=0;y++;}
+      const isTdy=isTodayInFQ(fy,fq);
+      lower.push({label:'Q'+(fq+1),isTdy,isWk:false,date:fiscalQStartDate(fy,fq)});
+      fq++;if(fq>3){fq=0;fy++;}
     }
   } else if(ganttScale==='year'){
     let y=minD.getFullYear();
@@ -2642,7 +2778,11 @@ function effectiveProgress(t){
 // ════════════════════════════════════════════════════
 function buildLightningLineHTML(treeOrder, totalH){
   const today=new Date(); today.setHours(0,0,0,0);
-  const todayX=dateToOff(today)*DAY_W+DAY_W/2;
+  const cw=SCALE_COL_W[ganttScale];
+  // スケール対応のtodayX（renderGanttと同じ計算）
+  const todayX=ganttScale==='day'
+    ? ganttScaleDateToX(today)+cw/2
+    : ganttScaleDateToX(today);
 
   const points=[];
 
@@ -2652,28 +2792,20 @@ function buildLightningLineHTML(treeOrder, totalH){
 
     const start=s2d(t.start), end=s2d(t.end);
 
-    // 将来タスク（まだ始まっていない）→ 除外
     if(start > today) return;
-
-    // 正常完了済み（期間内に完了）→ 除外
     if(t.status==='done' && end < today) return;
 
-    // ここに来るのは：
-    //   start <= today かつ（期間中 OR 期間終了で未完了）
-    const isOverdue = end < today; // 期間超過フラグ
-
+    const isOverdue = end < today;
     const pct=t.progress||0;
-    const barLeft=dateToOff(t.start)*DAY_W;
-    const barRight=(dateToOff(t.end)+1)*DAY_W;
-    const barWidth=barRight-barLeft;
 
-    // 実績進捗点のX（バー左端 + 実績%）
+    // スケール対応のバー左端・右端
+    const barLeft=ganttScaleDateToX(t.start);
+    const endNext=new Date(end); endNext.setDate(endNext.getDate()+1);
+    const barRight=ganttScaleDateToX(endNext);
+    const barWidth=Math.max(1, barRight-barLeft);
+
     const actualX=barLeft+barWidth*(pct/100);
 
-    // 進み・遅れは今日ラインとの比較
-    const ahead=actualX >= todayX;
-
-    // 予定進捗率（経過日数 / 総日数、期間超過なら100%が予定）
     const durDays=Math.max(1,Math.round((end-start)/86400000)+1);
     const elapsedDays=Math.round((today-start)/86400000);
     const plannedPct=isOverdue ? 100 : Math.min(100,Math.round(elapsedDays/durDays*100));
@@ -2682,7 +2814,7 @@ function buildLightningLineHTML(treeOrder, totalH){
     const statusLabel={todo:'未着手',doing:'進行中',done:'完了',block:'ブロック中'}[t.status]||'';
     const overdueLabel=isOverdue?' ⚠遅延':'';
     points.push({
-      x:actualX, y, ahead, isOverdue,
+      x:actualX, y, isOverdue,
       label:t.name+': 実績'+pct+'% / 予定'+plannedPct+'%（'+statusLabel+overdueLabel+'）'
     });
   });
@@ -2799,12 +2931,19 @@ function renderGantt(){
   const totalW=totalCols*cw;
   const totalH=treeOrder.length*ROW_H;
 
-  // 今日ラインX（スケール対応）
-  const todayX=ganttScaleDateToX(today);
+  // 今日ラインX（今日の列の中央）
+  const todayX=ganttScale==='day'
+    ? ganttScaleDateToX(today)+cw/2
+    : ganttScaleDateToX(today);
 
-  // バーのX座標変換（スケール対応）
-  const taskLeft=t=>ganttScaleDateToX(t.start)-cw/2;
-  const taskRight=t=>ganttScaleDateToX(t.end)+cw/2;
+  // バーの左端・右端X座標
+  // 開始日の左端 〜 終了日の翌日の左端（= 終了日まで完全に含む）
+  const taskLeft =t=> ganttScaleDateToX(t.start);
+  const taskRight=t=>{
+    // 終了日の翌日を計算してその左端を右端とする
+    const endNext=new Date(s2d(t.end)); endNext.setDate(endNext.getDate()+1);
+    return ganttScaleDateToX(endNext);
+  };
 
   const GANTT_COLORS={todo:'#9B9890',doing:'#2563EB',done:'#059669',block:'#DC2626'};
 
@@ -3618,6 +3757,16 @@ function selectTask(id){
   document.getElementById('dp-type').value=t.type||'task';
   document.getElementById('detail-panel').classList.add('open');
   renderList();
+  // ガントチャート表示中はタスクの開始日にスクロール
+  if(currentTab==='gantt'&&t.start&&ganttMinD){
+    requestAnimationFrame(()=>{
+      const el=document.getElementById('gantt-root');
+      if(!el) return;
+      const startX=ganttScaleDateToX(t.start);
+      // 開始日が画面左端から1/4の位置に来るようにスクロール
+      el.scrollLeft=Math.max(0, startX - el.clientWidth/4);
+    });
+  }
 }
 
 function dpUpdate(field,val){
@@ -3776,16 +3925,14 @@ function switchTab(tab){
   document.getElementById('list-view').style.display=tab==='list'?'block':'none';
   document.getElementById('gantt-view').style.display=tab==='gantt'?'flex':'none';
   document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&tab==='list')||(i===1&&tab==='gantt')));
-  const lb=document.getElementById('lightning-btn');
-  if(lb) lb.style.display=tab==='gantt'?'inline-flex':'none';
-  const sb=document.getElementById('gantt-scale-btns');
-  if(sb) sb.style.display=tab==='gantt'?'flex':'none';
   if(tab==='gantt'){
-    _ganttFirstRender=true; // タブを開くたびにToday中央表示
+    _ganttFirstRender=true;
     renderGantt();
-    // アクティブスケールボタンを初期化
+    // スケールボタンのアクティブ状態を更新
     document.querySelectorAll('.gantt-scale-btn').forEach(b=>{
-      b.classList.toggle('active',b.dataset.scale===ganttScale);
+      const isActive=b.dataset.scale===ganttScale;
+      b.style.background=isActive?'var(--accent)':'';
+      b.style.color=isActive?'#fff':'var(--text3)';
     });
   }
 }
@@ -3798,7 +3945,250 @@ function renderAll(){
   updateProjectUI();
 }
 
-// ─── Help Modal ───
+// ════════════════════════════════════════════════════
+// 起動ウィザード
+// ════════════════════════════════════════════════════
+const STARTUP_SKIP_KEY='wbs_startup_mode_v1';
+
+async function showStartupScreen(){
+  document.getElementById('startup-screen').style.display='flex';
+  document.getElementById('startup-step1').style.display='block';
+  document.getElementById('startup-step2').style.display='none';
+  document.getElementById('startup-connecting').style.display='none';
+
+  const prev=localStorage.getItem(STARTUP_SKIP_KEY);
+  const sub=document.getElementById('startup-sub');
+  const contSec=document.getElementById('startup-continue-section');
+  const contIcon=document.getElementById('startup-continue-icon');
+  const contTitle=document.getElementById('startup-continue-title');
+  const contDesc=document.getElementById('startup-continue-desc');
+  const quickSec=document.getElementById('startup-quick-section');
+  const quickTitle=document.getElementById('startup-quick-title');
+  const quickDesc=document.getElementById('startup-quick-desc');
+
+  // 前回フォルダの有無を確認（非同期で事前ロード）
+  let savedHandle=null;
+  if(prev==='csvFile'){
+    savedHandle=await loadHandleFromIDB();
+    if(savedHandle) csvDirHandle=savedHandle;
+  }
+
+  if(prev){
+    contSec.style.display='block';
+    sub.textContent='前回の設定で続行するか、変更してください';
+    if(prev==='csvFile'){
+      contIcon.textContent='☁️';
+      contTitle.textContent='前回と同じ設定で続行（OneDrive）';
+      const savedName=getSavedCsvDirName();
+      contDesc.textContent=savedName?'OneDrive「'+savedName+'」で続行します':'OneDriveモードで続行します';
+    } else {
+      contIcon.textContent='💾';
+      contTitle.textContent='前回と同じ設定で続行（ローカルストレージ）';
+      contDesc.textContent='このPC・このブラウザのデータで続行します';
+    }
+  } else {
+    contSec.style.display='none';
+    sub.textContent='データの保存先を選択してください';
+  }
+
+  // OneDriveワンクリック再接続ボタン（前回フォルダがある場合のみ表示）
+  if(savedHandle){
+    const savedName=getSavedCsvDirName();
+    quickSec.style.display='block';
+    quickTitle.textContent='⚡ OneDriveにワンクリックで再接続';
+    quickDesc.textContent=(savedName?'「'+savedName+'」':'前回のフォルダ')+'に接続してデータを読み込みます';
+  } else {
+    quickSec.style.display='none';
+  }
+}
+
+function hideStartupScreen(){
+  document.getElementById('startup-screen').style.display='none';
+}
+
+// ── 接続完了後の共通ログイン処理 ──
+function startupFinish(){
+  // 前回ユーザーが有効なら自動ログイン
+  const prevUserValid=currentUserId&&users.find(u=>u.id===currentUserId);
+  if(prevUserValid){
+    hideStartupScreen();
+    updateUserUI();
+    updateProjectUI();
+    renderAll();
+  } else {
+    // ユーザー選択画面へ
+    startupShowUserSelect();
+  }
+}
+
+// ── Step2：ユーザー選択画面を表示 ──
+function startupShowUserSelect(){
+  document.getElementById('startup-step1').style.display='none';
+  document.getElementById('startup-step2').style.display='block';
+  document.getElementById('startup-connecting').style.display='none';
+  const badge=document.getElementById('startup-mode-badge');
+  if(storageMode==='csvFile'){
+    badge.innerHTML='☁️ OneDriveモード';
+    badge.style.cssText='display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:16px;background:#ECFDF5;border:1px solid #6EE7B7;color:#065F46';
+  } else {
+    badge.innerHTML='💾 ローカルストレージモード';
+    badge.style.cssText='display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:16px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)';
+  }
+  startupRenderUsers();
+}
+
+// ── Step1：前回と同じで続行 ──
+async function startupContinue(){
+  const prev=localStorage.getItem(STARTUP_SKIP_KEY)||'localStorage';
+  storageMode=prev;
+  saveStorageMeta();
+  isEditMode=(storageMode!=='csvFile');
+  updateEditModeUI();
+  updateStorageIndicator();
+  if(storageMode==='csvFile'&&csvDirHandle){
+    // フォルダ既に復元済み → データ読み込みしてログイン
+    await _startupLoadCsvAndFinish();
+  } else {
+    startupFinish();
+  }
+}
+
+// ── Step1：ローカル or OneDriveボタン ──
+async function startupSelectMode(mode){
+  storageMode=mode;
+  saveStorageMeta();
+  localStorage.setItem(STARTUP_SKIP_KEY,mode);
+  isEditMode=(mode!=='csvFile');
+  updateEditModeUI();
+  updateStorageIndicator();
+  if(mode==='csvFile'){
+    // フォルダ未選択 → フォルダ選択ダイアログを開く
+    await startupSelectFolder();
+  } else {
+    startupFinish();
+  }
+}
+
+// ── Step1：ワンクリック再接続ボタン ──
+async function startupQuickReconnect(){
+  storageMode='csvFile';
+  saveStorageMeta();
+  localStorage.setItem(STARTUP_SKIP_KEY,'csvFile');
+  isEditMode=false;
+  updateEditModeUI();
+  updateStorageIndicator();
+  document.getElementById('startup-quick-section').style.display='none';
+  document.getElementById('startup-connecting').style.display='block';
+  try{
+    const granted=await verifyHandlePermission(csvDirHandle);
+    if(!granted){
+      csvDirHandle=null;
+      await clearHandleFromIDB();
+      document.getElementById('startup-connecting').style.display='none';
+      document.getElementById('startup-quick-section').style.display='none';
+      showToastNotice('⚠ アクセスが拒否されました。フォルダを選択してください。','warn');
+      await startupSelectFolder();
+      return;
+    }
+    await _startupLoadCsvAndFinish();
+  }catch(e){
+    document.getElementById('startup-connecting').style.display='none';
+    showToastNotice('⚠ 再接続に失敗しました: '+e.message,'warn');
+    await startupSelectFolder();
+  }
+}
+
+// ── フォルダ選択ダイアログ ──
+async function startupSelectFolder(){
+  if(!('showDirectoryPicker' in window)){
+    alert('このブラウザはFile System Access APIに対応していません。\nChrome または Edge をご使用ください。');
+    storageMode='localStorage';
+    isEditMode=true;
+    updateEditModeUI();
+    updateStorageIndicator();
+    startupFinish();
+    return;
+  }
+  try{
+    const handle=await window.showDirectoryPicker({mode:'readwrite'});
+    csvDirHandle=handle;
+    await saveHandleToIDB(handle);
+    saveStorageMeta();
+    updateStorageIndicator();
+    document.getElementById('startup-connecting').style.display='block';
+    await _startupLoadCsvAndFinish();
+  }catch(e){
+    if(e.name==='AbortError'){
+      // キャンセル → ローカルモードに戻す
+      storageMode='localStorage';
+      isEditMode=true;
+      saveStorageMeta();
+      updateEditModeUI();
+      updateStorageIndicator();
+      startupFinish();
+    } else {
+      showToastNotice('⚠ フォルダの選択に失敗しました: '+e.message,'warn');
+    }
+  }
+}
+
+// ── CSVデータ読み込み → ログイン（内部共通処理） ──
+async function _startupLoadCsvAndFinish(){
+  document.getElementById('startup-connecting').style.display='block';
+  try{
+    const ok=await loadFromCsvDir();
+    if(ok){
+      syncTasks();
+      showToastNotice('☁️ OneDriveに接続しました','success');
+    } else {
+      const save=confirm('フォルダにデータが見つかりませんでした。\n現在のデータをこのフォルダに書き出しますか？');
+      if(save) saveToLS();
+    }
+  }catch(e){
+    console.warn('CSV load failed:',e);
+  }
+  document.getElementById('startup-connecting').style.display='none';
+  startupFinish();
+}
+
+// ── Step2：ユーザーグリッド描画 ──
+function startupRenderUsers(){
+  const grid=document.getElementById('startup-user-grid');
+  if(!grid) return;
+  grid.innerHTML=users.map(u=>`
+    <div class="login-user-card" onclick="startupLogin('${u.id}')">
+      <div class="l-avatar" style="background:${u.color||'#9B9890'}">${initials(u.name)}</div>
+      <div class="l-name">${u.name}</div>
+      ${u.role?`<div class="l-role">${u.role}</div>`:''}
+    </div>`).join('');
+}
+
+// ── Step2：ユーザー選択してログイン ──
+function startupLogin(userId){
+  currentUserId=userId;
+  saveToLS();
+  hideStartupScreen();
+  updateUserUI();
+  updateProjectUI();
+  renderAll();
+}
+
+// ── Step2：新規ユーザー追加 ──
+function startupAddUser(){
+  openAddUserModal(true);
+}
+
+// ── Step1に戻る ──
+function startupBackToStep1(){
+  document.getElementById('startup-step2').style.display='none';
+  document.getElementById('startup-step1').style.display='block';
+}
+
+// ── Step2を経由する旧関数（後方互換） ──
+async function startupShowStep2(){
+  await startupShowUserSelect();
+}
+
 function openHelpModal(){
   document.getElementById('help-modal').classList.add('open');
   switchHelpTab('prepare');
@@ -4048,28 +4438,27 @@ let selectedTaskId=null;
 let collapsedSet=new Set();
 let sidebarCollapsed=false;
 
-// 1. ストレージメタ読み込み
+// 1. ストレージメタ読み込み（前回のstorageMode復元）
 loadStorageMeta();
 
-// 2. localStorageからデータ復元
+// 2. isEditModeを確定（CSVモードは参照モード固定）
+isEditMode = (storageMode !== 'csvFile');
+
+// 3. データ復元（表示用キャッシュ）
 initProjects();
 initUsers();
-
-// 3. IDBからハンドル復元（非同期）→ バナー・UI更新
-(async()=>{
-  if(storageMode==='csvFile'){
-    await tryRestoreHandleFromIDB(); // ハンドルをcsvDirHandleに復元
-    updateLoginCsvBanner();          // ワンクリックボタンを表示
-    updateStorageIndicator();
-  }
-})();
 
 // 4. UI描画
 updateProjectUI();
 updateStorageIndicator();
-isEditMode=storageMode==='localStorage';
 updateEditModeUI();
 renderAll();
+
+// 5. 起動時ストレージ選択画面を表示
+//    initUsersでログイン画面が出ている場合はそれを一旦隠す
+document.getElementById('login-screen').style.display='none';
+showStartupScreen();
+
 startCsvPolling();
 </script>
 </body>
