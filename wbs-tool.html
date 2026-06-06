@@ -52,17 +52,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 
 /* ─── Layout ─── */
 .app-body{display:flex;height:calc(100vh - 56px)}
-.sidebar{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;overflow-x:hidden;padding:16px;transition:width .25s cubic-bezier(.4,0,.2,1),padding .25s;position:relative}
-.sidebar.collapsed{width:48px;padding:12px 0;overflow-y:hidden}
-.sidebar.collapsed .sidebar-content{opacity:0;pointer-events:none;transition:opacity .1s}
-.sidebar-content{transition:opacity .2s .05s}
-.sidebar-toggle{width:26px;height:26px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text3);transition:.15s;flex-shrink:0}
-.sidebar-toggle:hover{background:var(--surface2);color:var(--text);border-color:var(--border2)}
-.sidebar-collapsed-icons{display:none;flex-direction:column;align-items:center;gap:14px;padding-top:48px}
-.sidebar.collapsed .sidebar-collapsed-icons{display:flex}
-.collapsed-stat{display:flex;flex-direction:column;align-items:center;gap:2px}
-.collapsed-stat-num{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);line-height:1}
-.collapsed-stat-dot{width:6px;height:6px;border-radius:50%;margin-top:2px}
 .main-area{flex:1;overflow:hidden;display:flex;flex-direction:column}
 .toolbar{padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .search-box{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;flex:1;max-width:280px}
@@ -301,6 +290,42 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 .checkout-btn{background:var(--warn)!important;border-color:var(--warn)!important;color:#fff!important}
 .checkout-btn:hover{background:#B45309!important;border-color:#B45309!important}
 /* 参照モード時：編集系UI を無効化 */
+/* ─── 新サイドバー ─── */
+.sidebar{width:240px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width .2s}
+.sidebar.collapsed{width:44px}
+.sidebar.collapsed .sidebar-content{display:none}
+.sidebar.collapsed .sidebar-collapsed-icons{display:flex}
+.sidebar-collapsed-icons{display:none;flex-direction:column;align-items:center;padding:8px 0;gap:8px}
+.sidebar-content{flex:1;overflow-y:auto;padding:0 0 16px}
+.sb-section{padding:10px 14px;border-bottom:1px solid var(--border)}
+.sb-section-hd{display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:8px}
+.sb-stat-row{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:12px;color:var(--text2)}
+.sb-stat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sb-stat-label{flex:1}
+.sb-stat-num{font-weight:700;font-size:13px;color:var(--text)}
+.sb-view-btns{display:flex;flex-direction:column;gap:2px}
+.sb-view-btn{display:flex;align-items:center;gap:8px;padding:7px 10px;border:none;border-radius:var(--radius-sm);background:none;cursor:pointer;font-size:13px;color:var(--text2);font-family:'DM Sans',sans-serif;width:100%;text-align:left;transition:.15s}
+.sb-view-btn:hover{background:var(--surface2)}
+.sb-view-btn.active{background:var(--accent-light);color:var(--accent);font-weight:600}
+.sb-check-label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer;padding:3px 0;user-select:none}
+.sb-check-label input{cursor:pointer;width:13px;height:13px;flex-shrink:0}
+.sb-action-btn{display:flex;align-items:center;gap:8px;width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;font-size:12px;color:var(--text2);font-family:'DM Sans',sans-serif;margin-bottom:4px;transition:.15s;text-align:left}
+.sb-action-btn:hover{background:var(--surface2);border-color:var(--border2)}
+.sb-action-btn.btn-primary-soft{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+.sb-action-btn.btn-primary-soft:hover{opacity:.9}
+.sb-action-btn:disabled{opacity:.4;pointer-events:none}
+.sb-task-item{padding:5px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.sb-task-item:hover .sb-task-name{color:var(--accent)}
+.sb-task-item:last-child{border-bottom:none}
+.collapsed-view-btn{width:30px;height:30px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.15s}
+.collapsed-view-btn:hover{background:var(--surface2)}
+.collapsed-view-btn.active{background:var(--accent-light);border-color:var(--accent)}
+.collapsed-stat{display:flex;flex-direction:column;align-items:center;gap:2px}
+.collapsed-stat-num{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);line-height:1}
+.collapsed-stat-dot{width:6px;height:6px;border-radius:50%;margin-top:2px}
+.sb-task-meta{font-size:10px;color:var(--text3)}
+.sb-empty{font-size:11px;color:var(--text3);text-align:center;padding:8px 0}
+
 body.readonly-mode .btn-primary{opacity:.4;pointer-events:none}
 body.readonly-mode .row-actions{opacity:.2;pointer-events:none}
 body.readonly-mode .drag-handle{opacity:.2;pointer-events:none}
@@ -313,6 +338,7 @@ body.readonly-mode .detail-actions button{opacity:.4;pointer-events:none}
 body.readonly-mode #new-project-btn,
 body.readonly-mode #new-project-btn-sidebar{opacity:.4;pointer-events:none}
 body.readonly-mode .proj-delete-btn{opacity:.2;pointer-events:none}
+body.readonly-mode #sb-add-task-btn{opacity:.4;pointer-events:none}
 /* 詳細パネルの入力フィールドをすべてロック */
 body.readonly-mode .detail-field input,
 body.readonly-mode .detail-field select,
@@ -433,178 +459,190 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
 
 <!-- Header -->
 <header class="app-header">
+  <!-- ── 左グループ ── -->
   <div class="app-logo">WBS<span>Manager</span></div>
-  <div class="header-divider"></div>
-  <div class="header-tabs">
-    <button class="tab-btn active" onclick="switchTab('list')">📋 リスト</button>
-    <button class="tab-btn" onclick="switchTab('gantt')">📊 ガントチャート</button>
-    <button class="tab-btn" onclick="switchTab('dashboard')">🏠 ダッシュボード</button>
-    <button class="tab-btn" onclick="switchTab('feedback')">📝 改善要望</button>
-  </div>
-  <div class="header-spacer"></div>
-  <!-- 参照モードバナー（CSVモード時のみ表示） -->
+  <div style="font-size:10px;font-weight:600;color:var(--text3);background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:2px 7px;letter-spacing:.03em;flex-shrink:0">v1.40.0</div>
+  <!-- 参照モードバナー（OneDriveモード参照中） -->
   <div class="readonly-banner" id="readonly-banner">
     <span id="readonly-banner-icon">👁</span>
     <span id="readonly-banner-text">参照モード</span>
   </div>
-  <!-- 編集開始/完了ボタン（CSVモード時のみ表示） -->
+  <!-- 編集モードバッジ（OneDriveモード編集中） -->
+  <div id="edit-mode-badge" style="display:none;align-items:center;gap:5px;padding:4px 10px;background:#D1FAE5;border:1px solid #6EE7B7;border-radius:20px;font-size:12px;font-weight:600;color:#065F46">
+    ✏️ 編集中
+  </div>
   <button class="btn btn-sm checkin-btn" id="checkin-btn" style="display:none" onclick="checkin()">✏️ 編集開始</button>
   <button class="btn btn-sm checkout-btn" id="checkout-btn" style="display:none" onclick="checkout()">✅ 編集完了</button>
-  <!-- Storage indicator：接続中はフォルダ名表示のみ、未接続時のみクリック可 -->
+  <!-- OneDrive / ストレージインジケーター -->
   <div class="storage-indicator mode-ls" id="storage-indicator" title="ストレージ設定">
     <div class="storage-dot" id="storage-dot" style="background:var(--text3)"></div>
     <span id="storage-label">💾 ローカル</span>
   </div>
-  <div class="header-actions">
-    <!-- エクスポート：上向き矢印 -->
-    <button class="btn btn-sm" onclick="exportCSV()" title="CSVエクスポート" style="padding:6px 10px">
-      <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-    </button>
-    <!-- インポート：下向き矢印 -->
-    <button class="btn btn-sm" onclick="triggerImport()" title="CSVインポート" style="padding:6px 10px">
-      <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 16 12 21 17 16"/><line x1="12" y1="21" x2="12" y2="9"/></svg>
-    </button>
-    <input type="file" id="import-file-input" accept=".csv" style="display:none" onchange="importCSV(event)">
-    <!-- Undo -->
-    <button class="btn btn-sm" id="undo-btn" onclick="undo()" title="元に戻す（Ctrl+Z）" style="padding:6px 10px;opacity:0.4" disabled>
-      <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/></svg>
-    </button>
-    <!-- 変更履歴 -->
-    <button class="btn btn-sm" onclick="openHistoryModal()" title="変更履歴" style="padding:6px 10px">
-      <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    </button>
-    <button class="btn btn-sm" onclick="openHelpModal()" title="操作マニュアル">
-      ❓ ヘルプ
-    </button>
-    <button class="btn btn-primary" onclick="openAddModal(null)">
-      <svg class="icon-svg" viewBox="0 0 24 24" style="stroke:#fff"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      タスク追加
-    </button>
-    <div class="header-divider"></div>
-    <!-- User switcher button：アイコンのみ（名前なし） -->
-    <button class="user-btn" id="user-btn" onclick="toggleUserPanel()" title="ユーザー切替">
-      <div class="avatar-lg" id="header-user-avatar" style="background:#9B9890">?</div>
-    </button>
-  </div>
+  <div class="header-divider"></div>
+  <!-- タスク追加 -->
+  <button class="btn btn-primary" id="sb-add-task-btn" onclick="openAddModal(null)">
+    <svg class="icon-svg" viewBox="0 0 24 24" style="stroke:#fff"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    タスク追加
+  </button>
+  <!-- Undo -->
+  <button class="btn btn-sm" id="undo-btn" onclick="undo()" title="元に戻す（Ctrl+Z）" style="padding:6px 10px;opacity:0.4" disabled>
+    <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/></svg>
+  </button>
+  <!-- 変更履歴 -->
+  <button class="btn btn-sm" onclick="openHistoryModal()" title="変更履歴" style="padding:6px 10px">
+    <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  </button>
+
+  <!-- スペーサー -->
+  <div style="flex:1"></div>
+
+  <!-- ── 右グループ ── -->
+  <!-- エクスポート -->
+  <button class="btn btn-sm" onclick="exportCSV()" title="CSVエクスポート" style="padding:6px 10px">
+    <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+  </button>
+  <!-- インポート -->
+  <button class="btn btn-sm" onclick="triggerImport()" title="CSVインポート" style="padding:6px 10px">
+    <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 16 12 21 17 16"/><line x1="12" y1="21" x2="12" y2="9"/></svg>
+  </button>
+  <input type="file" id="import-file-input" accept=".csv" style="display:none" onchange="importCSV(event)">
+  <!-- ヘルプ -->
+  <button class="btn btn-sm" onclick="openHelpModal()" title="操作マニュアル" style="padding:6px 10px">
+    <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  </button>
+  <div class="header-divider"></div>
+  <!-- ユーザー -->
+  <button class="user-btn" id="user-btn" onclick="toggleUserPanel()" title="ユーザー切替">
+    <div class="avatar-lg" id="header-user-avatar" style="background:#9B9890">?</div>
+  </button>
 </header>
 
 <div class="app-body">
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
-    <!-- Collapsed mini-view -->
+    <!-- 折りたたみ時のミニ表示 -->
     <div class="sidebar-collapsed-icons">
-      <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" title="サイドバーを展開">▶</button>
-      <div class="collapsed-stat" title="総タスク数">
-        <div class="collapsed-stat-num" id="stat-total-mini">0</div>
-        <div class="collapsed-stat-dot" style="background:var(--text3)"></div>
-      </div>
-      <div class="collapsed-stat" title="完了タスク">
-        <div class="collapsed-stat-num" id="stat-done-mini">0</div>
-        <div class="collapsed-stat-dot" style="background:var(--success)"></div>
-      </div>
-      <div class="collapsed-stat" title="期限超過">
-        <div class="collapsed-stat-num" id="stat-overdue-mini" style="color:var(--danger)">0</div>
-        <div class="collapsed-stat-dot" style="background:var(--danger)"></div>
-      </div>
+      <button class="sidebar-toggle" onclick="toggleSidebar()" title="サイドバーを展開">▶</button>
+      <!-- 表示切替（折りたたみ時） -->
+      <button class="collapsed-view-btn" id="cv-list"      onclick="switchTab('list')"      title="リスト">📋</button>
+      <button class="collapsed-view-btn" id="cv-gantt"     onclick="switchTab('gantt')"     title="ガントチャート">📊</button>
+      <button class="collapsed-view-btn" id="cv-dashboard" onclick="switchTab('dashboard')" title="ダッシュボード">🏠</button>
+      <button class="collapsed-view-btn" id="cv-feedback"  onclick="switchTab('feedback')"  title="改善要望">📝</button>
+      <!-- ミニ統計 -->
+      <div class="collapsed-stat" title="総タスク数"><div class="collapsed-stat-num" id="stat-total-mini">0</div><div class="collapsed-stat-dot" style="background:var(--text3)"></div></div>
+      <div class="collapsed-stat" title="完了タスク"><div class="collapsed-stat-num" id="stat-done-mini">0</div><div class="collapsed-stat-dot" style="background:var(--success)"></div></div>
+      <div class="collapsed-stat" title="期限超過"><div class="collapsed-stat-num" id="stat-overdue-mini" style="color:var(--danger)">0</div><div class="collapsed-stat-dot" style="background:var(--danger)"></div></div>
     </div>
 
-    <!-- Full content -->
+    <!-- 展開時のフルコンテンツ -->
     <div class="sidebar-content">
-      <!-- Project management panel -->
-      <div class="sidebar-section" style="margin-top:4px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <div class="sidebar-label" style="margin-bottom:0">プロジェクト</div>
-          <div style="display:flex;align-items:center;gap:6px">
-            <button id="new-project-btn-sidebar" class="btn btn-sm" onclick="openNewProjectModal()" style="padding:3px 8px;font-size:11px;gap:4px">
-              <svg class="icon-svg" viewBox="0 0 24 24" style="width:11px;height:11px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>新規
-            </button>
-            <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" title="サイドバーを折りたたむ">◀</button>
-          </div>
+
+      <!-- ── プロジェクト ── -->
+      <div class="sb-section">
+        <div class="sb-section-hd">
+          <span>📁 プロジェクト</span>
+          <button class="sidebar-toggle" onclick="toggleSidebar()" title="折りたたむ">◀</button>
         </div>
-        <div id="sidebar-proj-list"></div>
+        <div style="display:flex;gap:4px;margin-bottom:6px;align-items:center">
+          <select id="sb-proj-select" onchange="switchProject(this.value)"
+            style="flex:1;padding:6px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text);background:var(--surface)"></select>
+          <button id="sb-proj-delete-btn" onclick="deleteCurrentProject(event)" title="現在のプロジェクトを削除"
+            style="padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;color:var(--danger);font-size:13px;flex-shrink:0">🗑</button>
+        </div>
+        <button id="new-project-btn-sidebar" class="sb-action-btn" onclick="openNewProjectModal()">
+          <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+          新規プロジェクト
+        </button>
       </div>
-      <div style="height:1px;background:var(--border);margin:4px 0 16px"></div>
-      <div class="sidebar-section">
-        <div class="sidebar-label">プロジェクト概要</div>
-        <div class="stat-card">
-          <div class="stat-num" id="stat-total">0</div>
-          <div class="stat-label">総タスク数</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" id="stat-done">0</div>
-          <div class="stat-label">完了タスク</div>
-          <div class="mini-progress"><div class="mini-fill" id="stat-bar" style="width:0%"></div></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" id="stat-overdue" style="color:var(--danger)">0</div>
-          <div class="stat-label">期限超過</div>
-        </div>
-        <div class="stat-card" id="conflict-stat-card" style="display:none;border:1px solid #FCA5A5;background:#FEF2F2">
-          <div class="stat-num" id="stat-conflict" style="color:var(--danger)">0</div>
-          <div class="stat-label" style="color:var(--danger)">⚠ フォルダ日程の矛盾</div>
+
+      <!-- ── 表示切替 ── -->
+      <div class="sb-section">
+        <div class="sb-section-hd"><span>🖥 表示</span></div>
+        <div class="sb-view-btns" id="sb-view-btns">
+          <button class="sb-view-btn active" data-tab="list"      onclick="switchTab('list')">📋 リスト</button>
+          <button class="sb-view-btn"        data-tab="gantt"     onclick="switchTab('gantt')">📊 ガントチャート</button>
+          <button class="sb-view-btn"        data-tab="dashboard" onclick="switchTab('dashboard')">🏠 ダッシュボード</button>
+          <button class="sb-view-btn"        data-tab="feedback"  onclick="switchTab('feedback')">📝 改善要望</button>
         </div>
       </div>
-      <div class="sidebar-section">
-        <div class="sidebar-label">ステータス凡例</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#9B9890"></div>未着手</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--warn)"></div>進行中</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--success)"></div>完了</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>ブロック中</div>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-label">関係線</div>
-        <div class="legend-item">
-          <svg width="28" height="10" style="flex-shrink:0"><line x1="0" y1="5" x2="22" y2="5" stroke="#64748B" stroke-width="1.5" stroke-dasharray="4,2"/><polygon points="22,2 28,5 22,8" fill="#64748B"/></svg>
-          通常（順序OK）
+
+      <!-- ── フィルタ ── -->
+      <div class="sb-section">
+        <div class="sb-section-hd"><span>🔍 フィルタ</span></div>
+        <!-- テキスト検索 -->
+        <div style="position:relative;margin-bottom:8px">
+          <svg style="position:absolute;left:8px;top:50%;transform:translateY(-50%);opacity:.4" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input id="search-input" type="text" placeholder="タスクを検索..." oninput="renderAll()"
+            style="width:100%;padding:6px 8px 6px 26px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;background:var(--surface);color:var(--text);box-sizing:border-box">
         </div>
-        <div class="legend-item">
-          <svg width="28" height="10" style="flex-shrink:0"><line x1="0" y1="5" x2="22" y2="5" stroke="#DC2626" stroke-width="2" stroke-dasharray="4,2"/><polygon points="22,2 28,5 22,8" fill="#DC2626"/></svg>
-          <span style="color:var(--danger)">期間重複（要確認）</span>
+        <!-- 担当者フィルタ -->
+        <select id="filter-assignee" onchange="renderAll()"
+          style="width:100%;padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;color:var(--text);background:var(--surface);margin-bottom:8px">
+          <option value="">全担当者</option>
+        </select>
+        <!-- チェックボックスフィルタ -->
+        <label class="sb-check-label">
+          <input type="checkbox" id="filter-mine" onchange="renderAll()"> 自分のタスク
+        </label>
+        <label class="sb-check-label">
+          <input type="checkbox" id="filter-not-done" onchange="renderAll()"> 未完了のみ
+        </label>
+        <label class="sb-check-label">
+          <input type="checkbox" id="filter-overdue-only" onchange="renderAll()"> 遅延のみ
+        </label>
+        <label class="sb-check-label">
+          <input type="checkbox" id="filter-milestone-only" onchange="renderAll()"> マイルストーンのみ
+        </label>
+        <!-- 非表示タスク表示チェック -->
+        <label id="show-hidden-label" style="display:none" class="sb-check-label">
+          <input type="checkbox" id="show-hidden-check" onchange="renderAll()">
+          🚫 非表示（<span id="show-hidden-count">0</span>件）
+        </label>
+      </div>
+
+      <!-- ── 今日のタスク ── -->
+      <div class="sb-section">
+        <div class="sb-section-hd">
+          <span>📌 今日のタスク</span>
+          <span id="sb-today-count" style="font-size:11px;color:var(--text3)">0</span>
         </div>
+        <div id="sb-today-tasks" style="font-size:12px;color:var(--text2)"></div>
       </div>
-      <div class="sidebar-section">
-        <div class="sidebar-label">担当者</div>
-        <div id="assignee-legend"></div>
+
+      <!-- ── 遅延タスク ── -->
+      <div class="sb-section">
+        <div class="sb-section-hd">
+          <span>⚠ 遅延タスク</span>
+          <span id="sb-overdue-count" style="font-size:11px;color:var(--danger)">0</span>
+        </div>
+        <div id="sb-overdue-tasks" style="font-size:12px;color:var(--text2)"></div>
       </div>
+
     </div><!-- end sidebar-content -->
   </aside>
 
   <!-- Main -->
   <div class="main-area">
-    <!-- Toolbar -->
-    <div class="toolbar">
-      <div class="search-box">
-        <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input id="search-input" type="text" placeholder="タスクを検索..." oninput="renderAll()">
-      </div>
-      <select class="filter-select" id="filter-status" onchange="renderAll()">
-        <option value="">全ステータス</option>
-        <option value="not-done">完了以外</option>
-        <option value="todo">未着手</option>
-        <option value="doing">進行中</option>
-        <option value="done">完了</option>
-        <option value="block">ブロック中</option>
-      </select>
-      <select class="filter-select" id="filter-assignee" onchange="renderAll()">
-        <option value="">全担当者</option>
-      </select>
+    <!-- ステータスフィルタ（サイドバーに移動済み。ガント連動用の隠し要素） -->
+    <select id="filter-status" style="display:none" onchange="renderAll()">
+      <option value="">全ステータス</option>
+      <option value="not-done">完了以外</option>
+      <option value="todo">未着手</option>
+      <option value="doing">進行中</option>
+      <option value="done">完了</option>
+      <option value="block">ブロック中</option>
+    </select>
+
+    <!-- ソートモードヒント＋並替ボタン（リストビュー上部に残す） -->
+    <div id="list-toolbar" style="display:flex;align-items:center;gap:8px;padding:8px 20px;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap;min-height:44px">
       <button class="btn btn-sm" onclick="expandAll()">全展開</button>
       <button class="btn btn-sm" onclick="collapseAll()">全折りたたみ</button>
-      <button class="btn btn-sm sort-toggle-btn" id="sort-toggle-btn" onclick="toggleSortMode()" title="並替モードのON/OFF">
-        ⠿ 並替モード
-      </button>
-      <!-- 非表示タスク表示切替 -->
-      <label id="show-hidden-label" style="display:none;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer;user-select:none">
-        <input type="checkbox" id="show-hidden-check" onchange="renderAll()" style="width:14px;height:14px;cursor:pointer">
-        <span>🚫 非表示タスクを表示（<span id="show-hidden-count">0</span>件）</span>
-      </label>
+      <button class="btn btn-sm sort-toggle-btn" id="sort-toggle-btn" onclick="toggleSortMode()">⠿ 並替モード</button>
       <div id="sort-mode-hint" style="display:none;align-items:center;gap:6px;font-size:11px;color:var(--warn);background:var(--warn-light);border:1px solid var(--warn);border-radius:var(--radius-sm);padding:4px 10px">
-        <span>⠿</span>
-        <span>並替モードON：左端の <b>⠿</b> をドラッグして順序を変更。上下25%で同列、中央25%で子になります。</span>
+        ⠿ 並替モードON：左端の <b>⠿</b> をドラッグして順序を変更
       </div>
-      <div style="margin-left:auto;font-size:11px;color:var(--text3);display:flex;align-items:center;gap:6px" id="dep-hint">
-        <span>💡</span>
-        <span>行の <b style="color:var(--accent)">＋子</b> で子タスク追加 ／ <b style="color:var(--text2)">＋同列</b> で同階層追加 ／ 右クリックでメニュー</span>
+      <div style="margin-left:auto;font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px" id="dep-hint">
+        💡 行の <b style="color:var(--accent)">＋子</b> で子追加 ／ <b>＋同列</b> で同階層追加
       </div>
     </div>
 
@@ -998,17 +1036,17 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
     <div class="startup-logo">WBS<span>Manager</span></div>
     <div class="startup-sub" id="startup-sub">データの保存先を選択してください</div>
 
-    <!-- ── Step 1：ストレージ選択（通常はここで完結） ── -->
+    <!-- ── Step 1：ストレージ選択 ── -->
     <div id="startup-step1">
-      <!-- 前回の選択が記憶されている場合：続行ボタン -->
+      <!-- 前回設定がある場合：1つの「続行」ボタンに統合 -->
       <div id="startup-continue-section" style="display:none">
-        <button class="startup-continue" onclick="startupContinue()">
+        <button class="startup-continue" id="startup-continue-btn" onclick="startupContinue()">
           <span id="startup-continue-icon" style="font-size:24px">💾</span>
-          <div>
+          <div style="flex:1;min-width:0">
             <div style="font-size:14px;font-weight:700;color:var(--text)" id="startup-continue-title">前回と同じ設定で続行</div>
             <div style="font-size:12px;color:var(--text3);margin-top:2px" id="startup-continue-desc">ローカルストレージで続行します</div>
           </div>
-          <svg style="margin-left:auto;flex-shrink:0" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+          <svg style="flex-shrink:0" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
         </button>
         <div class="startup-divider">または別の設定で開始</div>
       </div>
@@ -1022,7 +1060,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
         </div>
       </button>
 
-      <!-- ☁️ OneDrive（フォルダ未記憶時：フォルダ選択へ） -->
+      <!-- ☁️ OneDrive -->
       <button class="startup-mode-btn" id="startup-onedrive-btn" onclick="startupSelectMode('csvFile')">
         <div class="startup-mode-icon">☁️</div>
         <div>
@@ -1030,18 +1068,6 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
           <div class="startup-mode-desc" id="startup-onedrive-btn-desc">OneDrive / SharePoint同期フォルダに保存します。<br>チームメンバーとリアルタイムに近い形でデータを共有できます。<br><span style="color:var(--accent);font-weight:600">※ Chrome / Edge のみ対応</span></div>
         </div>
       </button>
-
-      <!-- ⚡ OneDriveワンクリック再接続（前回フォルダあり時のみ表示） -->
-      <div id="startup-quick-section" style="display:none;margin-top:8px">
-        <button class="startup-continue" style="border-color:#6EE7B7;background:#ECFDF5" onclick="startupQuickReconnect()">
-          <span style="font-size:24px">⚡</span>
-          <div>
-            <div style="font-size:14px;font-weight:700;color:#065F46" id="startup-quick-title">ワンクリックで再接続</div>
-            <div style="font-size:12px;color:#047857;margin-top:2px" id="startup-quick-desc">前回のフォルダに接続します</div>
-          </div>
-          <svg style="margin-left:auto;flex-shrink:0" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-      </div>
 
       <!-- 接続中ステータス -->
       <div id="startup-connecting" style="display:none;text-align:center;padding:16px;font-size:13px;color:var(--text3)">
@@ -1168,7 +1194,6 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
 <!-- Help Modal -->
 <div class="modal-overlay" id="help-modal">
   <div class="modal help-modal">
-    <!-- タブナビ -->
     <div class="help-tabs">
       <button class="help-tab active" onclick="switchHelpTab('prepare')">📋 事前準備</button>
       <button class="help-tab" onclick="switchHelpTab('basic')">🚀 基本操作</button>
@@ -1182,119 +1207,66 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
     <!-- ── 事前準備 ── -->
     <div class="help-body" id="help-tab-prepare">
       <h2>📋 事前準備</h2>
-
       <h3>推奨ブラウザ</h3>
       <p>Chrome または Edge での利用を推奨します。OneDrive連携（File System Access API）はSafariやFirefoxでは動作しません。</p>
 
       <h3>SharePointフォルダをOneDriveに同期する</h3>
-      <p>複数人でデータを共有するには、SharePointのフォルダをOneDriveにショートカット追加します。</p>
-      <div class="help-step">
-        <div class="help-step-num">1</div>
-        <div class="help-step-body">
-          <b>SharePointサイトを開く</b>
-          <p>ブラウザでSharePointの対象サイトにアクセスします。<br>例：<code>https://会社名.sharepoint.com/sites/プロジェクト名</code></p>
-        </div>
-      </div>
-      <div class="help-step">
-        <div class="help-step-num">2</div>
-        <div class="help-step-body">
-          <b>WBSデータ用フォルダを用意する</b>
-          <p>ドキュメントライブラリでWBSデータを置くフォルダに移動します。新規作成する場合は「＋ 新規」→「フォルダー」から作成します（例：<code>WBSData</code>）。</p>
-        </div>
-      </div>
-      <div class="help-step">
-        <div class="help-step-num">3</div>
-        <div class="help-step-body">
-          <b>「OneDriveへのショートカットを追加」をクリック</b>
-          <p>フォルダを右クリック → 「OneDriveへのショートカットを追加」を選択します。</p>
-        </div>
-      </div>
-      <div class="help-step">
-        <div class="help-step-num">4</div>
-        <div class="help-step-body">
-          <b>OneDriveデスクトップアプリで同期を確認する</b>
-          <p>タスクバーのOneDriveアイコン（雲マーク）をクリックし、同期完了を確認します。エクスプローラーでOneDriveフォルダ内にSharePointのフォルダが表示されれば成功です。</p>
-        </div>
-      </div>
-      <div class="help-step">
-        <div class="help-step-num">5</div>
-        <div class="help-step-body">
-          <b>チームメンバー全員が同じ手順を実施する</b>
-          <p>共有したいメンバー全員が同じ手順でOneDriveにショートカットを追加することで、全員のPCに同じフォルダが同期されます。</p>
-        </div>
-      </div>
-      <div class="help-note">💡 OneDriveデスクトップアプリがインストールされていない場合は、Microsoft公式サイトからダウンロードし、会社のMicrosoft 365アカウントでサインインしてください。</div>
+      <div class="help-step"><div class="help-step-num">1</div><div class="help-step-body"><b>SharePointサイトを開く</b><p>ブラウザで対象サイトにアクセスします。例：<code>https://会社名.sharepoint.com/sites/プロジェクト名</code></p></div></div>
+      <div class="help-step"><div class="help-step-num">2</div><div class="help-step-body"><b>WBSデータ用フォルダを用意する</b><p>ドキュメントライブラリでWBSデータを置くフォルダを選択、または「＋ 新規」→「フォルダー」で作成します（例：<code>WBSData</code>）。</p></div></div>
+      <div class="help-step"><div class="help-step-num">3</div><div class="help-step-body"><b>「OneDriveへのショートカットを追加」をクリック</b><p>フォルダを右クリック → 「OneDriveへのショートカットを追加」を選択します。</p></div></div>
+      <div class="help-step"><div class="help-step-num">4</div><div class="help-step-body"><b>OneDriveデスクトップアプリで同期を確認</b><p>タスクバーの雲マークをクリックし、同期完了を確認します。エクスプローラーにフォルダが表示されれば成功です。</p></div></div>
+      <div class="help-step"><div class="help-step-num">5</div><div class="help-step-body"><b>チームメンバー全員が同じ手順を実施</b><p>全員が同じフォルダにショートカットを追加することで、全員のPCに同じフォルダが同期されます。</p></div></div>
 
-      <h3>WBS Manager 初回セットアップ</h3>
-      <div class="help-step">
-        <div class="help-step-num">1</div>
-        <div class="help-step-body">
-          <b>HTMLファイルをデスクトップに保存する</b>
-          <p><code>wbs-tool.html</code> をデスクトップに保存し、Chrome または Edge でダブルクリックして開きます。</p>
-        </div>
-      </div>
-      <div class="help-step">
-        <div class="help-step-num">2</div>
-        <div class="help-step-body">
-          <b>起動ウィザードでストレージを選択する</b>
-          <p>起動時に表示されるウィザードで「☁️ OneDrive（チーム共有）」を選択すると、フォルダ選択ダイアログが開きます。手順4で同期したフォルダを指定してください。</p>
-        </div>
-      </div>
-      <div class="help-step">
-        <div class="help-step-num">3</div>
-        <div class="help-step-body">
-          <b>ユーザーを選択してログインする</b>
-          <p>ユーザー選択画面が表示されます（前回ログインしたユーザーがある場合は自動ログインされます）。ユーザーが未登録の場合は「新しいユーザーを追加してログイン」から登録してください。</p>
-        </div>
-      </div>
+      <h3>初回セットアップ</h3>
+      <div class="help-step"><div class="help-step-num">1</div><div class="help-step-body"><b>HTMLファイルをブラウザで開く</b><p><code>wbs-tool.html</code> をデスクトップに保存し、Chrome または Edge でダブルクリックして開きます。</p></div></div>
+      <div class="help-step"><div class="help-step-num">2</div><div class="help-step-body"><b>起動ウィザードでストレージを選択</b><p>「☁️ OneDrive（チーム共有）」を選択するとフォルダ選択ダイアログが開きます。手順4で同期したフォルダを指定してください。</p></div></div>
+      <div class="help-step"><div class="help-step-num">3</div><div class="help-step-body"><b>ユーザーを選択してログイン</b><p>ユーザー選択画面が表示されます。未登録の場合は「新しいユーザーを追加してログイン」から登録してください。</p></div></div>
+      <div class="help-note">💡 2回目以降は起動時に「⚡ OneDriveに接続して続行」ボタンが表示されます。ブラウザの許可ダイアログに「許可」を押すだけで自動接続されます。</div>
     </div>
 
     <!-- ── 基本操作 ── -->
     <div class="help-body" id="help-tab-basic" style="display:none">
       <h2>🚀 基本操作</h2>
 
-      <h3>タスク・フォルダの追加</h3>
-      <table class="help-table">
-        <tr><th>操作</th><th>方法</th></tr>
-        <tr><td>最上位タスクを追加</td><td>ヘッダーの「＋ タスク追加」ボタン</td></tr>
-        <tr><td>同じ階層に追加</td><td>行左端の同列アイコン（＋横線）</td></tr>
-        <tr><td>子タスクを追加</td><td>行左端の子追加アイコン（青・インデント矢印）</td></tr>
-        <tr><td>右クリックメニュー</td><td>行を右クリック → 同階層追加 / 子追加 / 削除</td></tr>
-      </table>
-      <div class="help-note">💡 子タスクを追加すると、親タスクの開始日・終了日が自動的に継承されます（設定されている場合）。</div>
-
-      <h3>フォルダとタスクの違い</h3>
+      <h3>タスクの種別</h3>
       <ul>
         <li><b>📁 フォルダ</b>：フェーズやグループを表します。進捗率は子タスクの期間加重平均で自動計算されます。</li>
         <li><b>📄 タスク</b>：実際の作業単位です。進捗率を手動で入力します。</li>
+        <li><b>🔷 マイルストーン</b>：節目日を表します。開始日のみ設定。ガントチャートで◆ひし形マーカーで表示されます。</li>
       </ul>
+
+      <h3>タスクの追加</h3>
+      <table class="help-table">
+        <tr><th>操作</th><th>方法</th></tr>
+        <tr><td>最上位タスクを追加</td><td>ヘッダー左側の「＋ タスク追加」ボタン</td></tr>
+        <tr><td>同じ階層に追加</td><td>行左端の同列アイコン（＋横線）</td></tr>
+        <tr><td>子タスクを追加</td><td>行左端の子追加アイコン（青）</td></tr>
+        <tr><td>右クリックメニュー</td><td>行を右クリック</td></tr>
+      </table>
+      <div class="help-note">💡 追加されたタスクはクリックした行のサブツリー直後に挿入されます。</div>
 
       <h3>タスクの非表示</h3>
-      <p>行左端の👁アイコンをクリックするとタスクを非表示にできます（データは保持されます）。非表示タスクがある場合、ツールバーに「🚫 非表示タスクを表示（N件）」チェックボックスが表示されます。チェックを入れると半透明で一覧表示され、再度👁アイコンで個別に再表示できます。</p>
+      <p>行左端の👁アイコンで非表示化できます（データは保持）。サイドバーのフィルタ「🚫 非表示」チェックボックスで一覧確認・個別再表示が可能です。</p>
 
       <h3>並び替え</h3>
-      <p>ツールバーの「⠿ 並替モード」をONにすると、行左端の ⠿ ハンドルをドラッグして順序を変更できます。</p>
-      <ul>
-        <li>ドロップ位置の上25%：同列の上に挿入</li>
-        <li>ドロップ位置の下25%：同列の下に挿入</li>
-        <li>ドロップ位置の中央50%：子として挿入</li>
-      </ul>
+      <p>リストビュー上部の「⠿ 並替モード」をONにすると行をドラッグで並べ替えられます。ドロップ位置の上25%は同列上、下25%は同列下、中央50%は子として挿入されます。</p>
 
-      <h3>タスク詳細の編集</h3>
-      <p>行をクリックすると右側に詳細パネルが開きます。種別・タスク名・開始日/終了日（横並び）・担当者・ステータス・進捗率・成果物・備考・依存関係を編集できます。担当者は登録ユーザーが候補として表示される1つの入力欄で、自由入力も可能です。</p>
-
-      <h3>ステータスフィルタ</h3>
+      <h3>サイドバーのフィルタ</h3>
       <table class="help-table">
-        <tr><th>選択肢</th><th>表示対象</th></tr>
-        <tr><td>全ステータス</td><td>すべてのタスク</td></tr>
-        <tr><td>完了以外</td><td>未着手・進行中・ブロック中</td></tr>
-        <tr><td>未着手 / 進行中 / 完了 / ブロック中</td><td>個別ステータスで絞り込み</td></tr>
+        <tr><th>フィルタ</th><th>内容</th></tr>
+        <tr><td>タスク名検索</td><td>タスク名・成果物に部分一致するタスクを表示</td></tr>
+        <tr><td>担当者</td><td>特定の担当者のタスクのみ表示</td></tr>
+        <tr><td>自分のタスク</td><td>ログイン中のユーザーのタスクのみ表示</td></tr>
+        <tr><td>未完了のみ</td><td>完了以外のタスクを表示</td></tr>
+        <tr><td>遅延のみ</td><td>期限超過のタスクのみ表示</td></tr>
+        <tr><td>マイルストーンのみ</td><td>マイルストーン行のみ表示</td></tr>
       </table>
+      <div class="help-note">💡 フィルタはリストビューとガントチャートの両方に連動します。プロジェクト切替時にはフィルタが自動リセットされます。</div>
 
       <h3>CSV インポート / エクスポート</h3>
       <ul>
-        <li><b>エクスポート（↑アイコン）</b>：内部ID・No・依存関係（ID/No両方）・親IDを含むCSVを保存</li>
-        <li><b>インポート（↓アイコン）</b>：内部ID列があればアップサート（部分更新）または上書きを選択可能。旧フォーマット（ID列なし）は全体上書き</li>
+        <li><b>エクスポート（ヘッダー右側の↑アイコン）</b>：内部ID・No・依存関係・親IDを含むCSVを保存</li>
+        <li><b>インポート（ヘッダー右側の↓アイコン）</b>：内部ID列があればアップサート（部分更新）または上書きを選択可能</li>
       </ul>
     </div>
 
@@ -1302,42 +1274,48 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
     <div class="help-body" id="help-tab-gantt" style="display:none">
       <h2>📊 ガントチャート</h2>
 
-      <h3>表示スケールの切替</h3>
-      <p>ガントチャートビュー内のサブバーでスケールを切り替えます。切り替えるたびに Today が画面中央に自動スクロールされます。</p>
+      <h3>表示スケール</h3>
       <table class="help-table">
-        <tr><th>スケール</th><th>1列の幅</th><th>用途</th></tr>
-        <tr><td>日</td><td>1日</td><td>直近の詳細スケジュール確認</td></tr>
-        <tr><td>週</td><td>7日（月曜始まり）</td><td>月次の進捗管理</td></tr>
-        <tr><td>月</td><td>1ヶ月</td><td>フェーズ全体の把握</td></tr>
-        <tr><td>四半期</td><td>3ヶ月（<b>4月始まり年度</b>）</td><td>年度計画の確認</td></tr>
-        <tr><td>年</td><td>1年</td><td>複数年プロジェクトの俯瞰</td></tr>
+        <tr><th>スケール</th><th>1画面の目安</th><th>用途</th></tr>
+        <tr><td>日</td><td>約30日</td><td>直近の詳細スケジュール確認</td></tr>
+        <tr><td>週</td><td>約3ヶ月</td><td>月次の進捗管理</td></tr>
+        <tr><td>月</td><td>約1年</td><td>フェーズ全体の把握</td></tr>
+        <tr><td>四半期</td><td>約1.5年（<b>4月始まり年度</b>）</td><td>年度計画の確認</td></tr>
+        <tr><td>年</td><td>約3年</td><td>複数年プロジェクトの俯瞰</td></tr>
       </table>
-      <div class="help-note">💡 四半期はQ1=4〜6月、Q2=7〜9月、Q3=10〜12月、Q4=翌年1〜3月（4月始まり年度）です。</div>
+      <div class="help-note">💡 四半期はQ1=4〜6月、Q2=7〜9月、Q3=10〜12月、Q4=翌年1〜3月（4月始まり年度）です。スケール切替時はTodayが画面中央に自動スクロールされます。</div>
 
-      <h3>タスク選択時のスクロール</h3>
-      <p>ガントチャート表示中にタスク名をクリックすると、そのタスクの開始日が画面左1/4に来るよう自動スクロールします。</p>
+      <h3>ツールバー（左から）</h3>
+      <p>① 表示レンジ ② ⚡イナズマ線 ③ 🔴クリティカルパス ④ 色分けルール ⑤ 🖨印刷/PDF</p>
 
-      <h3>バーの操作</h3>
+      <h3>バー色分けルール</h3>
+      <table class="help-table">
+        <tr><th>ルール</th><th>内容</th></tr>
+        <tr><td>ステータス</td><td>未着手=グレー / 進行中=青 / 完了=緑 / ブロック=赤</td></tr>
+        <tr><td>担当者</td><td>各ユーザーのアバターカラー</td></tr>
+        <tr><td>遅延状況</td><td>完了=緑 / 期限超過=赤 / 遅れ気味=オレンジ / 順調=青</td></tr>
+      </table>
+
+      <h3>バー操作</h3>
       <ul>
         <li><b>バー中央をドラッグ</b>：開始日・終了日を同時にシフト</li>
         <li><b>バー左端をドラッグ</b>：開始日のみ変更</li>
         <li><b>バー右端をドラッグ</b>：終了日のみ変更</li>
       </ul>
-      <p>ドラッグ中はツールチップに日付と日数をリアルタイム表示します。</p>
-
-      <h3>依存関係の矢印</h3>
-      <ul>
-        <li><b>グレー点線</b>：正常な依存関係</li>
-        <li><b>赤い点線</b>：期間重複あり（前工程終了前に後工程が開始している）</li>
-      </ul>
+      <div class="help-note">💡 ドラッグ中はツールチップに日付と日数をリアルタイム表示します。参照モード中はバードラッグが無効化されます。</div>
 
       <h3>イナズマ線</h3>
-      <p>「⚡ イナズマ線」ボタンで表示/非表示を切り替えます。今日時点で進行中・期限超過のタスクの実績進捗点を縦につなぎ、遅れ・進みを視覚化します。スケール切替にも追従します。</p>
+      <p>今日時点の進捗遅れ・進みを実績進捗点を縦につないで可視化します。全スケールに追従します。</p>
       <ul>
         <li><b>🔵 青（今日ラインより右）</b>：進んでいる</li>
         <li><b>🔴 赤（今日ラインより左）</b>：遅れている</li>
-        <li><b>◆ 菱形（赤）</b>：期間超過かつ未完了の遅延タスク</li>
       </ul>
+
+      <h3>クリティカルパス</h3>
+      <p>「🔴 クリティカルパス」ボタンで表示/非表示を切替。依存関係から最長経路（フロート=0のタスク）を自動計算します。ラベル列に赤い左ボーダー、バーに赤いアウトラインで強調表示されます。</p>
+
+      <h3>マイルストーン</h3>
+      <p>種別を「🔷 マイルストーン」にすると、ガントチャートに◆ひし形マーカーで表示されます。開始日のみ設定します（終了日は不要）。</p>
     </div>
 
     <!-- ── OneDrive共有 ── -->
@@ -1345,74 +1323,94 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <h2>☁️ OneDrive共有モード</h2>
 
       <h3>起動ウィザード</h3>
-      <p>起動時に毎回ストレージ選択画面が表示されます。</p>
+      <p>起動時に表示される画面で、前回の設定がある場合は上部に続行ボタンが1つ表示されます。</p>
       <table class="help-table">
-        <tr><th>ボタン</th><th>動作</th></tr>
-        <tr><td>前回と同じ設定で続行</td><td>前回のモード・ユーザーで自動ログイン</td></tr>
-        <tr><td>⚡ ワンクリックで再接続</td><td>前回のOneDriveフォルダに1クリックで接続・自動ログイン</td></tr>
-        <tr><td>💾 ローカルストレージ</td><td>このPCのブラウザ内に保存するモードで起動</td></tr>
-        <tr><td>☁️ OneDrive（チーム共有）</td><td>フォルダ選択ダイアログを開いて接続</td></tr>
+        <tr><th>表示されるボタン</th><th>動作</th></tr>
+        <tr><td>⚡ OneDriveに接続して続行</td><td>前回のフォルダに自動接続。ブラウザの許可ダイアログに「許可」を押すだけで完了（最速）</td></tr>
+        <tr><td>☁️ OneDriveモードで続行</td><td>前回OneDriveを使用していたがフォルダが記憶されていない場合。フォルダ選択ダイアログが開く</td></tr>
+        <tr><td>💾 ローカルストレージで続行</td><td>前回ローカルを使用。そのまま起動</td></tr>
+        <tr><td>💾 ローカルストレージ（選択肢）</td><td>ローカルモードで新たに起動</td></tr>
+        <tr><td>☁️ OneDrive（チーム共有）（選択肢）</td><td>OneDriveモードで新たに起動。フォルダ選択ダイアログが開く</td></tr>
       </table>
-      <div class="help-note">💡 前回ログインしたユーザーが有効な場合は、モード選択後に自動ログインされます。</div>
 
-      <h3>編集モードと参照モード（OneDriveモード時）</h3>
+      <h3>ヘッダーの状態表示</h3>
       <div class="help-warn">⚠ OneDriveモードでは起動直後は「参照モード」です。編集するには必ず「✏️ 編集開始」を押してください。</div>
       <table class="help-table">
-        <tr><th>状態</th><th>バナー</th><th>編集可否</th></tr>
-        <tr><td>参照モード（起動直後）</td><td>👁 参照モード（黄）</td><td>❌ 不可</td></tr>
-        <tr><td>他ユーザー編集中</td><td>🔒 ○○が編集中（赤）</td><td>❌ 不可</td></tr>
-        <tr><td>編集モード</td><td>なし</td><td>✅ 可能</td></tr>
+        <tr><th>表示</th><th>状態</th><th>編集可否</th></tr>
+        <tr><td>👁 参照モード（黄バナー）</td><td>参照モード（起動直後）</td><td>❌ 不可</td></tr>
+        <tr><td>🔒 ○○が編集中（赤バナー）</td><td>他ユーザーが編集中</td><td>❌ 不可</td></tr>
+        <tr><td>✏️ 編集中（緑バッジ）</td><td>自分が編集モード</td><td>✅ 可能</td></tr>
       </table>
       <ul>
         <li><b>✏️ 編集開始</b>：最新データを読み込み、ロックを取得して編集可能になります</li>
         <li><b>✅ 編集完了</b>：データを保存し、ロックを解放します。離席前に必ず押してください</li>
       </ul>
 
-      <h3>参照モードで無効化される操作</h3>
+      <h3>📦 自動バックアップ</h3>
+      <p>「✏️ 編集開始」を押すたびに、その時点のデータを自動的にバックアップします。</p>
       <ul>
-        <li>タスクの追加・編集・削除・ドラッグ</li>
-        <li>詳細パネルの入力フィールドすべて</li>
-        <li>プロジェクトの追加・削除</li>
-        <li>ガントチャートのバードラッグ</li>
+        <li>バックアップ先：OneDriveフォルダ内の <code>Backup/</code> フォルダ（自動作成）</li>
+        <li>バックアップ形式：<code>Backup/2026-06-08_143022/</code> のようなタイムスタンプフォルダ</li>
+        <li>各フォルダには <code>wbs_data.json</code>（タスクデータ）と <code>wbs_feedback.json</code>（改善要望）が保存されます</li>
+        <li>最大10世代を保持。11件目が作成される際に最も古いフォルダが自動削除されます</li>
+        <li>バックアップが失敗した場合も編集モードは通常通り開始します</li>
       </ul>
+      <div class="help-note">💡 バックアップフォルダの <code>wbs_data.json</code> はツールで直接読み込める形式です。誤ってデータを壊した場合はエクスプローラーでファイルをコピーして復元できます。</div>
+
+      <h3>参照モードで無効化される操作</h3>
+      <p>タスクの追加・編集・削除・ドラッグ / 詳細パネルの入力 / プロジェクトの追加・削除 / ガントバードラッグ / CSVインポート</p>
 
       <h3>自動更新</h3>
-      <p>30秒ごとにOneDriveフォルダをポーリングし、他ユーザーの編集状態・データ更新を自動確認します。参照モード中にデータが更新された場合は自動リロードされます。</p>
+      <p>30秒ごとにOneDriveフォルダをポーリングし、他ユーザーの編集状態を自動確認します。参照モード中にデータが更新された場合は自動リロードされます。</p>
     </div>
 
     <!-- ── Tips ── -->
     <div class="help-body" id="help-tab-tips" style="display:none">
       <h2>💡 Tips</h2>
 
-      <h3>フォルダ日程の矛盾を検知</h3>
-      <p>子タスクの日程がフォルダの期間を超えている場合、リスト・ガントチャート両方で <b style="color:var(--danger)">⚠</b> マークが表示されます。サイドバーにも矛盾件数が表示されます。</p>
-
-      <h3>フォルダの進捗率は自動計算</h3>
-      <p>フォルダの進捗率は子タスクの期間で重み付けした加重平均で自動計算されます。手動入力は不要です。</p>
-
-      <h3>タスクを一時的に非表示にする</h3>
-      <p>行左端の👁アイコンで完了済みタスクや確認不要なタスクを非表示にできます。ツールバーの「🚫 非表示タスクを表示」チェックボックスで一覧確認・個別再表示が可能です。非表示状態はデータとして保存されます。</p>
+      <h3>ヘッダーのレイアウト</h3>
+      <table class="help-table">
+        <tr><th>位置</th><th>内容</th></tr>
+        <tr><td>左側</td><td>ロゴ / 参照モードバナー / 編集中バッジ / 編集開始・完了ボタン / ストレージ表示 / ＋タスク追加 / ↩Undo / 🕐変更履歴</td></tr>
+        <tr><td>右側</td><td>↑エクスポート / ↓インポート / ❓ヘルプ / 👤ユーザー</td></tr>
+      </table>
 
       <h3>サイドバーの折りたたみ</h3>
-      <p>サイドバーの「◀」ボタン（新規ボタン右隣）でサイドバーを折りたたみ、作業エリアを広くできます。折りたたみ中も総タスク数・完了数・期限超過数のミニ表示で状況を確認できます。</p>
+      <p>サイドバーの「◀」ボタンで折りたたみ、作業エリアを広げられます。折りたたみ中は📋📊🏠📝のアイコンボタンで表示を切り替えられます。</p>
 
-      <h3>ユーザーの切替</h3>
-      <p>画面右上のアバターアイコンをクリックするとユーザーパネルが開き、ログインユーザーを切り替えられます。ユーザーの追加・編集・削除もここから行います。</p>
+      <h3>ダッシュボード（🏠 タブ）</h3>
+      <p>13種のカードでプロジェクトの状況を可視化します。右上の「⚙ カード設定」ボタンで各カードの表示/非表示・幅（標準/2列）・並び順をユーザーごとに設定できます。設定はブラウザに保存されます。</p>
 
-      <h3>プロジェクトの管理</h3>
-      <p>サイドバーの「プロジェクト」セクションからプロジェクトの追加（新規ボタン）・切替・削除・名前変更ができます。OneDriveモードの参照モード中はプロジェクトの追加・削除はできません。</p>
+      <h3>変更履歴・Undo</h3>
+      <p>ヘッダー左側の↩ボタン（または <b>Ctrl+Z</b>）で直前の操作を取り消せます（最大30件）。🕐ボタンで変更ログ（最大200件）を一覧表示できます。</p>
+
+      <h3>バックアップからの復元（OneDriveモード）</h3>
+      <p>データを誤って壊してしまった場合、エクスプローラーで <code>Backup/</code> フォルダを開き、復元したいタイムスタンプフォルダの <code>wbs_data.json</code> を同期フォルダのルート（<code>wbs_data.json</code> と同じ場所）にコピーして上書きすることで復元できます。改善要望も同様に <code>wbs_feedback.json</code> を上書きします。</p>
+
+      <h3>フォルダ日程の矛盾検知</h3>
+      <p>子タスクの日程がフォルダの期間を超えている場合、リスト・ガントチャート両方で <b style="color:var(--danger)">⚠</b> マークが表示されます。</p>
+
+      <h3>改善要望管理（📝 タブ）</h3>
+      <p>ツール内で改善要望と対応結果をチームで管理できます。OneDriveモードでは <code>wbs_feedback.json</code> として同フォルダに保存されます。</p>
+
+      <h3>プロジェクト管理</h3>
+      <p>サイドバーのプロジェクトセレクト横の🗑ボタンで現在のプロジェクトを削除できます（2件以上の場合のみ有効）。「＋ 新規プロジェクト」ボタンで追加できます。プロジェクト切替時にフィルタは自動的にリセットされます。</p>
 
       <h3>CSVエクスポート形式</h3>
       <div class="help-code">ID, No, タスク名, 種別, 成果物, ステータス, 担当者,
 開始日, 終了日, 進捗率, 依存関係（ID）, 依存関係（No）, 親ID, 備考</div>
-      <p>内部IDが含まれるため、エクスポート→外部編集→インポートでもアップサート（部分更新）が可能です。</p>
+      <p>内部IDが含まれるため、エクスポート→外部編集→インポートでアップサート（部分更新）が可能です。</p>
 
       <h3>データのリセット</h3>
-      <p>ストレージ設定モーダル（ヘッダーの「💾 ローカル」または「⚠ 未接続」をクリック）の下部にある「🔄 サンプルデータでリセット」でデータを初期状態に戻せます。</p>
+      <p>ストレージ設定（ヘッダーのストレージ表示をクリック）の下部にある「🔄 サンプルデータでリセット」でデータを初期状態に戻せます。</p>
     </div>
   </div>
+  <!-- バージョン情報フッター -->
+  <div style="padding:8px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+    <span style="font-size:11px;color:var(--text3)">WBS Manager <b style="color:var(--text2)">v1.40.0</b></span>
+    <button onclick="closeHelpModal()" class="btn btn-sm">閉じる</button>
+  </div>
 </div>
-
 <!-- New Project Modal -->
 <div class="modal-overlay" id="new-proj-modal">
   <div class="modal" style="max-width:420px">
@@ -1925,38 +1923,93 @@ let isEditMode=false; // CSVモードでの編集フラグ
 
 // ── 参照/編集モードUI更新 ──
 function updateEditModeUI(){
-  // CSVモードかどうかはstorageModeだけで判定（csvDirHandleの有無に依存しない）
   const isCsvMode=storageMode==='csvFile';
   const banner=document.getElementById('readonly-banner');
   const checkinBtn=document.getElementById('checkin-btn');
   const checkoutBtn=document.getElementById('checkout-btn');
+  const editBadge=document.getElementById('edit-mode-badge');
   if(!isCsvMode){
-    // localStorageモード：常に編集可能
     if(banner) banner.classList.remove('visible');
     if(checkinBtn) checkinBtn.style.display='none';
     if(checkoutBtn) checkoutBtn.style.display='none';
+    if(editBadge) editBadge.style.display='none';
     document.body.classList.remove('readonly-mode');
     isEditMode=true;
     return;
   }
-  // CSVモード：isEditModeフラグで制御
   if(isEditMode){
     if(banner) banner.classList.remove('visible');
     if(checkinBtn) checkinBtn.style.display='none';
     if(checkoutBtn) checkoutBtn.style.display='inline-flex';
+    if(editBadge) editBadge.style.display='inline-flex';
     document.body.classList.remove('readonly-mode');
   } else {
     if(banner) banner.classList.add('visible');
     if(checkinBtn) checkinBtn.style.display='inline-flex';
     if(checkoutBtn) checkoutBtn.style.display='none';
+    if(editBadge) editBadge.style.display='none';
     document.body.classList.add('readonly-mode');
+  }
+}
+
+// ════════════════════════════════════════════════════
+// OneDrive バックアップ機能
+// Backup/ フォルダにタイムスタンプサブフォルダを作成し
+// wbs_data.json と wbs_feedback.json を保存する。
+// 最大10世代を保持し、古いものから順に削除する。
+// ════════════════════════════════════════════════════
+const BACKUP_DIR_NAME = 'Backup';
+const BACKUP_MAX = 10;
+
+async function runBackup(){
+  if(!csvDirHandle) return;
+  try{
+    // Backup フォルダを取得（なければ作成）
+    const backupRoot = await csvDirHandle.getDirectoryHandle(BACKUP_DIR_NAME, {create:true});
+
+    // タイムスタンプフォルダ名（例：2026-06-08_143022）
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    const ts = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+    const snapDir = await backupRoot.getDirectoryHandle(ts, {create:true});
+
+    // wbs_data.json を書き込む
+    const dataFh = await snapDir.getFileHandle('wbs_data.json', {create:true});
+    const dataW = await dataFh.createWritable();
+    const dataObj = {projects, currentProjectId, _projUid, _uid, users, currentUserId, _savedAt: Date.now()};
+    await dataW.write(JSON.stringify(dataObj, null, 2));
+    await dataW.close();
+
+    // wbs_feedback.json を書き込む
+    const fbFh = await snapDir.getFileHandle('wbs_feedback.json', {create:true});
+    const fbW = await fbFh.createWritable();
+    await fbW.write(JSON.stringify({feedbacks, _fbUid}, null, 2));
+    await fbW.close();
+
+    // 古いバックアップを削除（BACKUP_MAX 件を超えた分）
+    const entries = [];
+    for await (const [name, handle] of backupRoot.entries()){
+      if(handle.kind === 'directory') entries.push(name);
+    }
+    entries.sort(); // タイムスタンプ昇順＝古い順
+    const excess = entries.length - BACKUP_MAX;
+    for(let i = 0; i < excess; i++){
+      try{
+        await backupRoot.removeEntry(entries[i], {recursive:true});
+      }catch(e){ /* 削除失敗は無視 */ }
+    }
+
+    showToastNotice(`📦 バックアップ完了（${ts}）`, 'success');
+  }catch(e){
+    // バックアップ失敗は編集モード移行をブロックしない
+    console.warn('Backup failed:', e);
+    showToastNotice('⚠ バックアップに失敗しました（編集は継続できます）', 'warn');
   }
 }
 
 async function checkin(){
   if(storageMode!=='csvFile'){return;}
   if(!csvDirHandle){
-    // フォルダ未接続の場合はフォルダ選択を促す
     showToastNotice('⚠ OneDriveフォルダを先に接続してください（ストレージ設定から選択）','warn');
     openStorageModal();
     return;
@@ -1968,7 +2021,9 @@ async function checkin(){
   }
   const ok=await loadFromCsvDir();
   if(ok){ syncTasks(); updateProjectUI(); renderAll(); }
-  await loadFeedbackFromCsv(); // フィードバックも読み込み
+  await loadFeedbackFromCsv();
+  // バックアップ実行（失敗しても編集モードは開始する）
+  await runBackup();
   await writeLockFile(true);
   isEditMode=true;
   updateEditModeUI();
@@ -2187,8 +2242,6 @@ function updateUserUI(){
   const u=currentUser();
   document.getElementById('header-user-avatar').style.background=u?u.color:'#9B9890';
   document.getElementById('header-user-avatar').textContent=u?initials(u.name):'?';
-  const nameEl=document.getElementById('header-user-name');
-  if(nameEl) nameEl.textContent=u?u.name:'ゲスト';
   renderUserList();
 }
 
@@ -2472,9 +2525,28 @@ function switchProject(pid){
   syncTasks();
   collapsedSet.clear();
   selectedTaskId=null;
-  hiddenTaskIds=new Set(); // プロジェクト切替時に非表示状態リセット（task.hiddenはタスクデータに保持）
+  hiddenTaskIds=new Set();
   updateHiddenBtn();
   document.getElementById('detail-panel').classList.remove('open');
+
+  // ── フィルタを全リセット ──
+  const searchInput=document.getElementById('search-input');
+  const filterStatus=document.getElementById('filter-status');
+  const filterAssignee=document.getElementById('filter-assignee');
+  const filterMine=document.getElementById('filter-mine');
+  const filterNotDone=document.getElementById('filter-not-done');
+  const filterOverdue=document.getElementById('filter-overdue-only');
+  const filterMilestone=document.getElementById('filter-milestone-only');
+  const showHidden=document.getElementById('show-hidden-check');
+  if(searchInput) searchInput.value='';
+  if(filterStatus) filterStatus.value='';
+  if(filterAssignee) filterAssignee.value='';
+  if(filterMine) filterMine.checked=false;
+  if(filterNotDone) filterNotDone.checked=false;
+  if(filterOverdue) filterOverdue.checked=false;
+  if(filterMilestone) filterMilestone.checked=false;
+  if(showHidden) showHidden.checked=false;
+
   updateProjectUI();
   renderAll();
   saveToLS();
@@ -2487,32 +2559,21 @@ function saveCurrentTasks(){
 // ── Update all project UI elements ──
 function updateProjectUI(){
   const p=currentProject();
-  if(!p)return;
+  if(!p) return;
 
-  // header select（削除済みのため null チェック）
-  const sel=document.getElementById('header-proj-select');
-  if(sel) sel.innerHTML=projects.map(pr=>`<option value="${pr.id}"${pr.id===currentProjectId?' selected':''}>${escHtml(pr.name)}</option>`).join('');
-  const dot=document.getElementById('header-proj-dot');
-  if(dot) dot.style.background=p.color;
+  // サイドバーのプロジェクトセレクト更新
+  const sbSel=document.getElementById('sb-proj-select');
+  if(sbSel){
+    sbSel.innerHTML=projects.map(pr=>`<option value="${pr.id}"${pr.id===currentProjectId?' selected':''}>${escHtml(pr.name)}</option>`).join('');
+  }
 
-  // sidebar list
-  const list=document.getElementById('sidebar-proj-list');
-  list.innerHTML=projects.map(pr=>{
-    const taskCount=pr.tasks.length;
-    const doneCount=pr.tasks.filter(t=>t.status==='done').length;
-    const isActive=pr.id===currentProjectId;
-    return `<div class="proj-list-item${isActive?' active':''}" onclick="switchProject('${pr.id}')" id="projitem-${pr.id}">
-      <div class="proj-dot" style="background:${pr.color}"></div>
-      <span class="proj-name" id="projname-${pr.id}">${pr.name}</span>
-      <span class="proj-count">${doneCount}/${taskCount}</span>
-      <div class="proj-actions">
-        <button class="icon-btn" title="名前を編集" onclick="startRenameProject('${pr.id}',event)" style="font-size:12px;width:22px;height:22px">✏️</button>
-        ${projects.length>1?`<button class="icon-btn proj-delete-btn" title="削除" onclick="deleteProject('${pr.id}',event)" style="font-size:12px;width:22px;height:22px;color:var(--danger)">🗑</button>`:''}
-      </div>
-    </div>`;
-  }).join('');
+  // サイドバーの削除ボタン制御（1件のみの場合は無効化）
+  const sbDelBtn=document.getElementById('sb-proj-delete-btn');
+  if(sbDelBtn){
+    sbDelBtn.disabled=projects.length<=1;
+    sbDelBtn.style.opacity=projects.length<=1?'0.3':'1';
+  }
 
-  // page title
   document.title=`${p.name} — WBS Manager`;
 }
 
@@ -2538,6 +2599,10 @@ function finishRenameProject(pid){
 }
 
 // ── Delete project ──
+function deleteCurrentProject(e){
+  deleteProject(currentProjectId,e);
+}
+
 function deleteProject(pid,e){
   e.stopPropagation();
   if(!isEditMode&&storageMode==='csvFile'){
@@ -2666,6 +2731,11 @@ function renderList(){
   const q=(document.getElementById('search-input')||{value:''}).value.toLowerCase();
   const fs=(document.getElementById('filter-status')||{value:''}).value;
   const fa=(document.getElementById('filter-assignee')||{value:''}).value;
+  const filterMine=(document.getElementById('filter-mine')||{checked:false}).checked;
+  const filterNotDone=(document.getElementById('filter-not-done')||{checked:false}).checked;
+  const filterOverdueOnly=(document.getElementById('filter-overdue-only')||{checked:false}).checked;
+  const filterMilestoneOnly=(document.getElementById('filter-milestone-only')||{checked:false}).checked;
+  const cu=currentUser();
   const today=new Date();today.setHours(0,0,0,0);
   const formatDate=d=>{if(!d)return'-';const dt=new Date(d);return dt.toLocaleDateString('ja-JP',{month:'2-digit',day:'2-digit'});};
 
@@ -2675,6 +2745,11 @@ function renderList(){
     if(fs==='not-done'&&t.status==='done')return;
     if(fs&&fs!=='not-done'&&t.status!==fs)return;
     if(fa&&t.assignee!==fa)return;
+    // 新チェックボックスフィルタ
+    if(filterMine&&cu&&t.assignee!==cu.name)return;
+    if(filterNotDone&&t.status==='done')return;
+    if(filterOverdueOnly&&!(t.end&&s2d(t.end)<today&&t.status!=='done'))return;
+    if(filterMilestoneOnly&&t.type!=='milestone')return;
 
     const lvl=getLevel(t.id);
     const hasCh=hasChildren(t.id);
@@ -2835,7 +2910,7 @@ function renderList(){
 
   tbody.innerHTML=html||`<tr><td colspan="9"><div class="empty-state"><div class="icon">🗂</div><p>タスクが見つかりません</p></div></td></tr>`;
   updateStats();
-  updateAssigneeFilter();
+  updateStats();
 }
 
 // ── 非表示タスク管理 ──
@@ -2890,7 +2965,7 @@ let _ganttFirstRender=true; // Todayを中央表示するのは初回のみ
 
 // ── スケール設定 ──
 let ganttScale='day'; // 'day'|'week'|'month'|'quarter'|'year'
-const SCALE_COL_W={day:28, week:56, month:112, quarter:224, year:336};
+const SCALE_COL_W={day:40, week:90, month:100, quarter:200, year:400};
 
 function setGanttScale(scale){
   ganttScale=scale;
@@ -3272,22 +3347,30 @@ function renderGantt(){
   const container=document.getElementById('gantt-inner');
   const nums=calcDisplayNums();
 
-  // ── リストビューと同じフィルタを適用 ──
+  // ── フィルタ適用（サイドバーのチェックボックスも含む） ──
   const q=(document.getElementById('search-input')||{value:''}).value.toLowerCase();
   const fs=(document.getElementById('filter-status')||{value:''}).value;
   const fa=(document.getElementById('filter-assignee')||{value:''}).value;
+  const filterMine=(document.getElementById('filter-mine')||{checked:false}).checked;
+  const filterNotDone=(document.getElementById('filter-not-done')||{checked:false}).checked;
+  const filterOverdueOnly=(document.getElementById('filter-overdue-only')||{checked:false}).checked;
+  const filterMilestoneOnly=(document.getElementById('filter-milestone-only')||{checked:false}).checked;
+  const cuG=currentUser();
   let treeOrder=buildTreeOrder();
-  if(q||fs||fa){
-    // フィルタ条件に一致するタスクIDとその祖先フォルダIDを収集
+  if(q||fs||fa||filterMine||filterNotDone||filterOverdueOnly||filterMilestoneOnly){
+    const today2=new Date();today2.setHours(0,0,0,0);
     const matchIds=new Set();
     treeOrder.forEach(t=>{
-      if(t.type==='folder') return; // フォルダは後で祖先として追加
+      if(t.type==='folder') return;
       const nameMatch=!q||(t.name||'').toLowerCase().includes(q)||(t.deliverable||'').toLowerCase().includes(q);
       const statusMatch=!fs||(fs==='not-done'?t.status!=='done':t.status===fs);
       const assigneeMatch=!fa||t.assignee===fa;
-      if(nameMatch&&statusMatch&&assigneeMatch){
+      const mineMatch=!filterMine||!cuG||t.assignee===cuG.name;
+      const notDoneMatch=!filterNotDone||t.status!=='done';
+      const overdueMatch=!filterOverdueOnly||(t.end&&s2d(t.end)<today2&&t.status!=='done');
+      const milestoneMatch=!filterMilestoneOnly||t.type==='milestone';
+      if(nameMatch&&statusMatch&&assigneeMatch&&mineMatch&&notDoneMatch&&overdueMatch&&milestoneMatch){
         matchIds.add(t.id);
-        // 祖先フォルダも表示対象に
         let pid=t.parentId;
         while(pid){ matchIds.add(pid); const p=tasks.find(x=>x.id===pid); pid=p?p.parentId:null; }
       }
@@ -3986,18 +4069,28 @@ function applySort(dragId, targetId, pos){
   const dragTask=tasks.find(t=>t.id===dragId);
   const targetTask=tasks.find(t=>t.id===targetId);
   if(!dragTask||!targetTask)return;
-  pushUndo('並べ替え：'+dragTask.name);
 
-  // gather dragTask subtree (drag node + all descendants)
+  // ── 木構造破壊ガード ──
+  // ① 自分自身へのドロップ
+  if(dragId===targetId)return;
+  // ② 配列操作前にサブツリーIDを収集し、子孫への移動を禁止
   function subtree(id){
     const res=[id];
     tasks.filter(t=>t.parentId===id).forEach(c=>subtree(c.id).forEach(x=>res.push(x)));
     return res;
   }
   const dragSubtreeIds=subtree(dragId);
+  if(dragSubtreeIds.includes(targetId)){
+    showToastNotice('⚠ 自分自身の子孫には移動できません','warn');
+    return;
+  }
+  // ③ child挿入の場合、ターゲットが自分の子孫でないことを再確認
+  if(pos==='child' && isDescendantOf(targetId, dragId)){
+    showToastNotice('⚠ 自分自身の子孫には移動できません','warn');
+    return;
+  }
 
-  // guard: can't drop inside own subtree
-  if(dragSubtreeIds.includes(targetId))return;
+  pushUndo('並べ替え：'+dragTask.name);
 
   // remove drag subtree from tasks array
   const dragSubtree=dragSubtreeIds.map(sid=>tasks.find(t=>t.id===sid));
@@ -4013,16 +4106,12 @@ function applySort(dragId, targetId, pos){
   // find insertion index in tasks array
   let insertIdx;
   if(pos==='child'){
-    // insert after all current children of target (append as last child)
     const lastChildIdx=tasks.reduce((acc,t,i)=>t.parentId===targetId?i:acc,-1);
     insertIdx=lastChildIdx>=0?lastChildIdx+1:tasks.findIndex(t=>t.id===targetId)+1;
   } else if(pos==='above'){
     insertIdx=tasks.findIndex(t=>t.id===targetId);
     if(insertIdx<0)insertIdx=tasks.length;
   } else { // below
-    // insert after target and its entire subtree
-    const targetSub=subtree(targetId); // already re-computed on stripped array; need full walk
-    // find last index of target subtree in current tasks
     let lastIdx=tasks.findIndex(t=>t.id===targetId);
     for(let i=lastIdx+1;i<tasks.length;i++){
       if(isDescendantOf(tasks[i].id,targetId)) lastIdx=i; else break;
@@ -4145,41 +4234,84 @@ function getTaskConflictReasons(taskId, conflictMap){
 }
 
 function updateStats(){
-  const allLeaf=tasks.filter(t=>!hasChildren(t.id));
-  const done=allLeaf.filter(t=>t.status==='done').length;
+  const leafTasks=tasks.filter(t=>t.type==='task');
+  const done=leafTasks.filter(t=>t.status==='done').length;
+  const doing=leafTasks.filter(t=>t.status==='doing').length;
   const today=new Date();today.setHours(0,0,0,0);
-  const overdue=tasks.filter(t=>t.end&&new Date(t.end)<today&&t.status!=='done').length;
-  // 矛盾件数（フォルダ単位でカウント）
+  const overdue=tasks.filter(t=>t.type!=='folder'&&t.end&&new Date(t.end)<today&&t.status!=='done').length;
+  const pct=leafTasks.length?Math.round(done/leafTasks.length*100):0;
   const conflictMap=buildConflictMap();
   const conflictCount=conflictMap.size;
 
-  document.getElementById('stat-total').textContent=tasks.length;
-  document.getElementById('stat-done').textContent=done;
-  document.getElementById('stat-overdue').textContent=overdue;
-  const pct=allLeaf.length?Math.round(done/allLeaf.length*100):0;
-  document.getElementById('stat-bar').style.width=pct+'%';
+  // 削除済みのサイドバー統計要素（プロジェクト状況セクション）は参照しない
+  // sb-conflict-row はプロジェクト状況セクション削除により不要
+
+  // ミニ表示（折りたたみ時）
   document.getElementById('stat-total-mini').textContent=tasks.length;
   document.getElementById('stat-done-mini').textContent=done;
   document.getElementById('stat-overdue-mini').textContent=overdue;
 
-  // 矛盾カード
-  const conflictCard=document.getElementById('conflict-stat-card');
-  if(conflictCard){
-    conflictCard.style.display=conflictCount>0?'block':'none';
-    const el=document.getElementById('stat-conflict');
-    if(el)el.textContent=conflictCount;
+  // ── 今日のタスク ──
+  const todayTasks=tasks.filter(t=>{
+    if(t.type==='folder'||t.status==='done') return false;
+    const cu=currentUser();
+    // 「自分のタスク」フィルタON時は自分のタスクのみ
+    // ここでは全担当者を対象とし、自分のタスクを先に表示
+    if(!t.start||!t.end) return false;
+    const s=new Date(t.start);s.setHours(0,0,0,0);
+    const e=new Date(t.end);e.setHours(0,0,0,0);
+    return s<=today&&e>=today;
+  });
+  const cu=currentUser();
+  const myTasks=todayTasks.filter(t=>cu&&t.assignee===cu.name);
+  const otherTasks=todayTasks.filter(t=>!cu||t.assignee!==cu.name);
+  const todayDisplay=[...myTasks,...otherTasks].slice(0,5);
+  const sbTodayCount=document.getElementById('sb-today-count');
+  if(sbTodayCount) sbTodayCount.textContent=todayTasks.length;
+  const sbTodayEl=document.getElementById('sb-today-tasks');
+  if(sbTodayEl){
+    if(todayDisplay.length){
+      sbTodayEl.innerHTML=todayDisplay.map(t=>`
+        <div class="sb-task-item" onclick="selectTask('${t.id}');if(currentTab!=='list')switchTab('list')">
+          <div class="sb-task-name">${escHtml(t.name)}</div>
+          <div class="sb-task-meta">${t.assignee?escHtml(t.assignee)+' · ':''}〜${t.end}</div>
+        </div>`).join('')+
+        (todayTasks.length>5?`<div style="font-size:11px;color:var(--accent);text-align:center;padding:4px 0;cursor:pointer" onclick="switchTab('list')">さらに${todayTasks.length-5}件 →</div>`:'');
+    } else {
+      sbTodayEl.innerHTML='<div class="sb-empty">今日のタスクはありません</div>';
+    }
   }
 
-  const assignees=[...new Set(tasks.map(t=>t.assignee).filter(Boolean))];
-  document.getElementById('assignee-legend').innerHTML=assignees.map(a=>`<div class="legend-item"><div class="avatar" style="background:${getAssigneeColor(a)};width:20px;height:20px;font-size:9px">${a.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>${a}</div>`).join('');
-}
+  // ── 遅延タスク ──
+  const overdueTasks=tasks.filter(t=>{
+    if(t.type==='folder'||t.status==='done') return false;
+    return t.end&&new Date(t.end)<today;
+  }).sort((a,b)=>new Date(a.end)-new Date(b.end)).slice(0,5);
+  const sbOverdueCount=document.getElementById('sb-overdue-count');
+  if(sbOverdueCount) sbOverdueCount.textContent=overdue;
+  const sbOverdueEl=document.getElementById('sb-overdue-tasks');
+  if(sbOverdueEl){
+    if(overdueTasks.length){
+      sbOverdueEl.innerHTML=overdueTasks.map(t=>{
+        const daysLate=Math.round((today-new Date(t.end))/86400000);
+        return `<div class="sb-task-item" onclick="selectTask('${t.id}');if(currentTab!=='list')switchTab('list')">
+          <div class="sb-task-name">${escHtml(t.name)}</div>
+          <div class="sb-task-meta" style="color:var(--danger)">${daysLate}日遅延${t.assignee?' · '+escHtml(t.assignee):''}</div>
+        </div>`;
+      }).join('');
+    } else {
+      sbOverdueEl.innerHTML='<div class="sb-empty" style="color:var(--success)">✅ 遅延なし</div>';
+    }
+  }
 
-function updateAssigneeFilter(){
-  const sel=document.getElementById('filter-assignee');
-  const cur=sel.value;
-  const assignees=[...new Set(tasks.map(t=>t.assignee).filter(Boolean))];
-  sel.innerHTML=`<option value="">全担当者</option>`+assignees.map(a=>`<option value="${a}">${a}</option>`).join('');
-  sel.value=cur;
+  // 担当者フィルタ更新
+  const assigneeSelSB=document.getElementById('filter-assignee');
+  if(assigneeSelSB){
+    const cur=assigneeSelSB.value;
+    const assignees=[...new Set(tasks.map(t=>t.assignee).filter(Boolean))];
+    assigneeSelSB.innerHTML=`<option value="">全担当者</option>`+assignees.map(a=>`<option value="${a}">${escHtml(a)}</option>`).join('');
+    assigneeSelSB.value=cur;
+  }
 }
 
 // ─── Actions ───
@@ -4463,8 +4595,18 @@ function switchTab(tab){
   document.getElementById('gantt-view').style.display=tab==='gantt'?'flex':'none';
   document.getElementById('dashboard-view').style.display=tab==='dashboard'?'block':'none';
   document.getElementById('feedback-view').style.display=tab==='feedback'?'block':'none';
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',
-    (i===0&&tab==='list')||(i===1&&tab==='gantt')||(i===2&&tab==='dashboard')||(i===3&&tab==='feedback')));
+  // リストツールバーはリスト表示時のみ
+  const lt=document.getElementById('list-toolbar');
+  if(lt) lt.style.display=tab==='list'?'flex':'none';
+  // サイドバーのビューボタン更新
+  document.querySelectorAll('.sb-view-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.tab===tab);
+  });
+  // 折りたたみ時の表示切替ボタン更新
+  ['list','gantt','dashboard','feedback'].forEach(t=>{
+    const btn=document.getElementById('cv-'+t);
+    if(btn) btn.classList.toggle('active',t===tab);
+  });
   if(tab==='gantt'){
     _ganttFirstRender=true;
     renderGantt();
@@ -4483,8 +4625,10 @@ function switchTab(tab){
 function renderAll(){
   saveCurrentTasks();
   saveToLS();
-  if(currentTab==='list')renderList();
-  else renderGantt();
+  if(currentTab==='list') renderList();
+  else if(currentTab==='gantt') renderGantt();
+  else if(currentTab==='dashboard') renderDashboard();
+  // feedback タブは手動操作で更新されるため renderAll では再描画しない
   updateStats();
   updateProjectUI();
 }
@@ -4503,14 +4647,12 @@ async function showStartupScreen(){
   const prev=localStorage.getItem(STARTUP_SKIP_KEY);
   const sub=document.getElementById('startup-sub');
   const contSec=document.getElementById('startup-continue-section');
+  const contBtn=document.getElementById('startup-continue-btn');
   const contIcon=document.getElementById('startup-continue-icon');
   const contTitle=document.getElementById('startup-continue-title');
   const contDesc=document.getElementById('startup-continue-desc');
-  const quickSec=document.getElementById('startup-quick-section');
-  const quickTitle=document.getElementById('startup-quick-title');
-  const quickDesc=document.getElementById('startup-quick-desc');
 
-  // 前回フォルダの有無を確認（非同期で事前ロード）
+  // 前回フォルダの有無を確認（非同期）
   let savedHandle=null;
   if(prev==='csvFile'){
     savedHandle=await loadHandleFromIDB();
@@ -4520,29 +4662,40 @@ async function showStartupScreen(){
   if(prev){
     contSec.style.display='block';
     sub.textContent='前回の設定で続行するか、変更してください';
-    if(prev==='csvFile'){
-      contIcon.textContent='☁️';
-      contTitle.textContent='前回と同じ設定で続行（OneDrive）';
+
+    if(prev==='csvFile' && savedHandle){
+      // OneDrive × フォルダ記憶あり → ワンクリック再接続として統合
       const savedName=getSavedCsvDirName();
-      contDesc.textContent=savedName?'OneDrive「'+savedName+'」で続行します':'OneDriveモードで続行します';
+      contIcon.textContent='⚡';
+      contTitle.textContent='OneDriveに接続して続行';
+      contDesc.textContent=(savedName?'「'+savedName+'」':'前回のフォルダ')+'に接続してデータを読み込みます';
+      contBtn.style.borderColor='#6EE7B7';
+      contBtn.style.background='#ECFDF5';
+      contTitle.style.color='#065F46';
+      // ワンクリック接続処理を呼ぶ
+      contBtn.onclick=startupQuickReconnect;
+    } else if(prev==='csvFile'){
+      // OneDrive × フォルダ未記憶 → 再度フォルダ選択
+      contIcon.textContent='☁️';
+      contTitle.textContent='OneDriveモードで続行';
+      contDesc.textContent='フォルダを選択してOneDriveに接続します';
+      contBtn.style.borderColor='';
+      contBtn.style.background='';
+      contTitle.style.color='';
+      contBtn.onclick=()=>startupSelectMode('csvFile');
     } else {
+      // ローカルストレージ
       contIcon.textContent='💾';
-      contTitle.textContent='前回と同じ設定で続行（ローカルストレージ）';
+      contTitle.textContent='ローカルストレージで続行';
       contDesc.textContent='このPC・このブラウザのデータで続行します';
+      contBtn.style.borderColor='';
+      contBtn.style.background='';
+      contTitle.style.color='';
+      contBtn.onclick=startupContinue;
     }
   } else {
     contSec.style.display='none';
     sub.textContent='データの保存先を選択してください';
-  }
-
-  // OneDriveワンクリック再接続ボタン（前回フォルダがある場合のみ表示）
-  if(savedHandle){
-    const savedName=getSavedCsvDirName();
-    quickSec.style.display='block';
-    quickTitle.textContent='⚡ OneDriveにワンクリックで再接続';
-    quickDesc.textContent=(savedName?'「'+savedName+'」':'前回のフォルダ')+'に接続してデータを読み込みます';
-  } else {
-    quickSec.style.display='none';
   }
 }
 
@@ -4621,15 +4774,17 @@ async function startupQuickReconnect(){
   isEditMode=false;
   updateEditModeUI();
   updateStorageIndicator();
-  document.getElementById('startup-quick-section').style.display='none';
   document.getElementById('startup-connecting').style.display='block';
+  // 続行ボタンを無効化して二重実行を防ぐ
+  const contBtn=document.getElementById('startup-continue-btn');
+  if(contBtn) contBtn.style.pointerEvents='none';
   try{
     const granted=await verifyHandlePermission(csvDirHandle);
     if(!granted){
       csvDirHandle=null;
       await clearHandleFromIDB();
       document.getElementById('startup-connecting').style.display='none';
-      document.getElementById('startup-quick-section').style.display='none';
+      if(contBtn) contBtn.style.pointerEvents='';
       showToastNotice('⚠ アクセスが拒否されました。フォルダを選択してください。','warn');
       await startupSelectFolder();
       return;
@@ -4637,6 +4792,7 @@ async function startupQuickReconnect(){
     await _startupLoadCsvAndFinish();
   }catch(e){
     document.getElementById('startup-connecting').style.display='none';
+    if(contBtn) contBtn.style.pointerEvents='';
     showToastNotice('⚠ 再接続に失敗しました: '+e.message,'warn');
     await startupSelectFolder();
   }
@@ -5208,54 +5364,45 @@ function renderDashboard(){
     const projStart=dated.reduce((m,t)=>s2d(t.start)<m?s2d(t.start):m, s2d(dated[0].start));
     const projEnd  =dated.reduce((m,t)=>s2d(t.end)>m?s2d(t.end):m, s2d(dated[0].end));
     const totalDays=Math.max(1,Math.round((projEnd-projStart)/86400000));
-    const W=320,H=140,PAD={t:10,r:10,b:30,l:36};
-    const cW=W-PAD.l-PAD.r, cH=H-PAD.t-PAD.b;
+    // viewBoxで描画・width:100%で親幅に追従
+    const VW=400,VH=160,PAD={t:12,r:16,b:32,l:36};
+    const cW=VW-PAD.l-PAD.r, cH=VH-PAD.t-PAD.b;
     const xScale=d=>PAD.l+Math.round((d-projStart)/86400000/totalDays*cW);
     const yScale=n=>PAD.t+Math.round((1-n/dated.length)*cH);
-    // 理想ライン
     const ix1=xScale(projStart), iy1=yScale(dated.length);
     const ix2=xScale(projEnd),   iy2=yScale(0);
-    // 実績ライン（日ごとの未完了数をサンプリング）
     const samplePoints=[];
-    for(let i=0;i<=Math.min(totalDays,60);i++){
-      const d=new Date(projStart); d.setDate(d.getDate()+Math.round(i/Math.min(totalDays,60)*totalDays));
+    for(let i=0;i<=Math.min(totalDays,80);i++){
+      const d=new Date(projStart); d.setDate(d.getDate()+Math.round(i/Math.min(totalDays,80)*totalDays));
       d.setHours(0,0,0,0);
       if(d>today) break;
       const remaining=dated.filter(t=>t.status!=='done'||s2d(t.end)>d).length;
       samplePoints.push({x:xScale(d),y:yScale(remaining)});
     }
-    // 今日線
-    const todayX=Math.min(xScale(today),W-PAD.r);
+    const todayX=Math.min(xScale(today),VW-PAD.r);
     const actualPath=samplePoints.length>1?'M'+samplePoints.map(p=>`${p.x},${p.y}`).join(' L'):'';
-    // 軸ラベル
     const startLabel=`${projStart.getMonth()+1}/${projStart.getDate()}`;
     const endLabel=`${projEnd.getMonth()+1}/${projEnd.getDate()}`;
-    return `<svg width="${W}" height="${H}" style="width:100%;max-width:${W}px">
-      <!-- 背景グリッド -->
+    return `<svg viewBox="0 0 ${VW} ${VH}" style="width:100%;height:auto;display:block">
       ${[0,.25,.5,.75,1].map(r=>{
         const y=PAD.t+Math.round(r*cH);
         const n=Math.round((1-r)*dated.length);
-        return `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="var(--border)" stroke-width="1"/>
-                <text x="${PAD.l-4}" y="${y+4}" text-anchor="end" font-size="9" fill="var(--text3)" font-family="DM Mono,sans-serif">${n}</text>`;
+        return `<line x1="${PAD.l}" y1="${y}" x2="${VW-PAD.r}" y2="${y}" stroke="var(--border)" stroke-width="1"/>
+                <text x="${PAD.l-4}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--text3)" font-family="DM Mono,sans-serif">${n}</text>`;
       }).join('')}
-      <!-- 軸 -->
       <line x1="${PAD.l}" y1="${PAD.t}" x2="${PAD.l}" y2="${PAD.t+cH}" stroke="var(--border)" stroke-width="1"/>
-      <line x1="${PAD.l}" y1="${PAD.t+cH}" x2="${W-PAD.r}" y2="${PAD.t+cH}" stroke="var(--border)" stroke-width="1"/>
-      <!-- 軸ラベル -->
-      <text x="${PAD.l}" y="${H-4}" text-anchor="middle" font-size="9" fill="var(--text3)" font-family="DM Sans,sans-serif">${startLabel}</text>
-      <text x="${W-PAD.r}" y="${H-4}" text-anchor="middle" font-size="9" fill="var(--text3)" font-family="DM Sans,sans-serif">${endLabel}</text>
-      <!-- 理想ライン -->
-      <line x1="${ix1}" y1="${iy1}" x2="${ix2}" y2="${iy2}" stroke="#9B9890" stroke-width="1.5" stroke-dasharray="4 3" opacity=".7"/>
-      <!-- 実績ライン -->
-      ${actualPath?`<path d="${actualPath}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`:''}
-      <!-- 今日ライン -->
-      ${today>=projStart&&today<=projEnd?`<line x1="${todayX}" y1="${PAD.t}" x2="${todayX}" y2="${PAD.t+cH}" stroke="var(--danger)" stroke-width="1" stroke-dasharray="3 2" opacity=".6"/>
-      <text x="${todayX+3}" y="${PAD.t+10}" font-size="9" fill="var(--danger)" font-family="DM Sans,sans-serif">今日</text>`:''}
-      <!-- 凡例 -->
-      <line x1="${PAD.l}" y1="${H-16}" x2="${PAD.l+16}" y2="${H-16}" stroke="#9B9890" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <text x="${PAD.l+20}" y="${H-12}" font-size="9" fill="var(--text3)" font-family="DM Sans,sans-serif">理想</text>
-      <line x1="${PAD.l+50}" y1="${H-16}" x2="${PAD.l+66}" y2="${H-16}" stroke="var(--accent)" stroke-width="2"/>
-      <text x="${PAD.l+70}" y="${H-12}" font-size="9" fill="var(--text3)" font-family="DM Sans,sans-serif">実績</text>
+      <line x1="${PAD.l}" y1="${PAD.t+cH}" x2="${VW-PAD.r}" y2="${PAD.t+cH}" stroke="var(--border)" stroke-width="1"/>
+      <text x="${PAD.l}" y="${VH-6}" text-anchor="middle" font-size="10" fill="var(--text3)" font-family="DM Sans,sans-serif">${startLabel}</text>
+      <text x="${VW-PAD.r}" y="${VH-6}" text-anchor="middle" font-size="10" fill="var(--text3)" font-family="DM Sans,sans-serif">${endLabel}</text>
+      <line x1="${ix1}" y1="${iy1}" x2="${ix2}" y2="${iy2}" stroke="#9B9890" stroke-width="1.5" stroke-dasharray="5 3" opacity=".7"/>
+      ${actualPath?`<path d="${actualPath}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`:''}
+      ${today>=projStart&&today<=projEnd?`
+        <line x1="${todayX}" y1="${PAD.t}" x2="${todayX}" y2="${PAD.t+cH}" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="4 3" opacity=".7"/>
+        <text x="${todayX+4}" y="${PAD.t+12}" font-size="10" fill="var(--danger)" font-family="DM Sans,sans-serif">今日</text>`:''}
+      <line x1="${PAD.l}" y1="${VH-18}" x2="${PAD.l+18}" y2="${VH-18}" stroke="#9B9890" stroke-width="1.5" stroke-dasharray="5 3"/>
+      <text x="${PAD.l+22}" y="${VH-14}" font-size="10" fill="var(--text3)" font-family="DM Sans,sans-serif">理想</text>
+      <line x1="${PAD.l+58}" y1="${VH-18}" x2="${PAD.l+76}" y2="${VH-18}" stroke="var(--accent)" stroke-width="2.5"/>
+      <text x="${PAD.l+80}" y="${VH-14}" font-size="10" fill="var(--text3)" font-family="DM Sans,sans-serif">実績</text>
     </svg>`;
   })();
 
@@ -5636,10 +5783,13 @@ document.getElementById('help-modal').addEventListener('click',function(e){
 });
 function toggleSidebar(){
   sidebarCollapsed=!sidebarCollapsed;
-  const sb=document.getElementById('sidebar'),btn=document.getElementById('sidebar-toggle');
+  const sb=document.getElementById('sidebar');
   sb.classList.toggle('collapsed',sidebarCollapsed);
-  btn.textContent=sidebarCollapsed?'▶':'◀';
-  btn.title=sidebarCollapsed?'サイドバーを展開':'サイドバーを折りたたむ';
+  // 展開・折りたたみボタンはクラスで複数存在するため全て更新
+  document.querySelectorAll('.sidebar-toggle').forEach(btn=>{
+    btn.textContent=sidebarCollapsed?'▶':'◀';
+    btn.title=sidebarCollapsed?'サイドバーを展開':'サイドバーを折りたたむ';
+  });
 }
 
 // ─── Export CSV ───
@@ -5835,27 +5985,19 @@ function importCSV(event){
             tasks.push(incoming);
           }
         });
-        // _uid カウンターを既存IDより大きい値に更新
-        tasks.forEach(t=>{
-          const n=parseInt((t.id||'').replace('t',''))||0;
-          if(n>=_uid) _uid=n+1;
-        });
         const p=currentProject();if(p)p.tasks=tasks;
         alert('✅ アップサート完了：'+parsed.length+'件を処理しました');
       } else {
         // 上書き
         tasks=parsed;
         const p=currentProject();if(p)p.tasks=parsed;
-        // _uid を更新
-        parsed.forEach(t=>{
-          const n=parseInt((t.id||'').replace('t',''))||0;
-          if(n>=_uid) _uid=n+1;
-        });
         alert('✅ '+parsed.length+'件をインポートしました');
       }
 
       collapsedSet.clear();selectedTaskId=null;
       document.getElementById('detail-panel').classList.remove('open');
+      resyncUid(); // インポートしたIDとの衝突を防ぐためカウンタを補正
+      saveToLS();  // インポート完了データを明示的に保存
       renderAll();
     }catch(err){alert('インポートに失敗しました:\n'+err.message);}
     finally{event.target.value='';}
