@@ -356,7 +356,50 @@ body.readonly-mode #detail-readonly-notice{display:flex!important}
 .storage-option-title{font-size:13px;font-weight:600;margin-bottom:3px}
 .storage-option-desc{font-size:11px;color:var(--text3);line-height:1.5}
 
-/* ─── Help modal ─── */
+/* ─── 印刷用スタイル ─── */
+@media print {
+  body * { visibility: hidden; }
+  #print-area, #print-area * { visibility: visible; }
+  #print-area {
+    position: fixed; left: 0; top: 0;
+    width: 100%; height: auto;
+    overflow: visible;
+  }
+  #print-area .gantt-scale-btn,
+  #print-area #lightning-btn,
+  #print-area button { display: none !important; }
+  #gantt-root {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+  #gantt-root > div { overflow: visible !important; }
+  @page { size: A3 landscape; margin: 10mm; }
+}
+/* ─── Dashboard ─── */
+.db-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+.db-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px}
+.db-card-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:14px}
+.db-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.db-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;text-align:center}
+.db-kpi-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text)}
+.db-kpi-label{font-size:11px;color:var(--text3);margin-top:2px}
+.db-bar-wrap{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.db-bar-label{font-size:12px;color:var(--text2);width:90px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.db-bar-track{flex:1;height:12px;background:var(--surface2);border-radius:6px;overflow:hidden}
+.db-bar-fill{height:100%;border-radius:6px;transition:.3s}
+.db-bar-pct{font-size:11px;color:var(--text3);width:36px;text-align:right;flex-shrink:0}
+
+.fb-status{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap}
+.fb-status.open{background:#FEF3C7;color:#92400E}
+.fb-status.wip{background:#DBEAFE;color:#1E40AF}
+.fb-status.done{background:#D1FAE5;color:#065F46}
+.fb-status.rejected{background:#F3F4F6;color:#6B7280}
+.fb-row:hover{background:var(--surface2)}
+.fb-row td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;font-size:13px;color:var(--text2)}
+.fb-row td:first-child{text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)}
+.fb-request-text{font-weight:500;color:var(--text);white-space:pre-wrap;word-break:break-word}
+.fb-response-text{color:var(--text2);white-space:pre-wrap;word-break:break-word;font-size:12px}
 .help-modal{width:760px;max-width:96vw;max-height:86vh;display:flex;flex-direction:column;padding:0;overflow:hidden}
 .help-tabs{display:flex;border-bottom:2px solid var(--border);background:var(--surface2);flex-shrink:0}
 .help-tab{padding:12px 18px;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s;white-space:nowrap}
@@ -395,6 +438,8 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
   <div class="header-tabs">
     <button class="tab-btn active" onclick="switchTab('list')">📋 リスト</button>
     <button class="tab-btn" onclick="switchTab('gantt')">📊 ガントチャート</button>
+    <button class="tab-btn" onclick="switchTab('dashboard')">🏠 ダッシュボード</button>
+    <button class="tab-btn" onclick="switchTab('feedback')">📝 改善要望</button>
   </div>
   <div class="header-spacer"></div>
   <!-- 参照モードバナー（CSVモード時のみ表示） -->
@@ -420,6 +465,14 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 16 12 21 17 16"/><line x1="12" y1="21" x2="12" y2="9"/></svg>
     </button>
     <input type="file" id="import-file-input" accept=".csv" style="display:none" onchange="importCSV(event)">
+    <!-- Undo -->
+    <button class="btn btn-sm" id="undo-btn" onclick="undo()" title="元に戻す（Ctrl+Z）" style="padding:6px 10px;opacity:0.4" disabled>
+      <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/></svg>
+    </button>
+    <!-- 変更履歴 -->
+    <button class="btn btn-sm" onclick="openHistoryModal()" title="変更履歴" style="padding:6px 10px">
+      <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </button>
     <button class="btn btn-sm" onclick="openHelpModal()" title="操作マニュアル">
       ❓ ヘルプ
     </button>
@@ -577,9 +630,9 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
 
     <!-- Gantt View -->
     <div id="gantt-view" class="gantt-wrapper" style="display:none">
-      <!-- ガントツールバー（スケール選択・イナズマ線） -->
+      <!-- ガントツールバー -->
       <div id="gantt-toolbar" style="display:flex;align-items:center;gap:8px;padding:0 0 12px 0;flex-shrink:0;flex-wrap:wrap">
-        <!-- スケール選択 -->
+        <!-- ① 表示レンジ -->
         <div style="display:flex;gap:2px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px">
           <button class="gantt-scale-btn" data-scale="day"     onclick="setGanttScale('day')"     style="padding:5px 14px;font-size:12px;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;background:none;color:var(--text3);transition:.15s">日</button>
           <button class="gantt-scale-btn" data-scale="week"    onclick="setGanttScale('week')"    style="padding:5px 14px;font-size:12px;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;background:none;color:var(--text3);transition:.15s">週</button>
@@ -587,20 +640,142 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
           <button class="gantt-scale-btn" data-scale="quarter" onclick="setGanttScale('quarter')" style="padding:5px 14px;font-size:12px;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;background:none;color:var(--text3);transition:.15s">四半期</button>
           <button class="gantt-scale-btn" data-scale="year"    onclick="setGanttScale('year')"    style="padding:5px 14px;font-size:12px;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;background:none;color:var(--text3);transition:.15s">年</button>
         </div>
-        <!-- イナズマ線トグル -->
+        <!-- ② イナズマ線 -->
         <button id="lightning-btn"
           onclick="toggleLightningLine()"
           title="イナズマ線を表示/非表示"
           style="display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text3);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:.15s;white-space:nowrap">
           ⚡ イナズマ線
         </button>
+        <!-- ③ クリティカルパス -->
+        <button id="cp-btn" onclick="toggleCriticalPath()" title="クリティカルパスを表示/非表示"
+          style="display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text3);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:.15s;white-space:nowrap">
+          🔴 クリティカルパス
+        </button>
+        <!-- ④ ステータス（バー色分けルール） -->
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)">
+          <span>色分け：</span>
+          <select id="gantt-color-rule" onchange="renderGantt()"
+            style="padding:5px 8px;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;cursor:pointer">
+            <option value="status">ステータス</option>
+            <option value="assignee">担当者</option>
+            <option value="delay">遅延状況</option>
+            <option value="none">なし（デフォルト）</option>
+          </select>
+        </div>
+        <!-- ⑤ 印刷/PDF出力 -->
+        <button onclick="printGantt()" title="ガントチャートを印刷/PDF出力"
+          style="display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text3);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:.15s;white-space:nowrap">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          印刷/PDF
+        </button>
       </div>
       <div id="gantt-inner" style="flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden"></div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" style="display:none;flex:1;overflow:auto;padding:20px;background:var(--bg)">
+      <div id="dashboard-inner"></div>
+    </div>
+
+    <!-- Feedback View -->
+    <div id="feedback-view" style="display:none;flex:1;overflow:auto;padding:20px">
+      <!-- ツールバー -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="openFeedbackModal()">
+          <svg class="icon-svg" viewBox="0 0 24 24" style="stroke:#fff"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          改善要望を追加
+        </button>
+        <select id="fb-filter-status" class="filter-select" onchange="renderFeedback()" style="font-size:12px">
+          <option value="">全ステータス</option>
+          <option value="open">未対応</option>
+          <option value="wip">対応中</option>
+          <option value="done">対応済</option>
+          <option value="rejected">却下</option>
+        </select>
+        <span style="font-size:12px;color:var(--text3)" id="fb-count"></span>
+      </div>
+
+      <!-- テーブル -->
+      <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface)">
+        <table class="wbs-table" id="fb-table" style="min-width:900px">
+          <thead>
+            <tr>
+              <th style="width:60px;text-align:center">No</th>
+              <th style="width:90px">ステータス</th>
+              <th>改善要望</th>
+              <th style="width:110px">要求者</th>
+              <th style="width:90px">記載日</th>
+              <th>対応結果</th>
+              <th style="width:110px">対応者</th>
+              <th style="width:110px">対応日時</th>
+              <th style="width:60px"></th>
+            </tr>
+          </thead>
+          <tbody id="fb-tbody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Detail Panel -->
+<!-- Feedback Add Modal -->
+<div class="modal-overlay" id="feedback-modal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-title" id="fb-modal-title">改善要望を追加</div>
+    <input type="hidden" id="fb-edit-id">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="form-field">
+        <label>改善要望 *</label>
+        <textarea id="fb-request" placeholder="改善してほしい内容を記載してください" style="min-height:80px"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-field">
+          <label>要求者氏名</label>
+          <input id="fb-requester" type="text" list="fb-requester-list" placeholder="氏名" autocomplete="off">
+          <datalist id="fb-requester-list"></datalist>
+        </div>
+        <div class="form-field">
+          <label>記載日</label>
+          <input id="fb-request-date" type="date">
+        </div>
+      </div>
+      <div class="form-field">
+        <label>ステータス</label>
+        <select id="fb-status">
+          <option value="open">未対応</option>
+          <option value="wip">対応中</option>
+          <option value="done">対応済</option>
+          <option value="rejected">却下</option>
+        </select>
+      </div>
+      <div style="padding-top:8px;border-top:1px solid var(--border)">
+        <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">対応情報（開発者記入）</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="form-field">
+            <label>対応結果</label>
+            <textarea id="fb-response" placeholder="対応内容・理由を記載してください" style="min-height:60px"></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-field">
+              <label>対応者</label>
+              <input id="fb-responder" type="text" list="fb-responder-list" placeholder="氏名" autocomplete="off">
+              <datalist id="fb-responder-list"></datalist>
+            </div>
+            <div class="form-field">
+              <label>対応日時</label>
+              <input id="fb-response-date" type="datetime-local">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeFeedbackModal()">キャンセル</button>
+      <button class="btn btn-primary" onclick="submitFeedback()">保存</button>
+    </div>
+  </div>
+</div>
 <div class="detail-panel" id="detail-panel">
   <div id="detail-readonly-notice">
     👁 参照モード — 編集するには「✏️ 編集開始」を押してください
@@ -623,6 +798,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
         <select id="dp-type" onchange="dpUpdate('type',this.value)" style="padding:5px 8px;font-size:12px">
           <option value="task">📄 タスク</option>
           <option value="folder">📁 フォルダ</option>
+          <option value="milestone">🔷 マイルストーン</option>
         </select>
       </div>
       <div class="detail-field" style="margin:0">
@@ -719,6 +895,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
         <select id="m-type">
           <option value="task">📄 タスク</option>
           <option value="folder">📁 フォルダ（グループ）</option>
+          <option value="milestone">🔷 マイルストーン</option>
         </select>
       </div>
       <div class="form-field"><label>ステータス</label>
@@ -949,7 +1126,46 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
   </div>
 </div>
 
-<!-- ═══ Help Modal ═══ -->
+<!-- ═══ History Modal ═══ -->
+<div class="modal-overlay" id="history-modal">
+  <div class="modal" style="max-width:620px;max-height:80vh;display:flex;flex-direction:column">
+    <div class="modal-title">変更履歴</div>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:12px">最新200件を表示。ページをリロードするとリセットされます。</p>
+    <div style="flex:1;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-sm)">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr style="background:var(--surface2);position:sticky;top:0">
+            <th style="padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--text3);white-space:nowrap;border-bottom:2px solid var(--border)">日時</th>
+            <th style="padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--text3);border-bottom:2px solid var(--border)">変更内容</th>
+            <th style="padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--text3);border-bottom:2px solid var(--border)">操作者</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody"></tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-sm" onclick="undoStack=[];historyLog=[];updateUndoBtn();closeHistoryModal();showToastNotice('変更履歴をクリアしました','info')" style="color:var(--danger)">🗑 履歴をクリア</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="closeHistoryModal()">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Dashboard Settings Modal ═══ -->
+<div class="modal-overlay" id="db-settings-modal">
+  <div class="modal" style="max-width:480px;max-height:80vh;display:flex;flex-direction:column">
+    <div class="modal-title">ダッシュボード カード設定</div>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:12px">⠿ をドラッグして順番を変更。幅・表示はボタンで切替。設定はブラウザに保存されます。</p>
+    <div id="db-settings-list" style="flex:1;overflow-y:auto;padding-right:4px"></div>
+    <div class="modal-footer">
+      <button class="btn btn-sm" onclick="resetDbPrefs()" style="color:var(--danger)">🔄 リセット</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" onclick="closeDbSettings()">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- Help Modal -->
 <div class="modal-overlay" id="help-modal">
   <div class="modal help-modal">
     <!-- タブナビ -->
@@ -1262,8 +1478,11 @@ let _projUid=1;
 const projUid=()=>'p'+(_projUid++);
 
 const SAMPLE_TASKS=()=>{
-  let u=100;const id=()=>'t'+(u++);
-  const t1=id(),t2=id(),t3=id(),t4=id(),t5=id(),t6=id(),t7=id(),t8=id(),t9=id(),t10=id(),t11=id(),t12=id(),t13=id(),t14=id(),t15=id(),t16=id(),t17=id();
+  // サンプルデータは固定ID（t100〜t116）を使用
+  // 新規タスクのIDカウンタ(_uid)は200以上から始まるため衝突しない
+  const t1='t100',t2='t101',t3='t102',t4='t103',t5='t104',t6='t105',t7='t106',
+        t8='t107',t9='t108',t10='t109',t11='t110',t12='t111',t13='t112',
+        t14='t113',t15='t114',t16='t115',t17='t116';
   return [
     {id:t1,  parentId:null, type:'folder',name:'フェーズ1: 要件定義',      deliverable:'要件定義書（確定版）',  status:'done',  assignee:'田中 太郎',start:'2026-04-01',end:'2026-04-15',progress:100,deps:[],note:''},
     {id:t2,  parentId:t1,   type:'task',  name:'ビジネス要件整理',          deliverable:'ビジネス要件一覧',       status:'done',  assignee:'田中 太郎',start:'2026-04-01',end:'2026-04-05',progress:100,deps:[],note:''},
@@ -1376,11 +1595,11 @@ function loadFromLS(){
     const raw = localStorage.getItem(LS_KEY);
     if(!raw) return false;
     const d = JSON.parse(raw);
-    if(!d.projects||!d.projects.length) return false;
+    const err=validateWbsData(d);
+    if(err){ console.warn('localStorage validation failed:',err); return false; }
     applyLoadedData(d);
     return true;
   }catch(e){
-    // 破損データをクリア
     try{ localStorage.removeItem(LS_KEY); }catch(e2){}
     return false;
   }
@@ -1391,17 +1610,19 @@ function applyLoadedData(d){
   projects = d.projects;
   currentProjectId = d.currentProjectId || projects[0].id;
   if(d._projUid) _projUid = d._projUid;
-  if(d._uid)     _uid     = d._uid;
+  // _uid はデータから復元しつつ、既存タスクIDとの衝突を防ぐため安全な値に補正
+  if(d._uid) _uid = d._uid;
   if(d.users && d.users.length){
     users = d.users;
     currentUserId = d.currentUserId || null;
-    // userUidカウンターを既存IDより大きい値に設定（衝突防止）
     const maxUid = d.users.reduce((max,u)=>{
       const n=parseInt((u.id||'').replace('u',''))||0;
       return n>max?n:max;
     },0);
     if(maxUid >= _userUid) _userUid = maxUid+1;
   }
+  // 既存タスクIDをスキャンして _uid を安全な値に再設定
+  resyncUid();
   // 非表示セットを再構築（task.hiddenフラグから）
   if(typeof syncHiddenSet==='function') syncHiddenSet();
 }
@@ -1421,6 +1642,19 @@ async function saveToCsvDir(data){
   }catch(e){ console.warn('CSV save failed:', e); }
 }
 
+// ── WBSデータバリデーション ──
+function validateWbsData(d){
+  if(!d||typeof d!=='object') return 'データ形式が不正です（オブジェクトが必要）';
+  if(!Array.isArray(d.projects)) return 'projectsが見つかりません';
+  if(!d.projects.length) return 'プロジェクトが空です';
+  for(const p of d.projects){
+    if(!p.id||typeof p.id!=='string') return 'プロジェクトIDが不正です';
+    if(!p.name||typeof p.name!=='string') return 'プロジェクト名が不正です';
+    if(!Array.isArray(p.tasks)) return `プロジェクト「${p.name}」のtasksが配列ではありません`;
+  }
+  return null; // OK
+}
+
 // ── CSVからの読み込み ──
 async function loadFromCsvDir(){
   if(!csvDirHandle) return false;
@@ -1428,10 +1662,11 @@ async function loadFromCsvDir(){
     const fh   = await csvDirHandle.getFileHandle('wbs_data.json');
     const file = await fh.getFile();
     const text = await file.text();
-    const d    = JSON.parse(text);
-    if(!d.projects||!d.projects.length) return false;
+    let d;
+    try{ d=JSON.parse(text); }catch(e){ console.warn('wbs_data.json JSON parse error:',e); return false; }
+    const err=validateWbsData(d);
+    if(err){ console.warn('wbs_data.json validation failed:',err); return false; }
     applyLoadedData(d);
-    // LSキャッシュも更新
     try{ localStorage.setItem(LS_KEY, JSON.stringify(d)); }catch(e){}
     return true;
   }catch(e){ return false; }
@@ -1472,7 +1707,7 @@ function openStorageModal(){
       const info = document.getElementById('storage-lock-info');
       if(lock && info){
         info.style.display = 'block';
-        info.innerHTML = `⚠ <b>${lock.lockedBy}</b> が編集中です（${new Date(lock.lockedAt).toLocaleString('ja-JP')}〜）`;
+        info.innerHTML = `⚠ <b>${escHtml(lock.lockedBy)}</b> が編集中です（${new Date(lock.lockedAt).toLocaleString('ja-JP')}〜）`;
       }
     });
   }
@@ -1733,6 +1968,7 @@ async function checkin(){
   }
   const ok=await loadFromCsvDir();
   if(ok){ syncTasks(); updateProjectUI(); renderAll(); }
+  await loadFeedbackFromCsv(); // フィードバックも読み込み
   await writeLockFile(true);
   isEditMode=true;
   updateEditModeUI();
@@ -1793,17 +2029,110 @@ function showToastNotice(msg, type='info'){
 }
 
 // ── 保存（参照モード中はCSVへの書き込みを完全にブロック） ──
+// ── 参照モード判定ヘルパー ──
+function isReadOnly(){
+  return storageMode==='csvFile' && !isEditMode;
+}
+function guardReadOnly(msg){
+  if(!isReadOnly()) return false;
+  showToastNotice('⚠ '+(msg||'参照モードでは編集できません。「✏️ 編集開始」を押してください。'),'warn');
+  return true;
+}
+// ════════════════════════════════════════════════════
+const UNDO_MAX=30;
+let undoStack=[];    // {snapshot, label, user, at}
+let historyLog=[];   // 永続ログ（表示用）最大200件
+
+function pushUndo(label){
+  // 現在の tasks + projects のスナップショットを保存
+  const snapshot=JSON.stringify({
+    projects: projects.map(p=>({...p, tasks:p.tasks.map(t=>({...t}))})),
+    currentProjectId, _uid, _projUid
+  });
+  const cu=currentUser();
+  const entry={snapshot, label, user:cu?cu.name:'', at:new Date().toISOString()};
+  undoStack.push(entry);
+  if(undoStack.length>UNDO_MAX) undoStack.shift();
+  // 変更ログにも追記（最大200件）
+  historyLog.unshift({label, user:entry.user, at:entry.at});
+  if(historyLog.length>200) historyLog.pop();
+  updateUndoBtn();
+}
+
+function undo(){
+  if(!undoStack.length) return;
+  const entry=undoStack.pop();
+  const d=JSON.parse(entry.snapshot);
+  projects=d.projects;
+  currentProjectId=d.currentProjectId;
+  _uid=d._uid;
+  _projUid=d._projUid;
+  syncTasks();
+  updateProjectUI();
+  renderAll();
+  saveToLS();
+  showToastNotice('↩ 元に戻しました：'+entry.label,'info');
+  updateUndoBtn();
+}
+
+function updateUndoBtn(){
+  const btn=document.getElementById('undo-btn');
+  if(!btn) return;
+  btn.disabled=undoStack.length===0;
+  btn.title=undoStack.length?'元に戻す：'+undoStack[undoStack.length-1].label+'（Ctrl+Z）':'元に戻す履歴なし';
+  btn.style.opacity=undoStack.length?'1':'0.4';
+}
+
+// Ctrl+Z でUndo
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='z'&&!e.shiftKey){
+    const tag=document.activeElement?.tagName;
+    // 入力欄内のテキスト編集中はブラウザのUndoを優先
+    if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;
+    e.preventDefault();
+    undo();
+  }
+});
+
+// ── ガントチャート 印刷/PDF出力 ──
+function printGantt(){
+  // ガントビュー全体にprint-area IDを付与して印刷
+  const ganttView=document.getElementById('gantt-view');
+  ganttView.id='print-area';
+  // タイトルをセット
+  const prevTitle=document.title;
+  const p=currentProject();
+  document.title=(p?p.name:'WBS')+'_ガントチャート_'+new Date().toLocaleDateString('ja-JP').replace(/\//g,'');
+  window.print();
+  // 元に戻す
+  ganttView.id='gantt-view';
+  document.title=prevTitle;
+}
+function openHistoryModal(){
+  const tbody=document.getElementById('history-tbody');
+  if(!tbody) return;
+  if(!historyLog.length){
+    tbody.innerHTML=`<tr><td colspan="3" style="text-align:center;padding:32px;color:var(--text3)">変更履歴がありません</td></tr>`;
+  } else {
+    tbody.innerHTML=historyLog.map((h,i)=>`
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:8px 12px;font-size:12px;color:var(--text2);white-space:nowrap">${new Date(h.at).toLocaleString('ja-JP')}</td>
+        <td style="padding:8px 12px;font-size:13px;color:var(--text)">${escHtml(h.label)}</td>
+        <td style="padding:8px 12px;font-size:12px;color:var(--text3)">${escHtml(h.user)}</td>
+      </tr>`).join('');
+  }
+  document.getElementById('history-modal').classList.add('open');
+}
+function closeHistoryModal(){
+  document.getElementById('history-modal').classList.remove('open');
+}
+
 function saveToLS(){
   // CSVモードの参照モード中：localStorageへも書き込まない
-  // （localStorageのキャッシュがCSVより新しいタイムスタンプになるのを防ぐ）
-  if(storageMode==='csvFile'&&!isEditMode){
-    return;
-  }
+  if(storageMode==='csvFile'&&!isEditMode) return;
   const data={projects,currentProjectId,_projUid,_uid,users,currentUserId,_savedAt:Date.now()};
   try{ localStorage.setItem(LS_KEY,JSON.stringify(data)); }catch(e){}
-  if(storageMode==='csvFile'&&csvDirHandle&&isEditMode){
-    saveToCsvDir(data);
-  }
+  if(storageMode==='csvFile'&&csvDirHandle&&isEditMode) saveToCsvDir(data);
 }
 
 // ════════════════════════════════════════════════════
@@ -1878,7 +2207,7 @@ function renderUserList(){
         ${u.id===currentUserId?'<div class="online-dot"></div>':''}
       </div>
       <div class="user-item-info">
-        <div class="user-item-name">${u.name}</div>
+        <div class="user-item-name">${escHtml(u.name)}</div>
         <div class="user-item-meta">${u.role||'─'}</div>
       </div>
       <div class="user-item-actions">
@@ -2068,7 +2397,19 @@ function currentProject(){return projects.find(p=>p.id===currentProjectId)||proj
 let tasks=[];
 function syncTasks(){tasks=currentProject()?.tasks||[];}
 
-let _uid=100;
+let _uid=200; // サンプルデータ(t100〜t116)との衝突防止のため200以上から開始
+
+// 既存タスクの最大IDから_uidを安全な値に再設定する
+function resyncUid(){
+  let maxN=199; // 最低でも200から始める
+  projects.forEach(p=>{
+    (p.tasks||[]).forEach(t=>{
+      const n=parseInt((t.id||'').replace('t',''))||0;
+      if(n>maxN) maxN=n;
+    });
+  });
+  if(_uid<=maxN) _uid=maxN+1;
+}
 const uid=()=>'t'+(_uid++);
 
 // ─── Init projects ───
@@ -2106,8 +2447,9 @@ function migrateSampleDates(){
 function initProjects(){
   if(loadFromLS()){
     syncTasks();
-    migrateSampleDates(); // ← 旧データを自動マイグレーション
+    migrateSampleDates();
     syncTasks();
+    resyncUid(); // 読み込んだデータのIDと_uidの衝突を防ぐ
     return;
   }
   // Default: one sample project
@@ -2119,6 +2461,7 @@ function initProjects(){
   }];
   currentProjectId=pid;
   syncTasks();
+  resyncUid(); // サンプルデータID(t100〜t116)より大きい値に設定
   saveToLS();
 }
 
@@ -2148,7 +2491,7 @@ function updateProjectUI(){
 
   // header select（削除済みのため null チェック）
   const sel=document.getElementById('header-proj-select');
-  if(sel) sel.innerHTML=projects.map(pr=>`<option value="${pr.id}"${pr.id===currentProjectId?' selected':''}>${pr.name}</option>`).join('');
+  if(sel) sel.innerHTML=projects.map(pr=>`<option value="${pr.id}"${pr.id===currentProjectId?' selected':''}>${escHtml(pr.name)}</option>`).join('');
   const dot=document.getElementById('header-proj-dot');
   if(dot) dot.style.background=p.color;
 
@@ -2349,10 +2692,11 @@ function renderList(){
       ?`<button class="toggle-btn" onclick="toggleCollapse('${t.id}',event)">${isCol?'▶':'▼'}</button>`
       :`<button class="toggle-btn leaf">　</button>`;
 
-    // icon: folder open/closed vs task
+    // icon: folder open/closed vs task vs milestone
+    const isMilestone=t.type==='milestone';
     const icon = isFolder
       ? (isCol||!hasCh ? '📁' : '📂')
-      : '📄';
+      : isMilestone ? '🔷' : '📄';
 
     // ── 矛盾チェック ──
     // フォルダ：自分の子孫に矛盾があるか
@@ -2376,7 +2720,7 @@ function renderList(){
     const acolor=getAssigneeColor(t.assignee);
     const initials=t.assignee?t.assignee.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase():'?';
     const assigneeHtml=t.assignee
-      ?`<span class="assignee-chip"><span class="avatar" style="background:${acolor}">${initials}</span>${t.assignee}</span>`
+      ?`<span class="assignee-chip"><span class="avatar" style="background:${acolor}">${initials}</span>${escHtml(t.assignee)}</span>`
       :`<span style="color:var(--text3);font-size:12px">-</span>`;
 
     // dates
@@ -2396,7 +2740,9 @@ function renderList(){
     // type badge
     const typeBadge=isFolder
       ?`<span style="font-size:9px;background:#EEF3FF;color:var(--accent);border:1px solid #BFDBFE;border-radius:3px;padding:1px 5px;font-weight:600;flex-shrink:0">FOLDER</span>`
-      :`<span style="font-size:9px;background:var(--surface2);color:var(--text3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;flex-shrink:0">TASK</span>`;
+      :t.type==='milestone'
+        ?`<span style="font-size:9px;background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE;border-radius:3px;padding:1px 5px;font-weight:600;flex-shrink:0">MILESTONE</span>`
+        :`<span style="font-size:9px;background:var(--surface2);color:var(--text3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;flex-shrink:0">TASK</span>`;
 
     // 矛盾警告バッジ
     const conflictBadge=folderHasConflict
@@ -2425,7 +2771,9 @@ function renderList(){
         <div class="drag-handle" title="ドラッグして並べ替え" onmousedown="event.stopPropagation()">⠿</div>
         <div class="row-actions" style="opacity:1;gap:1px;display:inline-flex;align-items:center">
           <!-- 同列追加 -->
-          <button class="icon-btn add-sibling-btn" title="同じ階層にタスクを追加" onclick="openAddModal('${t.parentId||''}',event)" style="width:26px;height:26px;color:var(--text3)">
+          <button class="icon-btn add-sibling-btn" title="同じ階層にタスクを追加"
+            onclick="openAddModal(${t.parentId?`'${t.parentId}'`:'null'},event)"
+            style="width:26px;height:26px;color:var(--text3)">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
               <rect x="1" y="2" width="14" height="4" rx="1"/>
               <rect x="1" y="10" width="14" height="4" rx="1" stroke-dasharray="2.5 1.5" opacity=".5"/>
@@ -2433,7 +2781,9 @@ function renderList(){
             </svg>
           </button>
           <!-- 子追加 -->
-          <button class="icon-btn add-child-btn" title="子タスクを追加" onclick="openAddModal('${t.id}',event)" style="width:26px;height:26px;color:var(--accent)">
+          <button class="icon-btn add-child-btn" title="子タスクを追加"
+            onclick="openAddModal('${t.id}',event)"
+            style="width:26px;height:26px;color:var(--accent)">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
               <rect x="1" y="2" width="9" height="4" rx="1"/>
               <path d="M4 6 L4 11 L5.5 11"/>
@@ -2443,15 +2793,17 @@ function renderList(){
             </svg>
           </button>
           <!-- 非表示トグル -->
-          <button class="icon-btn" title="${hiddenTaskIds.has(t.id)?'再表示':'非表示にする'}" onclick="toggleHideTask('${t.id}',event)" style="width:26px;height:26px;color:${hiddenTaskIds.has(t.id)?'var(--warn)':'var(--text3)'}">
-            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-              ${hiddenTaskIds.has(t.id)
-                ? '<path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/><line x1="2" y1="2" x2="14" y2="14" stroke-width="1.8"/>'
-                : '<path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/>'}
-            </svg>
+          <button class="icon-btn" title="${hiddenTaskIds.has(t.id)?'再表示':'非表示'}"
+            onclick="toggleHideTask('${t.id}',event)"
+            style="width:26px;height:26px;color:${hiddenTaskIds.has(t.id)?'var(--warn)':'var(--text3)'}">
+            ${hiddenTaskIds.has(t.id)
+              ? `<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/><line x1="2" y1="2" x2="14" y2="14" stroke-width="1.8"/></svg>`
+              : `<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/></svg>`}
           </button>
           <!-- 削除 -->
-          <button class="icon-btn" title="削除" onclick="deleteTask('${t.id}',event)" style="width:26px;height:26px;color:var(--text3)">
+          <button class="icon-btn" title="削除"
+            onclick="deleteTask('${t.id}',event)"
+            style="width:26px;height:26px;color:var(--text3)">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
               <path d="M2 4h12M6 4V2.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V4M5 4l.7 8.5a.5.5 0 00.5.5h3.6a.5.5 0 00.5-.5L11 4"/>
               <line x1="6.5" y1="7" x2="6.8" y2="11"/>
@@ -2465,8 +2817,8 @@ function renderList(){
         ${indentHtml}${toggleHtml}
         <span class="task-icon">${icon}</span>
         <div class="task-name-inner">
-          <span class="task-name-text" style="${nameFw}">${t.name}</span>
-          ${t.deliverable?`<span class="task-deliverable">📎 ${t.deliverable}</span>`:''}
+          <span class="task-name-text" style="${nameFw}">${escHtml(t.name)}</span>
+          ${t.deliverable?`<span class="task-deliverable">📎 ${escHtml(t.deliverable)}</span>`:''}
         </div>
         ${typeBadge}${conflictBadge}
       </td>
@@ -2719,14 +3071,17 @@ const s2d = s => { const d=new Date(s); d.setHours(0,0,0,0); return d; };
 const addDays = (d,n) => { const r=new Date(d); r.setDate(r.getDate()+n); return r; };
 
 function ganttDateRange(){
-  const all=tasks.filter(t=>t.start&&t.end);
+  // マイルストーンはstartのみでOK、通常タスク/フォルダはstart+end両方必要
+  const all=tasks.filter(t=>t.type==='milestone'?t.start:(t.start&&t.end));
   if(!all.length){
     const t=new Date(); t.setDate(1);
     return {minD:t, maxD:addDays(t,60)};
   }
-  let minD=s2d(all[0].start), maxD=s2d(all[0].end);
+  // マイルストーンはend=nullの場合startを使う
+  const getEnd=t=>t.end?s2d(t.end):s2d(t.start);
+  let minD=s2d(all[0].start), maxD=getEnd(all[0]);
   all.forEach(t=>{
-    const s=s2d(t.start),e=s2d(t.end);
+    const s=s2d(t.start),e=getEnd(t);
     if(s<minD)minD=s; if(e>maxD)maxD=e;
   });
   minD=new Date(minD); minD.setDate(1);
@@ -2756,6 +3111,7 @@ function calcFolderProgress(folderId){
 // タスク／フォルダに関わらず実効進捗を返す
 function effectiveProgress(t){
   if(t.type==='folder') return calcFolderProgress(t.id);
+  if(t.type==='milestone') return t.status==='done'?100:0;
   return t.progress||0;
 }
 
@@ -2788,6 +3144,7 @@ function buildLightningLineHTML(treeOrder, totalH){
 
   treeOrder.forEach((t,ri)=>{
     if(t.type==='folder') return;
+    if(t.type==='milestone') return; // マイルストーンはイナズマ線対象外
     if(!t.start||!t.end) return;
 
     const start=s2d(t.start), end=s2d(t.end);
@@ -2914,9 +3271,32 @@ function toggleLightningLine(){
 function renderGantt(){
   const container=document.getElementById('gantt-inner');
   const nums=calcDisplayNums();
-  const treeOrder=buildTreeOrder();
+
+  // ── リストビューと同じフィルタを適用 ──
+  const q=(document.getElementById('search-input')||{value:''}).value.toLowerCase();
+  const fs=(document.getElementById('filter-status')||{value:''}).value;
+  const fa=(document.getElementById('filter-assignee')||{value:''}).value;
+  let treeOrder=buildTreeOrder();
+  if(q||fs||fa){
+    // フィルタ条件に一致するタスクIDとその祖先フォルダIDを収集
+    const matchIds=new Set();
+    treeOrder.forEach(t=>{
+      if(t.type==='folder') return; // フォルダは後で祖先として追加
+      const nameMatch=!q||(t.name||'').toLowerCase().includes(q)||(t.deliverable||'').toLowerCase().includes(q);
+      const statusMatch=!fs||(fs==='not-done'?t.status!=='done':t.status===fs);
+      const assigneeMatch=!fa||t.assignee===fa;
+      if(nameMatch&&statusMatch&&assigneeMatch){
+        matchIds.add(t.id);
+        // 祖先フォルダも表示対象に
+        let pid=t.parentId;
+        while(pid){ matchIds.add(pid); const p=tasks.find(x=>x.id===pid); pid=p?p.parentId:null; }
+      }
+    });
+    treeOrder=treeOrder.filter(t=>matchIds.has(t.id));
+  }
+
   if(!treeOrder.length){
-    container.innerHTML='<div class="empty-state" style="padding:60px"><div class="icon">📊</div><p>タスクがありません</p></div>';
+    container.innerHTML='<div class="empty-state" style="padding:60px"><div class="icon">📊</div><p>条件に一致するタスクがありません</p></div>';
     return;
   }
 
@@ -2954,7 +3334,7 @@ function renderGantt(){
     const isFolder=t.type==='folder';
     const hasCh=hasChildren(t.id);
     const isCol=collapsedSet.has(t.id);
-    const icon=isFolder?(isCol||!hasCh?'📁':'📂'):'📄';
+    const icon=isFolder?(isCol||!hasCh?'📁':'📂'):t.type==='milestone'?'🔷':'📄';
     const folderConflicts=isFolder?conflictMap.get(t.id)||[]:[];
     const folderHasConflict=folderConflicts.length>0;
     const taskConflictReasons=!isFolder?getTaskConflictReasons(t.id,conflictMap):[];
@@ -2962,7 +3342,7 @@ function renderGantt(){
     const hasConflict=folderHasConflict||taskHasConflict;
     const bg=hasConflict
       ?'rgba(220,38,38,.04)'
-      :(isFolder?'rgba(37,99,235,.03)':'var(--surface)');
+      :(isFolder?'rgba(37,99,235,.03)':showCriticalPath&&criticalPathIds.has(t.id)?'rgba(220,38,38,.06)':'var(--surface)');
     const conflictTip=folderHasConflict
       ?folderConflicts.map(c=>{const ct=tasks.find(x=>x.id===c.taskId);return(ct?ct.name:'?')+': '+c.reason;}).join('\n')
       :taskConflictReasons.join('\n');
@@ -2979,7 +3359,7 @@ function renderGantt(){
       :`<span style="width:18px;flex-shrink:0"></span>`;
 
     return `<div class="gantt-label-row" data-id="${t.id}"
-      style="height:${ROW_H}px;padding:0 8px 0 ${padL}px;background:${bg};display:flex;align-items:center;gap:4px;border-bottom:1px solid var(--border);overflow:hidden;box-sizing:border-box;user-select:none"
+      style="height:${ROW_H}px;padding:0 8px 0 ${padL}px;background:${bg};display:flex;align-items:center;gap:4px;border-bottom:1px solid var(--border);overflow:hidden;box-sizing:border-box;user-select:none;${showCriticalPath&&criticalPathIds.has(t.id)?'border-left:3px solid #DC2626;':''}"
       draggable="true"
       ondragstart="onDepLinkDragStart(event,'${t.id}')"
       ondragover="onDepLinkDragOver(event,'${t.id}')"
@@ -2988,7 +3368,14 @@ function renderGantt(){
       ${toggleBtn}
       <span style="flex-shrink:0;font-size:13px;cursor:pointer" onclick="selectTask('${t.id}')">${icon}</span>
       <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);flex-shrink:0;min-width:30px;cursor:pointer" onclick="selectTask('${t.id}')">${nums[t.id]||''}</span>
-      <span style="font-size:12px;font-weight:${isFolder?600:400};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;cursor:pointer" onclick="selectTask('${t.id}')">${t.name}</span>
+      <span style="font-size:12px;font-weight:${isFolder?600:400};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;cursor:pointer" onclick="selectTask('${t.id}')">${escHtml(t.name)}</span>
+      ${(()=>{
+        if(isFolder||!t.assignee) return '';
+        const u=users.find(x=>x.name===t.assignee);
+        const color=u?u.color:'#9B9890';
+        const initl=t.assignee.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+        return `<div title="${t.assignee}" style="flex-shrink:0;width:18px;height:18px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;cursor:default">${initl}</div>`;
+      })()}
       ${warnIcon}
       <span title="ドラッグ→別行にドロップで依存付け" style="font-size:11px;color:var(--text3);opacity:.4;cursor:grab;flex-shrink:0" class="dep-drag-handle">⇢</span>
     </div>`;
@@ -2999,17 +3386,77 @@ function renderGantt(){
 
   // ── Bars (drag targets) ──
   const rowIndex={}; treeOrder.forEach((t,i)=>rowIndex[t.id]=i);
+  const colorRule=(document.getElementById('gantt-color-rule')||{value:'status'}).value;
+  const today2=new Date(); today2.setHours(0,0,0,0);
+
+  // 担当者→色マップを構築
+  const assigneeColorMap={};
+  const assigneeNames=[...new Set(tasks.filter(t=>t.assignee).map(t=>t.assignee))];
+  const palette=['#2563EB','#7C3AED','#059669','#D97706','#DC2626','#0891B2','#65A30D','#DB2777','#9333EA','#374151'];
+  assigneeNames.forEach((name,i)=>{
+    const u=users.find(u=>u.name===name);
+    assigneeColorMap[name]=u?u.color:palette[i%palette.length];
+  });
+
+  const getBarColor=(t)=>{
+    if(colorRule==='none') return GANTT_COLORS[t.status]||'#9B9890';
+    if(colorRule==='assignee'){
+      if(t.assignee&&assigneeColorMap[t.assignee]) return assigneeColorMap[t.assignee];
+      return '#9B9890';
+    }
+    if(colorRule==='delay'){
+      if(t.status==='done') return '#059669'; // 完了：緑
+      if(t.end&&s2d(t.end)<today2) return '#DC2626'; // 期限超過：赤
+      if(t.start&&s2d(t.start)<=today2&&t.end&&s2d(t.end)>=today2){
+        // 進行中：進捗確認
+        const dur=Math.round((s2d(t.end)-s2d(t.start))/86400000)+1;
+        const elapsed=Math.round((today2-s2d(t.start))/86400000);
+        const planned=Math.min(100,Math.round(elapsed/dur*100));
+        const actual=t.progress||0;
+        if(actual<planned-10) return '#D97706'; // 遅れ気味：オレンジ
+        return '#2563EB'; // 順調：青
+      }
+      return '#9B9890'; // 未着手・将来
+    }
+    // status（デフォルト）
+    return GANTT_COLORS[t.status]||'#9B9890';
+  };
+
   const barsHTML = treeOrder.map((t,ri)=>{
     const taskConflictReasons=getTaskConflictReasons(t.id,conflictMap);
     const folderConflicts=t.type==='folder'?conflictMap.get(t.id)||[]:[];
     const hasConflict=taskConflictReasons.length>0||folderConflicts.length>0;
-    if(!t.start||!t.end) return '<div class="gantt-bar-row" data-id="'+t.id+'"'
+    // マイルストーンはendなしでもstartだけで描画する
+    if(t.type==='milestone'&&!t.start) return '<div class="gantt-bar-row" data-id="'+t.id+'"'
       +' style="position:absolute;top:'+(ri*ROW_H)+'px;left:0;width:'+totalW+'px;height:'+ROW_H+'px;pointer-events:none"></div>';
+    // 通常タスク・フォルダはstart/endの両方が必要
+    if(t.type!=='milestone'&&(!t.start||!t.end)) return '<div class="gantt-bar-row" data-id="'+t.id+'"'
+      +' style="position:absolute;top:'+(ri*ROW_H)+'px;left:0;width:'+totalW+'px;height:'+ROW_H+'px;pointer-events:none"></div>';
+
+    // ── マイルストーン：ひし形マーカー ──
+    if(t.type==='milestone'){
+      const mx=ganttScaleDateToX(t.start)+cw/2;
+      const my=ROW_H/2; // SVGはrow div内のローカル座標なのでri*ROW_Hは不要
+      const mSize=10;
+      const mColor=GANTT_COLORS[t.status]||'#7C3AED';
+      return `<div class="gantt-bar-row" data-id="${t.id}"
+        style="position:absolute;top:${ri*ROW_H}px;left:0;width:${totalW}px;height:${ROW_H}px;cursor:pointer"
+        onclick="selectTask('${t.id}')">
+        <svg style="position:absolute;top:0;left:0;width:${totalW}px;height:${ROW_H}px;overflow:visible;pointer-events:none">
+          <polygon points="${mx},${my-mSize} ${mx+mSize},${my} ${mx},${my+mSize} ${mx-mSize},${my}"
+            fill="${mColor}" stroke="white" stroke-width="1.5" opacity=".9"/>
+          <text x="${mx+mSize+4}" y="${my+4}" font-size="10" fill="var(--text2)" font-family="DM Sans,sans-serif">${t.name.slice(0,20)}${t.name.length>20?'…':''}</text>
+        </svg>
+        <div style="position:absolute;top:${my-mSize}px;left:${mx-mSize}px;width:${mSize*2}px;height:${mSize*2}px;z-index:5"
+          title="${t.name}&#10;${t.start}&#10;マイルストーン"></div>
+      </div>`;
+    }
     const left=Math.max(0,taskLeft(t));
     const right=Math.min(totalW,taskRight(t));
     const width=Math.max(right-left,cw*0.3);
-    const color=GANTT_COLORS[t.status]||'#9B9890';
-    const pct=effectiveProgress(t); // ← フォルダは自動計算
+    const color=getBarColor(t);
+    const pct=effectiveProgress(t);
+    const cpStyle=(showCriticalPath&&criticalPathIds.has(t.id)&&!hasConflict)?'box-shadow:0 0 0 2.5px #DC2626,0 2px 8px rgba(220,38,38,.3);':'';
     const barH=t.type==='folder'?14:22;
     const barTop=(ROW_H-barH)/2;
     const GRIP=6; // px width of resize handle
@@ -3027,7 +3474,7 @@ function renderGantt(){
                border-radius:${t.type==='folder'?2:4}px;background:${color};opacity:${t.type==='folder'?.65:.88};
                overflow:visible;display:flex;align-items:center;padding:0 ${GRIP+4}px;
                box-sizing:border-box;cursor:grab;z-index:3;user-select:none;
-               ${hasConflict?'box-shadow:0 0 0 2px #DC2626;':''}"
+               ${hasConflict?'box-shadow:0 0 0 2px #DC2626;':cpStyle}"
         title="${t.name}&#10;${t.start} → ${t.end}&#10;ドラッグで移動${hasConflict?'&#10;⚠ フォルダ期間との矛盾あり':''}">
         <!-- progress fill -->
         <div style="position:absolute;left:0;top:0;bottom:0;width:${pct}%;background:rgba(255,255,255,.22);pointer-events:none;border-radius:inherit"></div>
@@ -3194,6 +3641,7 @@ function attachGanttDragEvents(){
   body.addEventListener('mousedown', e=>{
     const handle=e.target.closest('[data-action]');
     if(!handle)return;
+    if(isReadOnly()) return; // 参照モード中はドラッグ不可
     const action=handle.dataset.action;
     const id=handle.dataset.id;
     const t=tasks.find(x=>x.id===id);
@@ -3266,6 +3714,7 @@ function onGanttMouseUp(e){
   const t=tasks.find(x=>x.id===id);
   if(!t)return;
 
+  pushUndo('日程変更：'+t.name);
   if(action==='move'){
     t.start=d2s(addDays(origStart,deltaDays));
     t.end=d2s(addDays(origStart,deltaDays+origDur));
@@ -3279,6 +3728,7 @@ function onGanttMouseUp(e){
     t.end=d2s(ne);
   }
 
+  saveToLS();
   // re-render to sync list panel dates too
   renderAll();
 }
@@ -3378,19 +3828,22 @@ function onDepLinkDrop(e, targetId){
   document.querySelectorAll('.gantt-dep-dropzone').forEach(el=>el.style.pointerEvents='none');
 
   if(!fromId||fromId===targetId)return;
-
+  if(guardReadOnly()) return;
   const target=tasks.find(x=>x.id===targetId);
   if(!target)return;
   if(!target.deps)target.deps=[];
   if(target.deps.includes(fromId)){
-    // already linked → offer to remove
     if(confirm(`依存関係 ${calcDisplayNums()[fromId]||fromId} → ${calcDisplayNums()[targetId]||targetId} を削除しますか？`)){
+      pushUndo('依存関係削除');
       target.deps=target.deps.filter(d=>d!==fromId);
+      saveToLS();
       renderAll();
     }
     return;
   }
+  pushUndo('依存関係追加');
   target.deps.push(fromId);
+  saveToLS();
   renderAll();
 }
 
@@ -3529,9 +3982,11 @@ function clearRowDropFeedback(){
 
 // ── Core sort logic ──
 function applySort(dragId, targetId, pos){
+  if(guardReadOnly()) return;
   const dragTask=tasks.find(t=>t.id===dragId);
   const targetTask=tasks.find(t=>t.id===targetId);
   if(!dragTask||!targetTask)return;
+  pushUndo('並べ替え：'+dragTask.name);
 
   // gather dragTask subtree (drag node + all descendants)
   function subtree(id){
@@ -3577,6 +4032,7 @@ function applySort(dragId, targetId, pos){
   if(insertIdx<0)insertIdx=tasks.length;
 
   tasks.splice(insertIdx,0,...dragSubtree);
+  saveToLS();
   renderAll();
 }
 
@@ -3603,16 +4059,22 @@ function onListDepDrop(e, targetId){
   clearDepLinkHighlight();
   document.querySelectorAll('.task-row').forEach(r=>{r.style.outline='';r.style.outlineOffset='';});
   if(!fromId||fromId===targetId)return;
+  if(guardReadOnly()) return;
   const target=tasks.find(x=>x.id===targetId);
   if(!target)return;
   if(!target.deps)target.deps=[];
   if(target.deps.includes(fromId)){
     if(confirm(`依存関係 ${calcDisplayNums()[fromId]||fromId} → ${calcDisplayNums()[targetId]||targetId} を削除しますか？`)){
-      target.deps=target.deps.filter(d=>d!==fromId);renderAll();
+      pushUndo('依存関係削除');
+      target.deps=target.deps.filter(d=>d!==fromId);
+      saveToLS();
+      renderAll();
     }
     return;
   }
+  pushUndo('依存関係追加');
   target.deps.push(fromId);
+  saveToLS();
   renderAll();
 }
 
@@ -3769,19 +4231,32 @@ function selectTask(id){
   }
 }
 
+let _dpUndoTimer=null;
+let _dpUndoField=null;
 function dpUpdate(field,val){
+  if(guardReadOnly()) return;
   const t=tasks.find(x=>x.id===selectedTaskId);if(!t)return;
+  // 変更前にスナップショットを取る（同じフィールドの連続編集は1回だけ記録）
+  if(_dpUndoField!==field){
+    pushUndo('タスク編集：'+t.name+' ['+field+']');
+    _dpUndoField=field;
+  }
+  clearTimeout(_dpUndoTimer);
+  _dpUndoTimer=setTimeout(()=>{_dpUndoField=null;},1000); // 1秒操作がなければ次の編集は新規履歴
   t[field]=val;
   if(field==='name')document.getElementById('dp-title').textContent=val;
+  saveToLS();
   renderAll();
 }
 
 function dpUpdateDeps(val){
-  // resolve display numbers back to internal IDs
+  if(guardReadOnly()) return;
   const nums=calcDisplayNums();
   const numToId={};Object.entries(nums).forEach(([id,n])=>numToId[n]=id);
   const t=tasks.find(x=>x.id===selectedTaskId);if(!t)return;
+  pushUndo('依存関係変更：'+t.name);
   t.deps=val.split(',').map(s=>s.trim()).filter(Boolean).map(s=>numToId[s]||s);
+  saveToLS();
   renderAll();
 }
 
@@ -3789,21 +4264,40 @@ function closeDetail(){selectedTaskId=null;document.getElementById('detail-panel
 
 function deleteTask(id,e){
   if(e)e.stopPropagation();
+  if(guardReadOnly('参照モードではタスクを削除できません')) return;
   if(!confirm('このアイテムと子アイテムをすべて削除しますか？'))return;
+  const t=tasks.find(x=>x.id===id);
+  pushUndo('タスク削除：'+(t?t.name:id));
   const toDelete=[id];
   const collect=pid=>{tasks.filter(t=>t.parentId===pid).forEach(t=>{toDelete.push(t.id);collect(t.id);});};
   collect(id);
   tasks=tasks.filter(t=>!toDelete.includes(t.id));
   if(toDelete.includes(selectedTaskId))closeDetail();
+  saveToLS();
   renderAll();
 }
 function deleteSelectedTask(){deleteTask(selectedTaskId,null);}
 
 // ─── Add Modal ───
 let addParentId=null;
+let insertAfterTaskId=null; // 挿入位置の基準タスクID
+
 function openAddModal(parentId,e){
   if(e){e.stopPropagation();e.preventDefault();}
+  if(!isEditMode&&storageMode==='csvFile'){
+    showToastNotice('⚠ 参照モードでは追加できません。「✏️ 編集開始」を押してください。','warn');
+    return;
+  }
   addParentId=parentId||null;
+
+  // 呼び出し元の行IDを取得（insertAfterTaskId の設定）
+  // e が存在する場合は、クリックされた行の data-id から判断
+  if(e){
+    const row=e.target.closest('[data-id]');
+    insertAfterTaskId=row?row.dataset.id:null;
+  } else {
+    insertAfterTaskId=null;
+  }
 
   const sel=document.getElementById('m-parent');
   const nums=calcDisplayNums();
@@ -3829,10 +4323,8 @@ function openAddModal(parentId,e){
   document.getElementById('m-deliverable').value='';
   document.getElementById('m-type').value='task';
   document.getElementById('m-status').value='todo';
-  // pre-fill assignee with current logged-in user
   const cu=currentUser();
   setAssigneeField('m', cu?cu.name:'');
-  // 親タスクの開始日・終了日を継承（設定されている場合のみ）
   const parentTask=addParentId?tasks.find(t=>t.id===addParentId):null;
   document.getElementById('m-start').value=parentTask?.start||'';
   document.getElementById('m-end').value=parentTask?.end||'';
@@ -3840,21 +4332,50 @@ function openAddModal(parentId,e){
   document.getElementById('m-deps').value='';
   document.getElementById('m-note').value='';
 
-  sel.onchange=()=>{addParentId=sel.value||null;openAddModal(addParentId,null);document.getElementById('add-modal').classList.add('open');};
+  sel.onchange=()=>{
+    addParentId=sel.value||null;
+    const bann=document.getElementById('modal-parent-banner');
+    const top=document.getElementById('modal-toplevel-banner');
+    const ttl=document.getElementById('modal-title-text');
+    if(addParentId){
+      const buildPath2=id=>{const parts=[];let cur=tasks.find(t=>t.id===id);while(cur){parts.unshift(`${nums[cur.id]} ${cur.name}`);cur=tasks.find(t=>t.id===cur.parentId);}return parts.join(' › ');};
+      document.getElementById('modal-parent-label').textContent=buildPath2(addParentId);
+      bann.style.display='block';top.style.display='none';
+      ttl.textContent='子アイテムを追加';
+      const pt=tasks.find(t=>t.id===addParentId);
+      if(pt?.start) document.getElementById('m-start').value=pt.start;
+      if(pt?.end) document.getElementById('m-end').value=pt.end;
+    }else{
+      bann.style.display='none';top.style.display='block';
+      ttl.textContent='最上位アイテムを追加';
+    }
+  };
   document.getElementById('add-modal').classList.add('open');
   setTimeout(()=>document.getElementById('m-name').focus(),100);
 }
 function closeAddModal(){document.getElementById('add-modal').classList.remove('open');}
 
+// サブツリーの最後のインデックスを取得（自身＋全子孫の末尾）
+function getSubtreeLastIndex(taskId){
+  let last=tasks.findIndex(t=>t.id===taskId);
+  for(let i=last+1;i<tasks.length;i++){
+    if(isDescendantOf(tasks[i].id,taskId)) last=i;
+    else break;
+  }
+  return last;
+}
+
 function submitAddTask(){
+  if(guardReadOnly()) return;
   const name=document.getElementById('m-name').value.trim();
   if(!name){alert('名前を入力してください');return;}
+  pushUndo('タスク追加：'+name);
   const pId=document.getElementById('m-parent').value||null;
   const type=document.getElementById('m-type').value;
   const nums=calcDisplayNums();
   const numToId={};Object.entries(nums).forEach(([id,n])=>numToId[n]=id);
   const deps=document.getElementById('m-deps').value.split(',').map(s=>s.trim()).filter(Boolean).map(s=>numToId[s]||s);
-  tasks.push({
+  const newTask={
     id:uid(), parentId:pId, type,
     name, deliverable:document.getElementById('m-deliverable').value,
     status:document.getElementById('m-status').value,
@@ -3863,8 +4384,24 @@ function submitAddTask(){
     end:document.getElementById('m-end').value||null,
     progress:parseInt(document.getElementById('m-progress').value)||0,
     deps, note:document.getElementById('m-note').value
-  });
-  closeAddModal();renderAll();
+  };
+
+  // ── 挿入位置を計算 ──
+  let insertIdx=-1;
+  if(insertAfterTaskId){
+    // サブツリー末尾の直後に挿入
+    insertIdx=getSubtreeLastIndex(insertAfterTaskId)+1;
+  }
+  if(insertIdx>0 && insertIdx<=tasks.length){
+    tasks.splice(insertIdx,0,newTask);
+  } else {
+    tasks.push(newTask);
+  }
+
+  insertAfterTaskId=null;
+  saveToLS();
+  closeAddModal();
+  renderAll();
 }
 
 // ─── Context Menu ───
@@ -3924,16 +4461,23 @@ function switchTab(tab){
   currentTab=tab;
   document.getElementById('list-view').style.display=tab==='list'?'block':'none';
   document.getElementById('gantt-view').style.display=tab==='gantt'?'flex':'none';
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&tab==='list')||(i===1&&tab==='gantt')));
+  document.getElementById('dashboard-view').style.display=tab==='dashboard'?'block':'none';
+  document.getElementById('feedback-view').style.display=tab==='feedback'?'block':'none';
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',
+    (i===0&&tab==='list')||(i===1&&tab==='gantt')||(i===2&&tab==='dashboard')||(i===3&&tab==='feedback')));
   if(tab==='gantt'){
     _ganttFirstRender=true;
     renderGantt();
-    // スケールボタンのアクティブ状態を更新
     document.querySelectorAll('.gantt-scale-btn').forEach(b=>{
       const isActive=b.dataset.scale===ganttScale;
       b.style.background=isActive?'var(--accent)':'';
       b.style.color=isActive?'#fff':'var(--text3)';
     });
+  }
+  if(tab==='dashboard') renderDashboard();
+  if(tab==='feedback'){
+    loadFeedbackFromLS();
+    renderFeedback();
   }
 }
 function renderAll(){
@@ -4158,8 +4702,8 @@ function startupRenderUsers(){
   grid.innerHTML=users.map(u=>`
     <div class="login-user-card" onclick="startupLogin('${u.id}')">
       <div class="l-avatar" style="background:${u.color||'#9B9890'}">${initials(u.name)}</div>
-      <div class="l-name">${u.name}</div>
-      ${u.role?`<div class="l-role">${u.role}</div>`:''}
+      <div class="l-name">${escHtml(u.name)}</div>
+      ${u.role?`<div class="l-role">${escHtml(u.role)}</div>`:''}
     </div>`).join('');
 }
 
@@ -4189,6 +4733,888 @@ async function startupShowStep2(){
   await startupShowUserSelect();
 }
 
+// ════════════════════════════════════════════════════
+// クリティカルパス計算
+// ════════════════════════════════════════════════════
+let showCriticalPath=false;
+let criticalPathIds=new Set();
+
+function toggleCriticalPath(){
+  showCriticalPath=!showCriticalPath;
+  const btn=document.getElementById('cp-btn');
+  if(btn){
+    btn.style.background=showCriticalPath?'#DC2626':'var(--surface)';
+    btn.style.color=showCriticalPath?'#fff':'var(--text3)';
+    btn.style.borderColor=showCriticalPath?'#DC2626':'var(--border)';
+  }
+  if(showCriticalPath) calcCriticalPath();
+  else criticalPathIds=new Set();
+  renderGantt();
+}
+
+function calcCriticalPath(){
+  // ── CPM（Critical Path Method）実装 ──
+  // 対象：type==='task' かつ start・end が設定されているもの
+  const taskList=tasks.filter(t=>(t.type==='task'||t.type==='milestone')&&t.start&&t.end);
+  if(!taskList.length){ criticalPathIds=new Set(); return; }
+
+  // 各タスクの期間（日数）
+  const dur={};
+  taskList.forEach(t=>{
+    dur[t.id]=Math.max(1,Math.round((s2d(t.end)-s2d(t.start))/86400000)+1);
+  });
+
+  // ES（最早開始）・EF（最早終了）前向き計算
+  const ES={}, EF={};
+  const visited=new Set();
+
+  const forward=(id)=>{
+    if(visited.has(id)) return EF[id]||0;
+    visited.add(id);
+    const t=taskList.find(x=>x.id===id);
+    if(!t){ ES[id]=0; EF[id]=0; return 0; }
+    const depEFs=(t.deps||[]).map(d=>forward(d));
+    ES[id]=depEFs.length?Math.max(...depEFs):0;
+    EF[id]=ES[id]+dur[id];
+    return EF[id];
+  };
+  taskList.forEach(t=>forward(t.id));
+
+  // プロジェクト終了時点（最大EF）
+  const projectEnd=Math.max(...taskList.map(t=>EF[t.id]||0));
+
+  // LS（最遅開始）・LF（最遅終了）後向き計算
+  const LS={}, LF={};
+  const visited2=new Set();
+
+  const backward=(id)=>{
+    if(visited2.has(id)) return;
+    visited2.add(id);
+    const t=taskList.find(x=>x.id===id);
+    if(!t) return;
+    // このタスクに依存しているタスクを探す
+    const successors=taskList.filter(x=>(x.deps||[]).includes(id));
+    if(!successors.length){
+      LF[id]=projectEnd;
+    } else {
+      successors.forEach(s=>backward(s.id));
+      LF[id]=Math.min(...successors.map(s=>LS[s.id]??projectEnd));
+    }
+    LS[id]=LF[id]-dur[id];
+  };
+  taskList.forEach(t=>backward(t.id));
+
+  // フロート（余裕）= LS - ES。フロート=0 がクリティカルパス
+  criticalPathIds=new Set();
+  taskList.forEach(t=>{
+    const float=(LS[t.id]??0)-(ES[t.id]??0);
+    if(Math.abs(float)<0.01) criticalPathIds.add(t.id);
+  });
+}
+
+// ダッシュボードのJS実装
+// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+// ダッシュボード カード設定（並べ替え・幅・表示/非表示）
+// ════════════════════════════════════════════════════
+const DB_PREFS_KEY='wbs_db_prefs_v2';
+const DB_CARDS=[
+  {id:'kpi',       label:'KPI',                          defSpan:4, kpi:true},
+  {id:'score',     label:'🏥 健全性スコア',               defSpan:1},
+  {id:'donut',     label:'🍩 ステータス分布',             defSpan:1},
+  {id:'burndown',  label:'📉 バーンダウン',               defSpan:2},
+  {id:'proj',      label:'📁 プロジェクト別完了率',        defSpan:1},
+  {id:'assignee',  label:'👤 担当者別タスク数',           defSpan:1},
+  {id:'risk',      label:'⚠ 遅延リスク',                 defSpan:1},
+  {id:'week',      label:'📅 今週の作業予定',             defSpan:1},
+  {id:'workload',  label:'⚖ ワークロード分析',            defSpan:1},
+  {id:'history',   label:'🕐 更新履歴',                  defSpan:1},
+  {id:'cp',        label:'🔴 クリティカルパス',           defSpan:2},
+  {id:'phase',     label:'📊 フェーズタイムライン',       defSpan:2},
+  {id:'milestone', label:'🔷 マイルストーン',             defSpan:1},
+];
+
+function loadDbPrefs(){
+  try{ const r=localStorage.getItem(DB_PREFS_KEY); return r?JSON.parse(r):null; }catch(e){ return null; }
+}
+function saveDbPrefs(prefs){
+  try{ localStorage.setItem(DB_PREFS_KEY,JSON.stringify(prefs)); }catch(e){}
+}
+function getDbPrefs(){
+  const saved=loadDbPrefs()||{};
+  // カードごとの設定を補完
+  return DB_CARDS.map((c,i)=>{
+    const s=saved[c.id]||{};
+    return {
+      id:c.id, label:c.label, kpi:c.kpi,
+      visible: s.visible!==undefined ? s.visible : true,
+      span:    s.span    !==undefined ? s.span    : c.defSpan,
+      order:   s.order   !==undefined ? s.order   : i,
+    };
+  }).sort((a,b)=>a.order-b.order);
+}
+function saveDbCardPrefs(cards){
+  const prefs={};
+  cards.forEach((c,i)=>{ prefs[c.id]={visible:c.visible,span:c.span,order:i}; });
+  saveDbPrefs(prefs);
+}
+
+// ── 設定モーダル ──
+let _dbDragSrc=null;
+function openDbSettings(){
+  document.getElementById('db-settings-modal').classList.add('open');
+  renderDbSettingsList();
+}
+function closeDbSettings(){
+  document.getElementById('db-settings-modal').classList.remove('open');
+}
+function renderDbSettingsList(){
+  const cards=getDbPrefs();
+  const list=document.getElementById('db-settings-list');
+  if(!list) return;
+  list.innerHTML=cards.map((c,i)=>`
+    <div class="db-setting-row" data-id="${c.id}" draggable="true"
+      style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);margin-bottom:6px;cursor:default;opacity:${c.visible?1:.45}"
+      ondragstart="dbDragStart(event,'${c.id}')"
+      ondragover="dbDragOver(event)"
+      ondrop="dbDrop(event,'${c.id}')"
+      ondragend="dbDragEnd(event)">
+      <!-- ドラッグハンドル -->
+      <span style="font-size:14px;color:var(--text3);cursor:grab;flex-shrink:0" title="ドラッグして並べ替え">⠿</span>
+      <!-- ラベル -->
+      <span style="flex:1;font-size:12px;font-weight:500;color:var(--text)">${c.label}</span>
+      <!-- 幅トグル（KPIは固定） -->
+      ${c.kpi?'<span style="font-size:11px;color:var(--text3)">固定</span>':`
+      <div style="display:flex;border:1px solid var(--border);border-radius:4px;overflow:hidden;flex-shrink:0">
+        <button onclick="dbSetSpan('${c.id}',1)" style="padding:3px 8px;font-size:11px;border:none;cursor:pointer;background:${c.span===1?'var(--accent)':'var(--surface)'};color:${c.span===1?'#fff':'var(--text3)'};transition:.15s">標準</button>
+        <button onclick="dbSetSpan('${c.id}',2)" style="padding:3px 8px;font-size:11px;border:none;cursor:pointer;background:${c.span===2?'var(--accent)':'var(--surface)'};color:${c.span===2?'#fff':'var(--text3)'};transition:.15s;border-left:1px solid var(--border)">2列</button>
+      </div>`}
+      <!-- 表示トグル -->
+      <button onclick="dbToggleVisible('${c.id}')"
+        style="padding:3px 8px;font-size:11px;border:1px solid var(--border);border-radius:4px;cursor:pointer;background:${c.visible?'var(--success)':'var(--surface2)'};color:${c.visible?'#fff':'var(--text3)'};transition:.15s;flex-shrink:0">
+        ${c.visible?'表示':'非表示'}
+      </button>
+    </div>`).join('');
+}
+// ドラッグ並べ替え
+function dbDragStart(e,id){ _dbDragSrc=id; e.dataTransfer.effectAllowed='move'; e.target.style.opacity='.4'; }
+function dbDragEnd(e){ e.target.style.opacity=''; _dbDragSrc=null; }
+function dbDragOver(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; }
+function dbDrop(e,targetId){
+  e.preventDefault();
+  if(!_dbDragSrc||_dbDragSrc===targetId) return;
+  const cards=getDbPrefs();
+  const srcIdx=cards.findIndex(c=>c.id===_dbDragSrc);
+  const tgtIdx=cards.findIndex(c=>c.id===targetId);
+  const [moved]=cards.splice(srcIdx,1);
+  cards.splice(tgtIdx,0,moved);
+  saveDbCardPrefs(cards);
+  renderDbSettingsList();
+  renderDashboard();
+}
+function dbSetSpan(id,span){
+  const cards=getDbPrefs();
+  const c=cards.find(x=>x.id===id);
+  if(c){ c.span=span; saveDbCardPrefs(cards); renderDbSettingsList(); renderDashboard(); }
+}
+function dbToggleVisible(id){
+  const cards=getDbPrefs();
+  const c=cards.find(x=>x.id===id);
+  if(c){ c.visible=!c.visible; saveDbCardPrefs(cards); renderDbSettingsList(); renderDashboard(); }
+}
+function resetDbPrefs(){
+  localStorage.removeItem(DB_PREFS_KEY);
+  renderDbSettingsList();
+  renderDashboard();
+}
+document.addEventListener('click',e=>{
+  const modal=document.getElementById('db-settings-modal');
+  if(modal&&modal.classList.contains('open')&&e.target===modal) closeDbSettings();
+});
+
+function renderDashboard(){
+  const el=document.getElementById('dashboard-inner');
+  if(!el) return;
+  const today=new Date(); today.setHours(0,0,0,0);
+
+  // ── 全プロジェクトのタスクを集計 ──
+  const allTasks=projects.flatMap(p=>p.tasks||[]);
+  const leafTasks=allTasks.filter(t=>t.type==='task');
+  const total=leafTasks.length;
+  const done=leafTasks.filter(t=>t.status==='done').length;
+  const overdue=leafTasks.filter(t=>t.status!=='done'&&t.end&&s2d(t.end)<today).length;
+  const blocked=leafTasks.filter(t=>t.status==='block').length;
+  const doneRate=total?Math.round(done/total*100):0;
+
+  // ── KPIカード ──
+  const kpiHtml=`
+    <div class="db-kpi-row">
+      <div class="db-kpi">
+        <div class="db-kpi-val">${total}</div>
+        <div class="db-kpi-label">総タスク数</div>
+      </div>
+      <div class="db-kpi">
+        <div class="db-kpi-val" style="color:var(--success)">${done}</div>
+        <div class="db-kpi-label">完了</div>
+      </div>
+      <div class="db-kpi">
+        <div class="db-kpi-val" style="color:var(--danger)">${overdue}</div>
+        <div class="db-kpi-label">期限超過</div>
+      </div>
+      <div class="db-kpi">
+        <div class="db-kpi-val" style="color:var(--warn)">${blocked}</div>
+        <div class="db-kpi-label">ブロック中</div>
+      </div>
+    </div>`;
+
+  // ── プロジェクト別完了率 ──
+  const projBarsHtml=projects.map(p=>{
+    const pt=( p.tasks||[]).filter(t=>t.type==='task');
+    const pd=pt.filter(t=>t.status==='done').length;
+    const pRate=pt.length?Math.round(pd/pt.length*100):0;
+    const pOver=pt.filter(t=>t.status!=='done'&&t.end&&s2d(t.end)<today).length;
+    const dot=`<div style="width:8px;height:8px;border-radius:50%;background:${p.color||'var(--accent)'};flex-shrink:0"></div>`;
+    return `<div class="db-bar-wrap">
+      ${dot}
+      <div class="db-bar-label" title="${escHtml(p.name)}">${escHtml(p.name)}</div>
+      <div class="db-bar-track">
+        <div class="db-bar-fill" style="width:${pRate}%;background:${p.color||'var(--accent)'}"></div>
+      </div>
+      <div class="db-bar-pct">${pRate}%</div>
+      ${pOver?`<div style="font-size:11px;color:var(--danger);flex-shrink:0">⚠${pOver}</div>`:''}
+    </div>`;
+  }).join('');
+
+  // ── ステータス分布（SVGドーナツ） ──
+  const statusCounts={todo:0,doing:0,done:0,block:0};
+  leafTasks.forEach(t=>{ if(statusCounts[t.status]!==undefined) statusCounts[t.status]++; });
+  const statusColors={todo:'#9B9890',doing:'#2563EB',done:'#059669',block:'#DC2626'};
+  const statusLabels={todo:'未着手',doing:'進行中',done:'完了',block:'ブロック中'};
+  const donutHtml=(()=>{
+    if(!total) return '<div style="text-align:center;color:var(--text3);padding:20px">データなし</div>';
+    const r=54,cx=70,cy=70,stroke=16;
+    const circ=2*Math.PI*r;
+    let offset=0;
+    const slices=['done','doing','todo','block'].map(s=>{
+      const cnt=statusCounts[s];
+      const pct=cnt/total;
+      const dash=pct*circ;
+      const rot=-Math.PI/2+2*Math.PI*offset;
+      const svg=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none"
+        stroke="${statusColors[s]}" stroke-width="${stroke}"
+        stroke-dasharray="${dash} ${circ-dash}"
+        stroke-dashoffset="${-circ*offset}"
+        transform="rotate(-90 ${cx} ${cy})"/>`;
+      offset+=pct;
+      return svg;
+    }).join('');
+    const legend=['done','doing','todo','block'].map(s=>`
+      <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2)">
+        <div style="width:10px;height:10px;border-radius:50%;background:${statusColors[s]};flex-shrink:0"></div>
+        ${statusLabels[s]}: <b style="color:var(--text)">${statusCounts[s]}</b>
+      </div>`).join('');
+    return `<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+      <svg width="140" height="140" style="flex-shrink:0">
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--surface2)" stroke-width="${stroke}"/>
+        ${slices}
+        <text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="22" font-weight="800" fill="var(--text)" font-family="Syne,sans-serif">${doneRate}</text>
+        <text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="11" fill="var(--text3)" font-family="DM Sans,sans-serif">% 完了</text>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:8px">${legend}</div>
+    </div>`;
+  })();
+
+  // ── 担当者別タスク数 ──
+  const assigneeMap={};
+  leafTasks.forEach(t=>{
+    const name=t.assignee||'（未割当）';
+    if(!assigneeMap[name]) assigneeMap[name]={total:0,done:0,overdue:0,color:'#9B9890'};
+    assigneeMap[name].total++;
+    if(t.status==='done') assigneeMap[name].done++;
+    if(t.status!=='done'&&t.end&&s2d(t.end)<today) assigneeMap[name].overdue++;
+    const u=users.find(x=>x.name===name);
+    if(u) assigneeMap[name].color=u.color;
+  });
+  const maxAssigneeTotal=Math.max(1,...Object.values(assigneeMap).map(v=>v.total));
+  const assigneeBarsHtml=Object.entries(assigneeMap)
+    .sort((a,b)=>b[1].total-a[1].total)
+    .map(([name,v])=>{
+      const doneW=Math.round(v.done/maxAssigneeTotal*100);
+      const todoW=Math.round((v.total-v.done)/maxAssigneeTotal*100);
+      const initl=name==='（未割当）'?'?':name.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+      return `<div class="db-bar-wrap">
+        <div style="width:20px;height:20px;border-radius:50%;background:${v.color};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0">${initl}</div>
+        <div class="db-bar-label" title="${name}">${name}</div>
+        <div class="db-bar-track" style="position:relative">
+          <div style="position:absolute;left:0;top:0;height:100%;width:${doneW}%;background:var(--success);border-radius:6px 0 0 6px"></div>
+          <div style="position:absolute;left:${doneW}%;top:0;height:100%;width:${todoW}%;background:var(--surface2)"></div>
+        </div>
+        <div class="db-bar-pct" style="color:var(--text)">${v.total}</div>
+        ${v.overdue?`<div style="font-size:11px;color:var(--danger);flex-shrink:0">⚠${v.overdue}</div>`:''}
+      </div>`;
+    }).join('');
+
+  // ── 直近7日のマイルストーン ──
+  const soon=new Date(today); soon.setDate(soon.getDate()+7);
+  const milestones=allTasks.filter(t=>t.type==='milestone'&&t.start&&s2d(t.start)>=today&&s2d(t.start)<=soon);
+  const milestoneHtml=milestones.length
+    ? milestones.map(t=>{
+        const proj=projects.find(p=>(p.tasks||[]).some(x=>x.id===t.id));
+        const daysLeft=Math.round((s2d(t.start)-today)/86400000);
+        return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+          <div style="font-size:16px;flex-shrink:0">🔷</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(t.name)}</div>
+            <div style="font-size:11px;color:var(--text3)">${proj?escHtml(proj.name):''} · ${t.start}</div>
+          </div>
+          <div style="font-size:12px;font-weight:600;color:${daysLeft===0?'var(--danger)':daysLeft<=2?'var(--warn)':'var(--accent)'};flex-shrink:0">${daysLeft===0?'今日':daysLeft+'日後'}</div>
+        </div>`;
+      }).join('')
+    : '<div style="text-align:center;color:var(--text3);padding:16px;font-size:12px">直近7日以内のマイルストーンはありません</div>';
+
+  // ── ① スケジュール健全性スコア ──
+  const healthScore=(()=>{
+    if(!total) return {score:100,grade:'green',label:'🟢 データなし',detail:[]};
+    const detail=[];
+    let score=100;
+    // 完了率 vs 経過日数の比率
+    const allDated=leafTasks.filter(t=>t.start&&t.end);
+    if(allDated.length){
+      const projStart=allDated.reduce((m,t)=>s2d(t.start)<m?s2d(t.start):m, s2d(allDated[0].start));
+      const projEnd  =allDated.reduce((m,t)=>s2d(t.end)>m?s2d(t.end):m, s2d(allDated[0].end));
+      const totalDays=Math.max(1,Math.round((projEnd-projStart)/86400000));
+      const elapsed  =Math.max(0,Math.round((today-projStart)/86400000));
+      const plannedRate=Math.min(100,Math.round(elapsed/totalDays*100));
+      const gap=plannedRate-doneRate;
+      if(gap>20){ score-=25; detail.push(`⚠ 進捗が計画より${gap}%遅れています`); }
+      else if(gap>10){ score-=10; detail.push(`⚠ 進捗が計画より${gap}%遅れています`); }
+      else if(gap<=0){ detail.push(`✅ 進捗は計画通りです`); }
+    }
+    // 期限超過
+    if(overdue>0){ const p=Math.min(30,overdue*8); score-=p; detail.push(`⚠ 期限超過 ${overdue}件（-${p}点）`); }
+    // ブロック中
+    if(blocked>0){ const p=Math.min(20,blocked*7); score-=p; detail.push(`⚠ ブロック中 ${blocked}件（-${p}点）`); }
+    score=Math.max(0,score);
+    const grade=score>=80?'green':score>=60?'yellow':'red';
+    const label=score>=80?'🟢 健全':score>=60?'🟡 注意':'🔴 危険';
+    return {score,grade,label,detail};
+  })();
+  const scoreColor=healthScore.grade==='green'?'var(--success)':healthScore.grade==='yellow'?'var(--warn)':'var(--danger)';
+  const scoreHtml=`
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+      <div style="text-align:center;flex-shrink:0">
+        <svg width="100" height="100">
+          <circle cx="50" cy="50" r="40" fill="none" stroke="var(--surface2)" stroke-width="10"/>
+          <circle cx="50" cy="50" r="40" fill="none" stroke="${scoreColor}" stroke-width="10"
+            stroke-dasharray="${healthScore.score*2.51} 251"
+            stroke-dashoffset="62.8"
+            transform="rotate(-90 50 50)"/>
+          <text x="50" y="44" text-anchor="middle" font-size="22" font-weight="800" fill="${scoreColor}" font-family="Syne,sans-serif">${healthScore.score}</text>
+          <text x="50" y="60" text-anchor="middle" font-size="10" fill="var(--text3)" font-family="DM Sans,sans-serif">/ 100点</text>
+        </svg>
+        <div style="font-size:13px;font-weight:700;color:${scoreColor}">${healthScore.label}</div>
+      </div>
+      <div style="flex:1;min-width:160px">
+        ${healthScore.detail.length
+          ? healthScore.detail.map(d=>`<div style="font-size:12px;color:var(--text2);margin-bottom:6px;line-height:1.5">${escHtml(d)}</div>`).join('')
+          : '<div style="font-size:12px;color:var(--success)">問題は検出されませんでした</div>'}
+      </div>
+    </div>`;
+
+  // ── ② 遅延リスクタスク一覧 ──
+  const riskTasks=(()=>{
+    const risks=[];
+    leafTasks.forEach(t=>{
+      if(t.status==='done'||!t.start||!t.end) return;
+      const start=s2d(t.start), end=s2d(t.end);
+      if(start>today) return; // 未開始タスクは除外
+      const dur=Math.max(1,Math.round((end-start)/86400000)+1);
+      const elapsed=Math.round((today-start)/86400000);
+      const planned=Math.min(100,Math.round(elapsed/dur*100));
+      const actual=t.progress||0;
+      const gap=planned-actual;
+      if(gap>=10){
+        const proj=projects.find(p=>(p.tasks||[]).some(x=>x.id===t.id));
+        const u=users.find(x=>x.name===t.assignee);
+        risks.push({t,gap,planned,actual,proj,u});
+      }
+    });
+    return risks.sort((a,b)=>b.gap-a.gap);
+  })();
+  const riskHtml=riskTasks.length
+    ? riskTasks.map(({t,gap,planned,actual,proj,u})=>{
+        const color=gap>=20?'var(--danger)':'var(--warn)';
+        const initl=t.assignee?t.assignee.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase():'?';
+        const aColor=u?u.color:'#9B9890';
+        return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+          <div style="font-size:18px;flex-shrink:0">⚠</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(t.name)}</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px">${proj?escHtml(proj.name):''} · 予定${planned}% / 実績${actual}%</div>
+          </div>
+          <div style="flex-shrink:0;text-align:right">
+            <div style="font-size:13px;font-weight:700;color:${color}">-${gap}%</div>
+            ${t.assignee?`<div style="display:flex;align-items:center;gap:4px;justify-content:flex-end;margin-top:2px"><div style="width:14px;height:14px;border-radius:50%;background:${aColor};display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#fff">${initl}</div><span style="font-size:11px;color:var(--text3)">${escHtml(t.assignee)}</span></div>`:''}
+          </div>
+        </div>`;
+      }).join('')
+    : '<div style="text-align:center;color:var(--success);padding:16px;font-size:12px">✅ 遅延リスクのあるタスクはありません</div>';
+
+  // ── ③ 今週の作業予定 ──
+  const weekEnd=new Date(today); weekEnd.setDate(weekEnd.getDate()+6);
+  const thisWeekTasks=leafTasks.filter(t=>{
+    if(!t.start&&!t.end) return false;
+    const start=t.start?s2d(t.start):null;
+    const end=t.end?s2d(t.end):null;
+    // 今週開始・今週終了・今週進行中のいずれか
+    return (start&&start>=today&&start<=weekEnd)||
+           (end&&end>=today&&end<=weekEnd)||
+           (start&&end&&start<=today&&end>=today);
+  }).sort((a,b)=>{
+    const da=a.end?s2d(a.end):s2d(a.start);
+    const db=b.end?s2d(b.end):s2d(b.start);
+    return da-db;
+  });
+  const weekDayNames=['日','月','火','水','木','金','土'];
+  const weekTaskHtml=thisWeekTasks.length
+    ? thisWeekTasks.map(t=>{
+        const u=users.find(x=>x.name===t.assignee);
+        const aColor=u?u.color:'#9B9890';
+        const initl=t.assignee?t.assignee.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase():'?';
+        const end=t.end?s2d(t.end):null;
+        const isEndThisWeek=end&&end>=today&&end<=weekEnd;
+        const isOverdueTask=end&&end<today&&t.status!=='done';
+        const statusColors={todo:'#9B9890',doing:'#2563EB',done:'#059669',block:'#DC2626'};
+        const statusLabels={todo:'未着手',doing:'進行中',done:'完了',block:'ブロック'};
+        const endLabel=end?`${end.getMonth()+1}/${end.getDate()}(${weekDayNames[end.getDay()]})終了`:'';
+        return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+          <div style="width:4px;height:36px;border-radius:2px;background:${statusColors[t.status]||'#9B9890'};flex-shrink:0"></div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:${isEndThisWeek?600:400};color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(t.name)}</div>
+            <div style="font-size:11px;margin-top:2px;display:flex;gap:6px;align-items:center">
+              <span style="color:${isOverdueTask?'var(--danger)':isEndThisWeek?'var(--warn)':'var(--text3)'}">${escHtml(endLabel)}</span>
+              <span style="background:${statusColors[t.status]};color:#fff;border-radius:3px;padding:0 4px;font-size:10px">${statusLabels[t.status]||''}</span>
+            </div>
+          </div>
+          ${t.assignee?`<div title="${escHtml(t.assignee)}" style="width:22px;height:22px;border-radius:50%;background:${aColor};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0">${initl}</div>`:''}
+        </div>`;
+      }).join('')
+    : '<div style="text-align:center;color:var(--text3);padding:16px;font-size:12px">今週の作業予定タスクはありません</div>';
+
+  // ── ④ バーンダウンチャート ──
+  const burndownHtml=(()=>{
+    const dated=leafTasks.filter(t=>t.start&&t.end);
+    if(!dated.length) return '<div style="color:var(--text3);font-size:12px;text-align:center;padding:16px">日程が設定されたタスクがありません</div>';
+    const projStart=dated.reduce((m,t)=>s2d(t.start)<m?s2d(t.start):m, s2d(dated[0].start));
+    const projEnd  =dated.reduce((m,t)=>s2d(t.end)>m?s2d(t.end):m, s2d(dated[0].end));
+    const totalDays=Math.max(1,Math.round((projEnd-projStart)/86400000));
+    const W=320,H=140,PAD={t:10,r:10,b:30,l:36};
+    const cW=W-PAD.l-PAD.r, cH=H-PAD.t-PAD.b;
+    const xScale=d=>PAD.l+Math.round((d-projStart)/86400000/totalDays*cW);
+    const yScale=n=>PAD.t+Math.round((1-n/dated.length)*cH);
+    // 理想ライン
+    const ix1=xScale(projStart), iy1=yScale(dated.length);
+    const ix2=xScale(projEnd),   iy2=yScale(0);
+    // 実績ライン（日ごとの未完了数をサンプリング）
+    const samplePoints=[];
+    for(let i=0;i<=Math.min(totalDays,60);i++){
+      const d=new Date(projStart); d.setDate(d.getDate()+Math.round(i/Math.min(totalDays,60)*totalDays));
+      d.setHours(0,0,0,0);
+      if(d>today) break;
+      const remaining=dated.filter(t=>t.status!=='done'||s2d(t.end)>d).length;
+      samplePoints.push({x:xScale(d),y:yScale(remaining)});
+    }
+    // 今日線
+    const todayX=Math.min(xScale(today),W-PAD.r);
+    const actualPath=samplePoints.length>1?'M'+samplePoints.map(p=>`${p.x},${p.y}`).join(' L'):'';
+    // 軸ラベル
+    const startLabel=`${projStart.getMonth()+1}/${projStart.getDate()}`;
+    const endLabel=`${projEnd.getMonth()+1}/${projEnd.getDate()}`;
+    return `<svg width="${W}" height="${H}" style="width:100%;max-width:${W}px">
+      <!-- 背景グリッド -->
+      ${[0,.25,.5,.75,1].map(r=>{
+        const y=PAD.t+Math.round(r*cH);
+        const n=Math.round((1-r)*dated.length);
+        return `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="var(--border)" stroke-width="1"/>
+                <text x="${PAD.l-4}" y="${y+4}" text-anchor="end" font-size="9" fill="var(--text3)" font-family="DM Mono,sans-serif">${n}</text>`;
+      }).join('')}
+      <!-- 軸 -->
+      <line x1="${PAD.l}" y1="${PAD.t}" x2="${PAD.l}" y2="${PAD.t+cH}" stroke="var(--border)" stroke-width="1"/>
+      <line x1="${PAD.l}" y1="${PAD.t+cH}" x2="${W-PAD.r}" y2="${PAD.t+cH}" stroke="var(--border)" stroke-width="1"/>
+      <!-- 軸ラベル -->
+      <text x="${PAD.l}" y="${H-4}" text-anchor="middle" font-size="9" fill="var(--text3)" font-family="DM Sans,sans-serif">${startLabel}</text>
+      <text x="${W-PAD.r}" y="${H-4}" text-anchor="middle" font-size="9" fill="var(--text3)" font-family="DM Sans,sans-serif">${endLabel}</text>
+      <!-- 理想ライン -->
+      <line x1="${ix1}" y1="${iy1}" x2="${ix2}" y2="${iy2}" stroke="#9B9890" stroke-width="1.5" stroke-dasharray="4 3" opacity=".7"/>
+      <!-- 実績ライン -->
+      ${actualPath?`<path d="${actualPath}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`:''}
+      <!-- 今日ライン -->
+      ${today>=projStart&&today<=projEnd?`<line x1="${todayX}" y1="${PAD.t}" x2="${todayX}" y2="${PAD.t+cH}" stroke="var(--danger)" stroke-width="1" stroke-dasharray="3 2" opacity=".6"/>
+      <text x="${todayX+3}" y="${PAD.t+10}" font-size="9" fill="var(--danger)" font-family="DM Sans,sans-serif">今日</text>`:''}
+      <!-- 凡例 -->
+      <line x1="${PAD.l}" y1="${H-16}" x2="${PAD.l+16}" y2="${H-16}" stroke="#9B9890" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="${PAD.l+20}" y="${H-12}" font-size="9" fill="var(--text3)" font-family="DM Sans,sans-serif">理想</text>
+      <line x1="${PAD.l+50}" y1="${H-16}" x2="${PAD.l+66}" y2="${H-16}" stroke="var(--accent)" stroke-width="2"/>
+      <text x="${PAD.l+70}" y="${H-12}" font-size="9" fill="var(--text3)" font-family="DM Sans,sans-serif">実績</text>
+    </svg>`;
+  })();
+
+  // ── ⑤ クリティカルパス上のタスク一覧 ──
+  const cpHtml=(()=>{
+    // 既存のCPM計算を再利用（showCriticalPathフラグに依存しない独立計算）
+    const taskList=allTasks.filter(t=>(t.type==='task'||t.type==='milestone')&&t.start&&t.end);
+    if(!taskList.length) return '<div style="color:var(--text3);font-size:12px;text-align:center;padding:16px">依存関係が設定されたタスクがありません</div>';
+    const dur={};
+    taskList.forEach(t=>{ dur[t.id]=Math.max(1,Math.round((s2d(t.end)-s2d(t.start))/86400000)+1); });
+    const ES={},EF={},visited=new Set();
+    const forward=id=>{
+      if(visited.has(id)) return EF[id]||0;
+      visited.add(id);
+      const t=taskList.find(x=>x.id===id);
+      if(!t){ ES[id]=0;EF[id]=0;return 0; }
+      const depEFs=(t.deps||[]).map(d=>forward(d));
+      ES[id]=depEFs.length?Math.max(...depEFs):0;
+      EF[id]=ES[id]+dur[id];
+      return EF[id];
+    };
+    taskList.forEach(t=>forward(t.id));
+    const projEnd2=Math.max(...taskList.map(t=>EF[t.id]||0));
+    const LS={},LF={},visited2=new Set();
+    const backward=id=>{
+      if(visited2.has(id)) return;
+      visited2.add(id);
+      const t=taskList.find(x=>x.id===id);
+      if(!t) return;
+      const succ=taskList.filter(x=>(x.deps||[]).includes(id));
+      if(!succ.length){ LF[id]=projEnd2; }
+      else { succ.forEach(s=>backward(s.id)); LF[id]=Math.min(...succ.map(s=>LS[s.id]??projEnd2)); }
+      LS[id]=LF[id]-dur[id];
+    };
+    taskList.forEach(t=>backward(t.id));
+    const cpTasks=taskList.filter(t=>Math.abs((LS[t.id]??0)-(ES[t.id]??0))<0.01);
+    if(!cpTasks.length) return '<div style="color:var(--text3);font-size:12px;text-align:center;padding:16px">クリティカルパスを計算できません（依存関係を設定してください）</div>';
+    return cpTasks.map(t=>{
+      const proj=projects.find(p=>(p.tasks||[]).some(x=>x.id===t.id));
+      const isLate=t.status!=='done'&&t.end&&s2d(t.end)<today;
+      const u=users.find(x=>x.name===t.assignee);
+      const aColor=u?u.color:'#9B9890';
+      const initl=t.assignee?t.assignee.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase():'?';
+      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+        <div style="width:4px;height:36px;border-radius:2px;background:#DC2626;flex-shrink:0"></div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(t.name)}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">${proj?escHtml(proj.name):''} · ${t.start||''}〜${t.end||''} · ${dur[t.id]}日</div>
+        </div>
+        <div style="flex-shrink:0;text-align:right">
+          ${isLate?'<div style="font-size:11px;color:var(--danger);font-weight:600">期限超過</div>':''}
+          ${t.assignee?`<div title="${escHtml(t.assignee)}" style="margin-top:2px;width:20px;height:20px;border-radius:50%;background:${aColor};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff">${initl}</div>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  })();
+
+  // ── ⑥ フェーズ別進捗タイムライン ──
+  const phaseHtml=(()=>{
+    const folders=allTasks.filter(t=>t.type==='folder'&&t.parentId===null&&t.start&&t.end);
+    if(!folders.length) return '<div style="color:var(--text3);font-size:12px;text-align:center;padding:16px">最上位フォルダ（フェーズ）がありません</div>';
+    const projStart=folders.reduce((m,t)=>s2d(t.start)<m?s2d(t.start):m, s2d(folders[0].start));
+    const projEnd  =folders.reduce((m,t)=>s2d(t.end)>m?s2d(t.end):m, s2d(folders[0].end));
+    const totalDays=Math.max(1,Math.round((projEnd-projStart)/86400000));
+    const palette=['#2563EB','#7C3AED','#059669','#D97706','#0891B2','#65A30D','#DB2777'];
+    const todayPct=Math.min(100,Math.max(0,Math.round((today-projStart)/86400000/totalDays*100)));
+    return `<div style="margin-bottom:8px">
+      <div style="position:relative;height:14px;margin-bottom:4px">
+        <div style="position:absolute;left:${todayPct}%;top:0;width:1px;height:14px;background:var(--danger);opacity:.7"></div>
+        <div style="position:absolute;left:${todayPct}%;top:-14px;font-size:9px;color:var(--danger);transform:translateX(-50%)">今日</div>
+      </div>
+      ${folders.map((t,i)=>{
+        const s=s2d(t.start),e=s2d(t.end);
+        const left=Math.round((s-projStart)/86400000/totalDays*100);
+        const width=Math.max(2,Math.round((e-s)/86400000/totalDays*100));
+        const pct=effectiveProgress(t);
+        const color=palette[i%palette.length];
+        const isDone=t.status==='done';
+        const isOver=!isDone&&e<today;
+        const phaseLabel=`${escHtml(t.name)}　${pct}%`;
+        return `<div style="margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+            <div style="font-size:11px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">${phaseLabel}</div>
+            <div style="font-size:10px;color:${isOver?'var(--danger)':'var(--text3)'};flex-shrink:0;margin-left:8px">${t.start}〜${t.end}</div>
+          </div>
+          <div style="position:relative;height:18px;background:var(--surface2);border-radius:4px;overflow:hidden">
+            <!-- バー位置 -->
+            <div style="position:absolute;left:${left}%;width:${width}%;height:100%;background:${color};opacity:${isDone?1:.7};border-radius:4px"></div>
+            <!-- 進捗フィル -->
+            <div style="position:absolute;left:${left}%;width:${width*pct/100}%;height:100%;background:${color};border-radius:4px"></div>
+            <!-- 超過マーク -->
+            ${isOver?`<div style="position:absolute;right:0;top:0;height:100%;width:4px;background:var(--danger)"></div>`:''}
+          </div>
+        </div>`;
+      }).join('')}
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:4px">
+        <span>${folders[0].start}</span><span>${folders[folders.length-1].end}</span>
+      </div>
+    </div>`;
+  })();
+
+  // ── ⑧ チームワークロード分析 ──
+  const workloadHtml=(()=>{
+    const assigneeWork={};
+    leafTasks.forEach(t=>{
+      const name=t.assignee||'（未割当）';
+      if(!assigneeWork[name]) assigneeWork[name]={
+        active:0, thisWeek:0, overdue:0, total:0, color:'#9B9890'
+      };
+      const u=users.find(x=>x.name===name);
+      if(u) assigneeWork[name].color=u.color;
+      assigneeWork[name].total++;
+      if(t.status!=='done'){
+        if(t.start&&t.end){
+          const s=s2d(t.start),e=s2d(t.end);
+          if(s<=today&&e>=today) assigneeWork[name].active++;
+          const weekEnd2=new Date(today); weekEnd2.setDate(weekEnd2.getDate()+6);
+          if(e>=today&&e<=weekEnd2) assigneeWork[name].thisWeek++;
+        }
+        if(t.end&&s2d(t.end)<today) assigneeWork[name].overdue++;
+      }
+    });
+    const entries=Object.entries(assigneeWork).sort((a,b)=>b[1].active-a[1].active);
+    if(!entries.length) return '<div style="color:var(--text3);font-size:12px;text-align:center;padding:16px">担当者が設定されたタスクがありません</div>';
+    const maxActive=Math.max(1,...entries.map(([,v])=>v.active));
+    return entries.map(([name,v])=>{
+      const initl=name==='（未割当）'?'?':name.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+      const barW=Math.round(v.active/maxActive*100);
+      const load=v.active>=5?'🔴 高負荷':v.active>=3?'🟡 やや高':v.active>0?'🟢 適正':'⚪ 余裕';
+      return `<div style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          <div style="width:20px;height:20px;border-radius:50%;background:${v.color};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;flex-shrink:0">${initl}</div>
+          <div style="flex:1;font-size:12px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(name)}</div>
+          <div style="font-size:11px;flex-shrink:0">${load}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="db-bar-track" style="flex:1">
+            <div class="db-bar-fill" style="width:${barW}%;background:${v.color}"></div>
+          </div>
+          <div style="font-size:10px;color:var(--text3);flex-shrink:0;width:110px;text-align:right">
+            進行中${v.active} 今週締切${v.thisWeek}${v.overdue?` <span style="color:var(--danger)">超過${v.overdue}</span>`:''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  })();
+
+  // ── ⑦ 直近の更新履歴 ──
+  const historyCardHtml=(()=>{
+    if(!historyLog||!historyLog.length) return '<div style="color:var(--text3);font-size:12px;text-align:center;padding:16px">変更履歴がありません（操作後に表示されます）</div>';
+    return historyLog.slice(0,15).map(h=>{
+      const u=users.find(x=>x.name===h.user);
+      const aColor=u?u.color:'#9B9890';
+      const initl=h.user?h.user.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase():'?';
+      const dt=new Date(h.at);
+      const timeStr=`${dt.getMonth()+1}/${dt.getDate()} ${dt.getHours()}:${String(dt.getMinutes()).padStart(2,'0')}`;
+      return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+        ${h.user?`<div title="${escHtml(h.user)}" style="width:18px;height:18px;border-radius:50%;background:${aColor};display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#fff;flex-shrink:0">${initl}</div>`:'<div style="width:18px"></div>'}
+        <div style="flex:1;min-width:0;font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(h.label)}</div>
+        <div style="font-size:10px;color:var(--text3);flex-shrink:0">${timeStr}</div>
+      </div>`;
+    }).join('');
+  })();
+
+  // ── カード表示ヘルパー（新プレフシステム対応） ──
+  const cardPrefs=getDbPrefs();
+  const cardMap={}; // id → {html, title}
+  cardMap['kpi']       ={title:'KPI',                    html:kpiHtml,         kpi:true};
+  cardMap['score']     ={title:'🏥 スケジュール健全性スコア', html:scoreHtml};
+  cardMap['donut']     ={title:'🍩 ステータス分布',          html:donutHtml};
+  cardMap['burndown']  ={title:'📉 バーンダウンチャート',    html:burndownHtml};
+  cardMap['proj']      ={title:'📁 プロジェクト別完了率',    html:projBarsHtml||'<div style="color:var(--text3);font-size:12px">プロジェクトなし</div>'};
+  cardMap['assignee']  ={title:'👤 担当者別タスク数<div style="font-size:10px;color:var(--text3);margin-top:2px">■ 完了 □ 未完了　右の数字は総タスク数</div>', html:assigneeBarsHtml||'<div style="color:var(--text3);font-size:12px">データなし</div>'};
+  cardMap['risk']      ={title:'⚠ 遅延リスクタスク <span style="font-size:11px;color:var(--text3);font-weight:400">（予定より10%以上遅れ）</span>', html:riskHtml};
+  cardMap['week']      ={title:`📅 今週の作業予定 <span style="font-size:11px;color:var(--text3);font-weight:400">（〜${weekEnd.getMonth()+1}/${weekEnd.getDate()}）</span>`, html:weekTaskHtml};
+  cardMap['workload']  ={title:'⚖ チームワークロード分析',  html:workloadHtml};
+  cardMap['history']   ={title:'🕐 直近の更新履歴',          html:historyCardHtml};
+  cardMap['cp']        ={title:'🔴 クリティカルパス上のタスク <span style="font-size:11px;color:var(--text3);font-weight:400">（遅延するとプロジェクト全体が遅れる）</span>', html:cpHtml};
+  cardMap['phase']     ={title:'📊 フェーズ別進捗タイムライン', html:phaseHtml};
+  cardMap['milestone'] ={title:'🔷 直近7日のマイルストーン',  html:milestoneHtml};
+
+  // 順序・表示・幅に従いカードHTMLを生成
+  const cardsHtml=cardPrefs.filter(c=>c.visible&&cardMap[c.id]).map(c=>{
+    const m=cardMap[c.id];
+    if(m.kpi) return c.visible?`<div style="grid-column:span 4">${m.html}</div>`:'';
+    return `<div class="db-card" style="grid-column:span ${c.span||1}">
+      <div class="db-card-title">${m.title}</div>
+      ${m.html}
+    </div>`;
+  }).join('');
+
+  el.innerHTML=`
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+      <button id="db-settings-btn" class="btn btn-sm" onclick="openDbSettings()" style="gap:6px">
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.42 1.42M11.54 11.54l1.41 1.41M3.05 12.95l1.42-1.42M11.54 4.46l1.41-1.41"/></svg>
+        カード設定
+      </button>
+    </div>
+    <div class="db-grid" style="grid-template-columns:repeat(4,1fr)">
+      ${cardsHtml}
+    </div>`;
+}
+// ════════════════════════════════════════════════════
+const FB_LS_KEY='wbs_feedback_v1';
+const FB_FILE='wbs_feedback.json';
+let feedbacks=[];
+let _fbUid=1;
+const FB_STATUS_LABEL={open:'未対応',wip:'対応中',done:'対応済',rejected:'却下'};
+
+function loadFeedbackFromLS(){
+  try{
+    const raw=localStorage.getItem(FB_LS_KEY);
+    if(!raw) return;
+    const d=JSON.parse(raw);
+    feedbacks=d.feedbacks||[];
+    _fbUid=d._fbUid||feedbacks.length+1;
+  }catch(e){}
+}
+async function loadFeedbackFromCsv(){
+  if(!csvDirHandle) return false;
+  try{
+    const fh=await csvDirHandle.getFileHandle(FB_FILE);
+    const file=await fh.getFile();
+    const d=JSON.parse(await file.text());
+    feedbacks=d.feedbacks||[];
+    _fbUid=d._fbUid||feedbacks.length+1;
+    localStorage.setItem(FB_LS_KEY,JSON.stringify({feedbacks,_fbUid}));
+    return true;
+  }catch(e){ return false; }
+}
+function saveFeedback(){
+  const data={feedbacks,_fbUid};
+  localStorage.setItem(FB_LS_KEY,JSON.stringify(data));
+  if(storageMode==='csvFile'&&csvDirHandle&&isEditMode) saveFeedbackToCsv(data);
+}
+async function saveFeedbackToCsv(data){
+  if(!csvDirHandle) return;
+  try{
+    const fh=await csvDirHandle.getFileHandle(FB_FILE,{create:true});
+    const w=await fh.createWritable();
+    await w.write(JSON.stringify(data,null,2));
+    await w.close();
+  }catch(e){ console.warn('feedback save failed:',e); }
+}
+
+function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+function renderFeedback(){
+  const fs=(document.getElementById('fb-filter-status')||{value:''}).value;
+  const list=fs?feedbacks.filter(f=>f.status===fs):feedbacks;
+  const countEl=document.getElementById('fb-count');
+  if(countEl) countEl.textContent=list.length+'件';
+
+  const names=[...new Set(users.map(u=>u.name))];
+  const dlHtml=names.map(n=>`<option value="${n}">`).join('');
+  const reqList=document.getElementById('fb-requester-list');
+  const resListEl=document.getElementById('fb-responder-list');
+  if(reqList) reqList.innerHTML=dlHtml;
+  if(resListEl) resListEl.innerHTML=dlHtml;
+
+  const tbody=document.getElementById('fb-tbody');
+  if(!tbody) return;
+  if(!list.length){
+    tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text3)"><div style="font-size:32px;margin-bottom:8px">📝</div><div>改善要望がありません</div></td></tr>`;
+    return;
+  }
+  const readonly=!isEditMode&&storageMode==='csvFile';
+  tbody.innerHTML=list.map(f=>{
+    const sc=f.status||'open';
+    return `<tr class="fb-row">
+      <td style="text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)">${f.no}</td>
+      <td><span class="fb-status ${sc}">${FB_STATUS_LABEL[sc]||sc}</span></td>
+      <td><div class="fb-request-text">${escHtml(f.request)}</div></td>
+      <td style="font-size:12px;color:var(--text2)">${escHtml(f.requester)}</td>
+      <td style="font-size:12px;color:var(--text2)">${f.requestDate||''}</td>
+      <td><div class="fb-response-text">${escHtml(f.response)}</div></td>
+      <td style="font-size:12px;color:var(--text2)">${escHtml(f.responder)}</td>
+      <td style="font-size:12px;color:var(--text2)">${f.responseDate?f.responseDate.replace('T',' ').slice(0,16):''}</td>
+      <td style="white-space:nowrap">
+        <button class="icon-btn" title="編集" onclick="openFeedbackModal('${f.id}')" style="color:var(--accent)" ${readonly?'style="opacity:.4;pointer-events:none"':''}>✏️</button>
+        <button class="icon-btn" title="削除" onclick="deleteFeedback('${f.id}')" style="color:var(--danger)" ${readonly?'style="opacity:.4;pointer-events:none"':''}>🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function openFeedbackModal(id=null){
+  if(!isEditMode&&storageMode==='csvFile'){
+    showToastNotice('⚠ 参照モードでは操作できません。「✏️ 編集開始」を押してください。','warn');
+    return;
+  }
+  document.getElementById('fb-edit-id').value=id||'';
+  const today=new Date().toISOString().slice(0,10);
+  const cu=currentUser();
+  if(id){
+    const f=feedbacks.find(x=>x.id===id);
+    if(!f) return;
+    document.getElementById('fb-modal-title').textContent='改善要望を編集';
+    document.getElementById('fb-request').value=f.request||'';
+    document.getElementById('fb-requester').value=f.requester||'';
+    document.getElementById('fb-request-date').value=f.requestDate||'';
+    document.getElementById('fb-status').value=f.status||'open';
+    document.getElementById('fb-response').value=f.response||'';
+    document.getElementById('fb-responder').value=f.responder||'';
+    document.getElementById('fb-response-date').value=f.responseDate||'';
+  } else {
+    document.getElementById('fb-modal-title').textContent='改善要望を追加';
+    document.getElementById('fb-request').value='';
+    document.getElementById('fb-requester').value=cu?cu.name:'';
+    document.getElementById('fb-request-date').value=today;
+    document.getElementById('fb-status').value='open';
+    document.getElementById('fb-response').value='';
+    document.getElementById('fb-responder').value='';
+    document.getElementById('fb-response-date').value='';
+  }
+  // datalist更新
+  const names=users.map(u=>`<option value="${u.name}">`).join('');
+  document.getElementById('fb-requester-list').innerHTML=names;
+  document.getElementById('fb-responder-list').innerHTML=names;
+  document.getElementById('feedback-modal').classList.add('open');
+}
+function closeFeedbackModal(){
+  document.getElementById('feedback-modal').classList.remove('open');
+}
+function submitFeedback(){
+  const request=document.getElementById('fb-request').value.trim();
+  if(!request){ alert('改善要望を入力してください'); return; }
+  const id=document.getElementById('fb-edit-id').value;
+  const data={
+    request,
+    requester:document.getElementById('fb-requester').value.trim(),
+    requestDate:document.getElementById('fb-request-date').value,
+    status:document.getElementById('fb-status').value,
+    response:document.getElementById('fb-response').value.trim(),
+    responder:document.getElementById('fb-responder').value.trim(),
+    responseDate:document.getElementById('fb-response-date').value,
+  };
+  if(id){
+    const idx=feedbacks.findIndex(f=>f.id===id);
+    if(idx>=0) feedbacks[idx]={...feedbacks[idx],...data};
+  } else {
+    feedbacks.push({id:'fb'+_fbUid, no:_fbUid, ...data});
+    _fbUid++;
+  }
+  saveFeedback();
+  closeFeedbackModal();
+  renderFeedback();
+}
+function deleteFeedback(id){
+  const f=feedbacks.find(x=>x.id===id);
+  if(!f||!confirm(`No.${f.no} の要望を削除しますか？`)) return;
+  feedbacks=feedbacks.filter(x=>x.id!==id);
+  saveFeedback();
+  renderFeedback();
+}
+document.getElementById('feedback-modal').addEventListener('click',function(e){
+  if(e.target===this) closeFeedbackModal();
+});
+
 function openHelpModal(){
   document.getElementById('help-modal').classList.add('open');
   switchHelpTab('prepare');
@@ -4204,6 +5630,7 @@ function switchHelpTab(tab){
     if(btn) btn.classList.toggle('active',t===tab);
   });
 }
+document.getElementById('history-modal').addEventListener('click',function(e){ if(e.target===this) closeHistoryModal(); });
 document.getElementById('help-modal').addEventListener('click',function(e){
   if(e.target===this) closeHelpModal();
 });
@@ -4241,8 +5668,12 @@ function exportCSV(){
 }
 
 // ─── Import CSV ───
-function triggerImport(){document.getElementById('import-file-input').click();}
+function triggerImport(){
+  if(guardReadOnly('参照モードではインポートできません')) return;
+  document.getElementById('import-file-input').click();
+}
 function importCSV(event){
+  if(guardReadOnly()) return;
   const file=event.target.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=e=>{
@@ -4447,6 +5878,7 @@ isEditMode = (storageMode !== 'csvFile');
 // 3. データ復元（表示用キャッシュ）
 initProjects();
 initUsers();
+loadFeedbackFromLS(); // 改善要望をlocalStorageから復元
 
 // 4. UI描画
 updateProjectUI();
