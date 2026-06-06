@@ -1967,24 +1967,31 @@ async function runBackup(){
     // Backup フォルダを取得（なければ作成）
     const backupRoot = await csvDirHandle.getDirectoryHandle(BACKUP_DIR_NAME, {create:true});
 
-    // タイムスタンプフォルダ名（例：2026-06-08_143022）
+    // タイムスタンプフォルダ名（例：2026-06-08_143022_u1）
+    // ユーザーIDをサフィックスに付けて同一秒の競合を防ぐ
     const now = new Date();
     const pad = n => String(n).padStart(2,'0');
-    const ts = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+    const ts = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}_${currentUserId||'u0'}`;
     const snapDir = await backupRoot.getDirectoryHandle(ts, {create:true});
 
-    // wbs_data.json を書き込む
+    // wbs_data.json を書き込む（close漏れをtry-finallyで防止）
     const dataFh = await snapDir.getFileHandle('wbs_data.json', {create:true});
     const dataW = await dataFh.createWritable();
-    const dataObj = {projects, currentProjectId, _projUid, _uid, users, currentUserId, _savedAt: Date.now()};
-    await dataW.write(JSON.stringify(dataObj, null, 2));
-    await dataW.close();
+    try{
+      const dataObj = {projects, currentProjectId, _projUid, _uid, users, currentUserId, _savedAt: Date.now()};
+      await dataW.write(JSON.stringify(dataObj, null, 2));
+    }finally{
+      await dataW.close();
+    }
 
-    // wbs_feedback.json を書き込む
+    // wbs_feedback.json を書き込む（close漏れをtry-finallyで防止）
     const fbFh = await snapDir.getFileHandle('wbs_feedback.json', {create:true});
     const fbW = await fbFh.createWritable();
-    await fbW.write(JSON.stringify({feedbacks, _fbUid}, null, 2));
-    await fbW.close();
+    try{
+      await fbW.write(JSON.stringify({feedbacks, _fbUid}, null, 2));
+    }finally{
+      await fbW.close();
+    }
 
     // 古いバックアップを削除（BACKUP_MAX 件を超えた分）
     const entries = [];
