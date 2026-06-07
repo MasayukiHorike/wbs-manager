@@ -140,7 +140,7 @@ td.td-cell{padding:8px 12px;white-space:nowrap}
 .today-line{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);z-index:10;pointer-events:none}
 
 /* ─── Detail Panel ─── */
-.detail-panel{position:fixed;right:0;top:56px;width:320px;height:calc(100vh - 56px);background:var(--surface);border-left:1px solid var(--border);box-shadow:var(--shadow-md);transform:translateX(100%);transition:.25s cubic-bezier(.4,0,.2,1);overflow:hidden;z-index:200;display:flex;flex-direction:column}
+.detail-panel{position:fixed;right:0;top:56px;width:320px;height:calc(100vh - 56px);background:var(--surface);border-left:1px solid var(--border);box-shadow:var(--shadow-md);transform:translateX(100%);transition:.25s cubic-bezier(.4,0,.2,1);overflow:visible;z-index:200;display:flex;flex-direction:column}
 .detail-panel.open{transform:translateX(0)}
 .detail-panel .detail-body{flex:1;overflow-y:auto}
 .detail-header{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px}
@@ -461,7 +461,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
 <header class="app-header">
   <!-- ── 左グループ ── -->
   <div class="app-logo">WBS<span>Manager</span></div>
-  <div style="font-size:10px;font-weight:600;color:var(--text3);background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:2px 7px;letter-spacing:.03em;flex-shrink:0">v1.40.0</div>
+  <div style="font-size:10px;font-weight:600;color:var(--text3);background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:2px 7px;letter-spacing:.03em;flex-shrink:0">v1.42.0</div>
   <!-- 参照モードバナー（OneDriveモード参照中） -->
   <div class="readonly-banner" id="readonly-banner">
     <span id="readonly-banner-icon">👁</span>
@@ -546,6 +546,10 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
         <div style="display:flex;gap:4px;margin-bottom:6px;align-items:center">
           <select id="sb-proj-select" onchange="switchProject(this.value)"
             style="flex:1;padding:6px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text);background:var(--surface)"></select>
+          <!-- 編集ボタン -->
+          <button id="sb-proj-edit-btn" onclick="openEditProjectModal(event)" title="現在のプロジェクトを編集"
+            style="padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;color:var(--text2);font-size:13px;flex-shrink:0">✏️</button>
+          <!-- 削除ボタン -->
           <button id="sb-proj-delete-btn" onclick="deleteCurrentProject(event)" title="現在のプロジェクトを削除"
             style="padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;color:var(--danger);font-size:13px;flex-shrink:0">🗑</button>
         </div>
@@ -815,6 +819,15 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
   </div>
 </div>
 <div class="detail-panel" id="detail-panel">
+  <!-- 左端の格納帯 -->
+  <div onclick="closeDetail()" title="詳細パネルを閉じる"
+    style="position:absolute;left:-20px;top:50%;transform:translateY(-50%);width:20px;height:64px;background:var(--surface);border:1px solid var(--border);border-right:none;border-radius:6px 0 0 6px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:-2px 0 6px rgba(0,0,0,.08);transition:.15s;z-index:201"
+    onmouseenter="this.style.background='var(--surface2)';this.querySelector('svg').style.stroke='var(--accent)'"
+    onmouseleave="this.style.background='var(--surface)';this.querySelector('svg').style.stroke='var(--text3)'">
+    <svg viewBox="0 0 10 16" width="10" height="16" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:.15s">
+      <polyline points="2,2 8,8 2,14"/>
+    </svg>
+  </div>
   <div id="detail-readonly-notice">
     👁 参照モード — 編集するには「✏️ 編集開始」を押してください
   </div>
@@ -824,7 +837,6 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <div class="detail-title" id="dp-title" style="font-size:14px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">-</div>
       <div class="detail-wbs-id" id="dp-id" style="font-size:11px;color:var(--text3);margin-top:1px">-</div>
     </div>
-    <button class="detail-close" onclick="closeDetail()" style="flex-shrink:0">✕</button>
   </div>
   <!-- ボディ：コンパクトグリッドレイアウト -->
   <div class="detail-body" style="padding:10px 14px;display:flex;flex-direction:column;gap:8px;overflow-y:auto">
@@ -908,8 +920,6 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
   <!-- アクション -->
   <div class="detail-actions" style="padding:8px 14px;border-top:1px solid var(--border)">
     <button class="btn btn-sm" style="color:var(--danger)" onclick="deleteSelectedTask()">🗑 削除</button>
-    <div style="flex:1"></div>
-    <button class="btn btn-sm btn-primary" onclick="closeDetail()">閉じる</button>
   </div>
 </div>
 
@@ -1221,7 +1231,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <div class="help-step"><div class="help-step-num">1</div><div class="help-step-body"><b>HTMLファイルをブラウザで開く</b><p><code>wbs-tool.html</code> をデスクトップに保存し、Chrome または Edge でダブルクリックして開きます。</p></div></div>
       <div class="help-step"><div class="help-step-num">2</div><div class="help-step-body"><b>起動ウィザードでストレージを選択</b><p>「☁️ OneDrive（チーム共有）」を選択するとフォルダ選択ダイアログが開きます。手順4で同期したフォルダを指定してください。</p></div></div>
       <div class="help-step"><div class="help-step-num">3</div><div class="help-step-body"><b>ユーザーを選択してログイン</b><p>ユーザー選択画面が表示されます。未登録の場合は「新しいユーザーを追加してログイン」から登録してください。</p></div></div>
-      <div class="help-note">💡 2回目以降は起動時に「⚡ OneDriveに接続して続行」ボタンが表示されます。ブラウザの許可ダイアログに「許可」を押すだけで自動接続されます。</div>
+      <div class="help-note">💡 2回目以降は起動時に「⚡ OneDriveに接続して続行」ボタンが1つ表示されます。ブラウザの許可ダイアログに「許可」を押すだけで自動接続されます。</div>
     </div>
 
     <!-- ── 基本操作 ── -->
@@ -1232,7 +1242,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <ul>
         <li><b>📁 フォルダ</b>：フェーズやグループを表します。進捗率は子タスクの期間加重平均で自動計算されます。</li>
         <li><b>📄 タスク</b>：実際の作業単位です。進捗率を手動で入力します。</li>
-        <li><b>🔷 マイルストーン</b>：節目日を表します。開始日のみ設定。ガントチャートで◆ひし形マーカーで表示されます。</li>
+        <li><b>🔷 マイルストーン</b>：節目日を表します。開始日のみ設定。ガントチャートに◆ひし形マーカーで表示されます。</li>
       </ul>
 
       <h3>タスクの追加</h3>
@@ -1250,6 +1260,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
 
       <h3>並び替え</h3>
       <p>リストビュー上部の「⠿ 並替モード」をONにすると行をドラッグで並べ替えられます。ドロップ位置の上25%は同列上、下25%は同列下、中央50%は子として挿入されます。</p>
+      <div class="help-note">⚠ 自分自身の子孫タスクへの移動は禁止されています。不正なドロップはトースト通知で警告されます。</div>
 
       <h3>サイドバーのフィルタ</h3>
       <table class="help-table">
@@ -1268,6 +1279,13 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
         <li><b>エクスポート（ヘッダー右側の↑アイコン）</b>：内部ID・No・依存関係・親IDを含むCSVを保存</li>
         <li><b>インポート（ヘッダー右側の↓アイコン）</b>：内部ID列があればアップサート（部分更新）または上書きを選択可能</li>
       </ul>
+      <p>種別・ステータスは英語表記で出力・入力します。大文字小文字は区別せず、日本語表記も認識します。</p>
+      <table class="help-table">
+        <tr><th>列</th><th>値（英語）</th><th>日本語でも認識</th></tr>
+        <tr><td>種別</td><td>task / folder / milestone</td><td>タスク / フォルダ / マイルストーン</td></tr>
+        <tr><td>ステータス</td><td>todo / doing / done / block</td><td>未着手 / 進行中 / 完了 / ブロック中</td></tr>
+      </table>
+      <div class="help-note">💡 タスク名や備考にカンマ・改行が含まれていても、CSVは正しくエスケープされるため列ズレは発生しません。</div>
     </div>
 
     <!-- ── ガントチャート ── -->
@@ -1284,6 +1302,21 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
         <tr><td>年</td><td>約3年</td><td>複数年プロジェクトの俯瞰</td></tr>
       </table>
       <div class="help-note">💡 四半期はQ1=4〜6月、Q2=7〜9月、Q3=10〜12月、Q4=翌年1〜3月（4月始まり年度）です。スケール切替時はTodayが画面中央に自動スクロールされます。</div>
+
+      <h3>ヘッダー・ラベル列の固定</h3>
+      <table class="help-table">
+        <tr><th>固定方向</th><th>内容</th></tr>
+        <tr><td>縦スクロール</td><td>日付ヘッダー（年月行・日付行）が上端に固定されたまま表示されます</td></tr>
+        <tr><td>横スクロール</td><td>タスク名列（ラベル列）が左端に固定されたまま表示されます</td></tr>
+      </table>
+
+      <h3>ラベル列幅の調整</h3>
+      <p>タスク名列の幅をドラッグで自由に変更できます。</p>
+      <ul>
+        <li>ラベルヘッダーの右端にカーソルを合わせると <code>↔</code> カーソルに変化</li>
+        <li>そのままドラッグすると幅がリアルタイムに変化（160px〜600px）</li>
+        <li>マウスを離すと確定してガントを再描画</li>
+      </ul>
 
       <h3>ツールバー（左から）</h3>
       <p>① 表示レンジ ② ⚡イナズマ線 ③ 🔴クリティカルパス ④ 色分けルール ⑤ 🖨印刷/PDF</p>
@@ -1323,11 +1356,11 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <h2>☁️ OneDrive共有モード</h2>
 
       <h3>起動ウィザード</h3>
-      <p>起動時に表示される画面で、前回の設定がある場合は上部に続行ボタンが1つ表示されます。</p>
+      <p>起動時に前回の設定がある場合、状況に応じた続行ボタンが1つ表示されます。</p>
       <table class="help-table">
         <tr><th>表示されるボタン</th><th>動作</th></tr>
-        <tr><td>⚡ OneDriveに接続して続行</td><td>前回のフォルダに自動接続。ブラウザの許可ダイアログに「許可」を押すだけで完了（最速）</td></tr>
-        <tr><td>☁️ OneDriveモードで続行</td><td>前回OneDriveを使用していたがフォルダが記憶されていない場合。フォルダ選択ダイアログが開く</td></tr>
+        <tr><td>⚡ OneDriveに接続して続行（緑）</td><td>前回フォルダ記憶あり。ブラウザ許可ダイアログに「許可」を押すだけで自動接続（最速）</td></tr>
+        <tr><td>☁️ OneDriveモードで続行</td><td>前回OneDriveを使用したがフォルダ未記憶。フォルダ選択ダイアログが開く</td></tr>
         <tr><td>💾 ローカルストレージで続行</td><td>前回ローカルを使用。そのまま起動</td></tr>
         <tr><td>💾 ローカルストレージ（選択肢）</td><td>ローカルモードで新たに起動</td></tr>
         <tr><td>☁️ OneDrive（チーム共有）（選択肢）</td><td>OneDriveモードで新たに起動。フォルダ選択ダイアログが開く</td></tr>
@@ -1342,23 +1375,23 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
         <tr><td>✏️ 編集中（緑バッジ）</td><td>自分が編集モード</td><td>✅ 可能</td></tr>
       </table>
       <ul>
-        <li><b>✏️ 編集開始</b>：最新データを読み込み、ロックを取得して編集可能になります</li>
+        <li><b>✏️ 編集開始</b>：最新データを読み込み、自動バックアップを実行後、ロックを取得して編集可能になります</li>
         <li><b>✅ 編集完了</b>：データを保存し、ロックを解放します。離席前に必ず押してください</li>
       </ul>
 
       <h3>📦 自動バックアップ</h3>
       <p>「✏️ 編集開始」を押すたびに、その時点のデータを自動的にバックアップします。</p>
       <ul>
-        <li>バックアップ先：OneDriveフォルダ内の <code>Backup/</code> フォルダ（自動作成）</li>
-        <li>バックアップ形式：<code>Backup/2026-06-08_143022/</code> のようなタイムスタンプフォルダ</li>
-        <li>各フォルダには <code>wbs_data.json</code>（タスクデータ）と <code>wbs_feedback.json</code>（改善要望）が保存されます</li>
-        <li>最大10世代を保持。11件目が作成される際に最も古いフォルダが自動削除されます</li>
-        <li>バックアップが失敗した場合も編集モードは通常通り開始します</li>
+        <li>保存先：OneDriveフォルダ内の <code>Backup/</code> フォルダ（自動作成）</li>
+        <li>形式：<code>Backup/2026-06-08_143022_u1/</code> のようなタイムスタンプ＋ユーザーIDのフォルダ</li>
+        <li>各フォルダに <code>wbs_data.json</code>（タスクデータ）と <code>wbs_feedback.json</code>（改善要望）を保存</li>
+        <li>最大10世代保持。11件目が作成される際に最も古いフォルダを自動削除</li>
+        <li>バックアップ失敗時もトースト警告を表示し、編集モードは通常通り開始</li>
       </ul>
-      <div class="help-note">💡 バックアップフォルダの <code>wbs_data.json</code> はツールで直接読み込める形式です。誤ってデータを壊した場合はエクスプローラーでファイルをコピーして復元できます。</div>
+      <div class="help-note">💡 バックアップの <code>wbs_data.json</code> はツールで直接読み込める形式です。誤ってデータを壊した場合はエクスプローラーでファイルをルートにコピーして上書き復元できます。</div>
 
       <h3>参照モードで無効化される操作</h3>
-      <p>タスクの追加・編集・削除・ドラッグ / 詳細パネルの入力 / プロジェクトの追加・削除 / ガントバードラッグ / CSVインポート</p>
+      <p>タスクの追加・編集・削除・ドラッグ / 詳細パネルの入力 / プロジェクトの追加・編集・削除 / ガントバードラッグ / CSVインポート</p>
 
       <h3>自動更新</h3>
       <p>30秒ごとにOneDriveフォルダをポーリングし、他ユーザーの編集状態を自動確認します。参照モード中にデータが更新された場合は自動リロードされます。</p>
@@ -1371,8 +1404,8 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <h3>ヘッダーのレイアウト</h3>
       <table class="help-table">
         <tr><th>位置</th><th>内容</th></tr>
-        <tr><td>左側</td><td>ロゴ / 参照モードバナー / 編集中バッジ / 編集開始・完了ボタン / ストレージ表示 / ＋タスク追加 / ↩Undo / 🕐変更履歴</td></tr>
-        <tr><td>右側</td><td>↑エクスポート / ↓インポート / ❓ヘルプ / 👤ユーザー</td></tr>
+        <tr><td>左側</td><td>ロゴ v1.42.0 / 参照モードバナー / 編集中バッジ / 編集開始・完了ボタン / ストレージ表示 / ─ / ＋タスク追加 / ↩Undo / 🕐変更履歴</td></tr>
+        <tr><td>右側</td><td>↑エクスポート / ↓インポート / ❓ヘルプ / ─ / 👤ユーザー</td></tr>
       </table>
 
       <h3>サイドバーの折りたたみ</h3>
@@ -1385,7 +1418,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <p>ヘッダー左側の↩ボタン（または <b>Ctrl+Z</b>）で直前の操作を取り消せます（最大30件）。🕐ボタンで変更ログ（最大200件）を一覧表示できます。</p>
 
       <h3>バックアップからの復元（OneDriveモード）</h3>
-      <p>データを誤って壊してしまった場合、エクスプローラーで <code>Backup/</code> フォルダを開き、復元したいタイムスタンプフォルダの <code>wbs_data.json</code> を同期フォルダのルート（<code>wbs_data.json</code> と同じ場所）にコピーして上書きすることで復元できます。改善要望も同様に <code>wbs_feedback.json</code> を上書きします。</p>
+      <p>データを誤って壊してしまった場合、エクスプローラーで <code>Backup/</code> フォルダを開き、復元したい世代のフォルダ内の <code>wbs_data.json</code> を同期フォルダのルートにコピーして上書きします。改善要望も同様に <code>wbs_feedback.json</code> を上書きします。</p>
 
       <h3>フォルダ日程の矛盾検知</h3>
       <p>子タスクの日程がフォルダの期間を超えている場合、リスト・ガントチャート両方で <b style="color:var(--danger)">⚠</b> マークが表示されます。</p>
@@ -1394,12 +1427,21 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <p>ツール内で改善要望と対応結果をチームで管理できます。OneDriveモードでは <code>wbs_feedback.json</code> として同フォルダに保存されます。</p>
 
       <h3>プロジェクト管理</h3>
-      <p>サイドバーのプロジェクトセレクト横の🗑ボタンで現在のプロジェクトを削除できます（2件以上の場合のみ有効）。「＋ 新規プロジェクト」ボタンで追加できます。プロジェクト切替時にフィルタは自動的にリセットされます。</p>
+      <p>サイドバーのプロジェクトセレクト横に3つのボタンがあります。</p>
+      <table class="help-table">
+        <tr><th>ボタン</th><th>動作</th></tr>
+        <tr><td>✏️ 編集</td><td>現在のプロジェクトの名前・説明・カラーを変更。参照モード中は無効</td></tr>
+        <tr><td>🗑 削除</td><td>現在のプロジェクトを削除。2件以上のみ有効</td></tr>
+      </table>
+      <p>「＋ 新規プロジェクト」ボタンで新規作成できます。プロジェクト切替時にフィルタは自動的にリセットされます。</p>
+
+      <h3>タスク詳細パネルの閉じ方</h3>
+      <p>詳細パネルが開いているとき、パネル左端の「<b>›</b>」帯をクリックするとパネルが閉じます。帯はパネル外にはみ出して常時表示されます。</p>
 
       <h3>CSVエクスポート形式</h3>
       <div class="help-code">ID, No, タスク名, 種別, 成果物, ステータス, 担当者,
 開始日, 終了日, 進捗率, 依存関係（ID）, 依存関係（No）, 親ID, 備考</div>
-      <p>内部IDが含まれるため、エクスポート→外部編集→インポートでアップサート（部分更新）が可能です。</p>
+      <p>内部IDが含まれるため、エクスポート→外部編集→インポートでアップサート（部分更新）が可能です。カンマや改行を含むフィールドも正しくエスケープされます。</p>
 
       <h3>データのリセット</h3>
       <p>ストレージ設定（ヘッダーのストレージ表示をクリック）の下部にある「🔄 サンプルデータでリセット」でデータを初期状態に戻せます。</p>
@@ -1407,10 +1449,35 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
   </div>
   <!-- バージョン情報フッター -->
   <div style="padding:8px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
-    <span style="font-size:11px;color:var(--text3)">WBS Manager <b style="color:var(--text2)">v1.40.0</b></span>
+    <span style="font-size:11px;color:var(--text3)">WBS Manager <b style="color:var(--text2)">v1.42.0</b></span>
     <button onclick="closeHelpModal()" class="btn btn-sm">閉じる</button>
   </div>
 </div>
+<!-- Edit Project Modal -->
+<div class="modal-overlay" id="edit-proj-modal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-title">プロジェクトを編集</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="form-field">
+        <label>プロジェクト名 *</label>
+        <input id="ep-name" type="text" placeholder="例: ECサイトリニューアル">
+      </div>
+      <div class="form-field">
+        <label>説明</label>
+        <textarea id="ep-desc" placeholder="プロジェクトの概要・目的" style="min-height:60px"></textarea>
+      </div>
+      <div class="form-field">
+        <label>カラー</label>
+        <div id="ep-color-picker" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeEditProjectModal()">キャンセル</button>
+      <button class="btn btn-primary" onclick="submitEditProject()">保存</button>
+    </div>
+  </div>
+</div>
+
 <!-- New Project Modal -->
 <div class="modal-overlay" id="new-proj-modal">
   <div class="modal" style="max-width:420px">
@@ -2530,6 +2597,7 @@ function switchProject(pid){
   saveCurrentTasks();
   currentProjectId=pid;
   syncTasks();
+  resyncUid(); // プロジェクト切替後、切替先のタスクIDと_uidの衝突を防ぐ
   collapsedSet.clear();
   selectedTaskId=null;
   hiddenTaskIds=new Set();
@@ -2574,11 +2642,16 @@ function updateProjectUI(){
     sbSel.innerHTML=projects.map(pr=>`<option value="${pr.id}"${pr.id===currentProjectId?' selected':''}>${escHtml(pr.name)}</option>`).join('');
   }
 
-  // サイドバーの削除ボタン制御（1件のみの場合は無効化）
+  // サイドバーの削除・編集ボタン制御（1件のみの場合は削除を無効化）
   const sbDelBtn=document.getElementById('sb-proj-delete-btn');
   if(sbDelBtn){
     sbDelBtn.disabled=projects.length<=1;
     sbDelBtn.style.opacity=projects.length<=1?'0.3':'1';
+  }
+  const sbEditBtn=document.getElementById('sb-proj-edit-btn');
+  if(sbEditBtn){
+    sbEditBtn.disabled=!isEditMode&&storageMode==='csvFile';
+    sbEditBtn.style.opacity=(!isEditMode&&storageMode==='csvFile')?'0.3':'1';
   }
 
   document.title=`${p.name} — WBS Manager`;
@@ -2677,6 +2750,51 @@ function submitNewProject(){
   renderAll();
 }
 document.getElementById('new-proj-modal').addEventListener('click',function(e){if(e.target===this)closeNewProjectModal();});
+
+// ── プロジェクト編集モーダル ──
+let selectedEditProjColor='#2563EB';
+function openEditProjectModal(e){
+  if(e) e.stopPropagation();
+  if(!isEditMode&&storageMode==='csvFile'){
+    showToastNotice('⚠ 参照モードではプロジェクトを編集できません。「✏️ 編集開始」を押してください。','warn');
+    return;
+  }
+  const p=currentProject();
+  if(!p) return;
+  selectedEditProjColor=p.color||PROJ_COLORS[0];
+  document.getElementById('ep-name').value=p.name||'';
+  document.getElementById('ep-desc').value=p.desc||'';
+  // カラーピッカー
+  document.getElementById('ep-color-picker').innerHTML=PROJ_COLORS.map(c=>`
+    <div onclick="selectEditProjColor('${c}')" id="epcolor-${c.replace('#','')}"
+      style="width:24px;height:24px;border-radius:50%;background:${c};cursor:pointer;border:3px solid ${c===selectedEditProjColor?'#1A1917':'transparent'};transition:.12s"
+      title="${c}"></div>`).join('');
+  document.getElementById('edit-proj-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('ep-name').focus(),100);
+}
+function selectEditProjColor(c){
+  selectedEditProjColor=c;
+  document.querySelectorAll('#ep-color-picker > div').forEach(el=>{
+    const elColor='#'+el.id.replace('epcolor-','');
+    el.style.borderColor=elColor===c?'#1A1917':'transparent';
+  });
+}
+function closeEditProjectModal(){document.getElementById('edit-proj-modal').classList.remove('open');}
+function submitEditProject(){
+  const name=document.getElementById('ep-name').value.trim();
+  if(!name){alert('プロジェクト名を入力してください');return;}
+  const p=currentProject();
+  if(!p) return;
+  p.name=name;
+  p.desc=document.getElementById('ep-desc').value.trim();
+  p.color=selectedEditProjColor;
+  closeEditProjectModal();
+  saveToLS();
+  updateProjectUI();
+  renderAll();
+  showToastNotice('✅ プロジェクトを更新しました','success');
+}
+document.getElementById('edit-proj-modal').addEventListener('click',function(e){if(e.target===this)closeEditProjectModal();});
 
 // ─── Display number: 動的に "1", "1.1", "2.3.1" などを計算 ───
 function calcDisplayNums(){
@@ -2960,7 +3078,8 @@ function isShowHidden(){
   const cb=document.getElementById('show-hidden-check');
   return cb&&cb.checked;
 }
-const DAY_W=28,ROW_H=38,LABEL_W=320,HDR_MONTH=24,HDR_DAY=22;
+const DAY_W=28,ROW_H=38,HDR_MONTH=24,HDR_DAY=22;
+let LABEL_W=320; // ガントラベル列幅（ドラッグでリサイズ可能）
 
 // ── Gantt state ──
 let ganttMinD=null;
@@ -3673,15 +3792,19 @@ function renderGantt(){
       // ── ヘッダー行（縦スクロールで上固定） ──
       '<div style="display:flex;position:sticky;top:0;z-index:30;min-width:max-content">'+
         // 交差点：タスク名ヘッダー（縦横両方固定）
-        '<div style="position:sticky;left:0;z-index:40;flex:0 0 '+LABEL_W+'px;min-width:'+LABEL_W+'px;background:var(--surface2);border-right:2px solid var(--border);border-bottom:2px solid var(--border);display:flex;flex-direction:column">'+
-          // 上段ヘッダーの高さ分（上位スケール行）
-          '<div style="height:'+HDR_MONTH+'px;border-bottom:1px solid var(--border)"></div>'+
-          // 下段：展開/折りたたみボタン
-          '<div style="height:'+HDR_DAY+'px;display:flex;align-items:center;padding:0 10px;gap:6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)">'+
-            '<button onclick="ganttExpandAll()" title="全展開" style="width:20px;height:20px;border:1px solid var(--border);border-radius:3px;background:var(--surface);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--text3)">▼</button>'+
-            '<button onclick="ganttCollapseAll()" title="全折りたたみ" style="width:20px;height:20px;border:1px solid var(--border);border-radius:3px;background:var(--surface);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--text3)">▶</button>'+
-            '<span style="font-family:DM Mono,monospace;margin-right:2px;font-size:10px">No</span><span style="font-size:10px">タスク名</span>'+
-            '<span style="margin-left:auto;font-size:9px;color:var(--text3);font-weight:400;letter-spacing:0;text-transform:none">⇢依存付け</span>'+
+        // ※ sticky:leftとposition:relativeは同一要素に併記不可のため外側/内側に分離
+        '<div style="position:sticky;left:0;z-index:40;flex:0 0 '+LABEL_W+'px;min-width:'+LABEL_W+'px">'+
+          '<div style="position:relative;width:100%;height:100%;background:var(--surface2);border-right:2px solid var(--border);border-bottom:2px solid var(--border);display:flex;flex-direction:column">'+
+            '<div style="position:absolute;top:0;right:-4px;width:8px;height:100%;cursor:col-resize;z-index:50" id="gantt-label-resizer" title="ドラッグして列幅を変更"></div>'+
+            // 上段ヘッダーの高さ分（上位スケール行）
+            '<div style="height:'+HDR_MONTH+'px;border-bottom:1px solid var(--border)"></div>'+
+            // 下段：展開/折りたたみボタン
+            '<div style="height:'+HDR_DAY+'px;display:flex;align-items:center;padding:0 10px;gap:6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)">'+
+              '<button onclick="ganttExpandAll()" title="全展開" style="width:20px;height:20px;border:1px solid var(--border);border-radius:3px;background:var(--surface);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--text3)">▼</button>'+
+              '<button onclick="ganttCollapseAll()" title="全折りたたみ" style="width:20px;height:20px;border:1px solid var(--border);border-radius:3px;background:var(--surface);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--text3)">▶</button>'+
+              '<span style="font-family:DM Mono,monospace;margin-right:2px;font-size:10px">No</span><span style="font-size:10px">タスク名</span>'+
+              '<span style="margin-left:auto;font-size:9px;color:var(--text3);font-weight:400;letter-spacing:0;text-transform:none">⇢依存付け</span>'+
+            '</div>'+
           '</div>'+
         '</div>'+
         // カレンダーヘッダー（横スクロールと一緒に動く）
@@ -3719,6 +3842,47 @@ function renderGantt(){
       el.scrollLeft=Math.max(0, tx - el.clientWidth/2);
     });
   }
+  // リサイズハンドルを初期化（renderGantt後に毎回）
+  setTimeout(()=>initGanttLabelResizer(),0);
+}
+
+// ── ガントラベル列リサイズ ──
+function initGanttLabelResizer(){
+  const resizer=document.getElementById('gantt-label-resizer');
+  if(!resizer) return;
+  // 既にリスナー設定済みなら再設定しない（renderGantt毎に呼ばれるため）
+  if(resizer._resizerInit) return;
+  resizer._resizerInit=true;
+  let startX=0, startW=0, dragging=false;
+  resizer.addEventListener('mousedown',e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    dragging=true;
+    startX=e.clientX;
+    startW=LABEL_W;
+    document.body.style.cursor='col-resize';
+    document.body.style.userSelect='none';
+  });
+  document.addEventListener('mousemove',e=>{
+    if(!dragging) return;
+    const diff=e.clientX-startX;
+    LABEL_W=Math.max(160,Math.min(600,startW+diff));
+    document.querySelectorAll('#gantt-labels').forEach(el=>{
+      el.style.flex=`0 0 ${LABEL_W}px`;
+      el.style.minWidth=`${LABEL_W}px`;
+    });
+    document.querySelectorAll('.gantt-label-row').forEach(el=>{
+      el.style.width=`${LABEL_W}px`;
+      el.style.minWidth=`${LABEL_W}px`;
+    });
+  });
+  document.addEventListener('mouseup',()=>{
+    if(!dragging) return;
+    dragging=false;
+    document.body.style.cursor='';
+    document.body.style.userSelect='';
+    renderGantt();
+  });
 }
 
 // ════════════════════════════════════════════════════
@@ -5803,20 +5967,23 @@ function toggleSidebar(){
 const CSV_HEADERS=['ID','No','タスク名','種別','成果物','ステータス','担当者','開始日','終了日','進捗率','依存関係（ID）','依存関係（No）','親ID','備考'];
 function exportCSV(){
   const nums=calcDisplayNums();
+  // 種別・ステータスを英語で出力
+  const TYPE_EXP={folder:'folder',task:'task',milestone:'milestone'};
+  const STATUS_EXP={todo:'todo',doing:'doing',done:'done',block:'block'};
   const rows=buildTreeOrder().map(t=>[
-    t.id,                                          // 内部ID
-    nums[t.id]||'',                                // 表示No
+    t.id,
+    nums[t.id]||'',
     t.name,
-    t.type==='folder'?'フォルダ':'タスク',
+    TYPE_EXP[t.type]||'task',
     t.deliverable||'',
-    STATUS_LABEL[t.status],
+    STATUS_EXP[t.status]||'todo',
     t.assignee||'',
     t.start||'',
     t.end||'',
     t.progress+'%',
-    (t.deps||[]).join(' | '),                      // 依存関係（内部ID）
-    (t.deps||[]).map(d=>nums[d]||d).join(' | '),   // 依存関係（表示No）
-    t.parentId||'',                                // 親ID
+    (t.deps||[]).join(' | '),
+    (t.deps||[]).map(d=>nums[d]||d).join(' | '),
+    t.parentId||'',
     t.note||''
   ]);
   const csv=[CSV_HEADERS,...rows].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
@@ -5887,7 +6054,19 @@ function importCSV(event){
         if(!confirm('インポートします。現在のデータは上書きされます。続行しますか？'))return;
       }
 
-      const STATUS_FROM={'未着手':'todo','進行中':'doing','完了':'done','ブロック中':'block'};
+      const STATUS_FROM={'未着手':'todo','進行中':'doing','完了':'done','ブロック中':'block',
+        'todo':'todo','doing':'doing','done':'done','block':'block',
+        'in progress':'doing','inprogress':'doing','blocked':'block','complete':'done','completed':'done'};
+
+      // 種別を正規化（大文字小文字・日本語・英語を吸収）
+      const parseType=raw=>{
+        const v=(raw||'').toLowerCase().trim();
+        if(v==='folder'||v==='フォルダ') return 'folder';
+        if(v==='milestone'||v==='マイルストーン') return 'milestone';
+        return 'task';
+      };
+      // ステータスを正規化
+      const parseStatus=raw=>STATUS_FROM[(raw||'').toLowerCase().trim()]||STATUS_FROM[raw]||'todo';
 
       // 日付正規化（YYYY-MM-DD に統一）
       const normDate=v=>{
@@ -5923,7 +6102,7 @@ function importCSV(event){
         const no=iNo>=0?r[iNo]:'';
         if(no) noToId[no]=taskId;
 
-        const type=(iType>=0&&r[iType]==='フォルダ')?'folder':'task';
+        const type=parseType(iType>=0?r[iType]:'');
         const prog=parseInt(String(iProg>=0?r[iProg]:'0').replace('%',''))||0;
         const statusRaw=iStat>=0?r[iStat]:'';
 
@@ -5936,12 +6115,12 @@ function importCSV(event){
         parsed.push({
           id:taskId, _no:no,
           _depsRaw:depsRaw,
-          _depsAreIds:iDepsId>=0&&!!r[iDepsId], // trueなら依存はすでに内部ID
+          _depsAreIds:iDepsId>=0&&!!r[iDepsId],
           _parentIdRaw:iParentId>=0?r[iParentId]:'',
           parentId:null,
           type, name,
           deliverable:iDel>=0?r[iDel]:'',
-          status:STATUS_FROM[statusRaw]||'todo',
+          status:parseStatus(statusRaw),
           assignee:iAsgn>=0?r[iAsgn]:'',
           start:normDate(iStart>=0?r[iStart]:null),
           end:normDate(iEnd>=0?r[iEnd]:null),
