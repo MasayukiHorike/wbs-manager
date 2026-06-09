@@ -5,7 +5,7 @@
 | 項目 | 内容 |
 |------|------|
 | ツール名 | WBS Manager |
-| バージョン | v1.43.0 |
+| バージョン | v1.44.0 |
 | 形態 | シングル HTML ファイル（バックエンドなし） |
 | 動作環境 | Chrome / Edge（File System Access API 対応ブラウザ） |
 | データ保存 | localStorage / OneDrive 同期フォルダ（JSON） |

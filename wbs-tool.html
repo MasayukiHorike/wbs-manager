@@ -461,7 +461,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
 <header class="app-header">
   <!-- ── 左グループ ── -->
   <div class="app-logo">WBS<span>Manager</span></div>
-  <div style="font-size:10px;font-weight:600;color:var(--text3);background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:2px 7px;letter-spacing:.03em;flex-shrink:0">v1.43.0</div>
+  <div style="font-size:10px;font-weight:600;color:var(--text3);background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:2px 7px;letter-spacing:.03em;flex-shrink:0">v1.44.0</div>
   <!-- 参照モードバナー（OneDriveモード参照中） -->
   <div class="readonly-banner" id="readonly-banner">
     <span id="readonly-banner-icon">👁</span>
@@ -872,11 +872,11 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
       <div class="detail-field" style="margin:0">
         <label style="font-size:10px">開始日</label>
-        <input id="dp-start" type="date" oninput="dpUpdate('start',this.value)" style="padding:5px 8px;font-size:12px">
+        <input id="dp-start" type="date" onchange="dpUpdate('start',this.value)" style="padding:5px 8px;font-size:12px">
       </div>
       <div class="detail-field" style="margin:0">
         <label style="font-size:10px">終了日</label>
-        <input id="dp-end" type="date" oninput="dpUpdate('end',this.value)" style="padding:5px 8px;font-size:12px">
+        <input id="dp-end" type="date" onchange="dpUpdate('end',this.value)" style="padding:5px 8px;font-size:12px">
       </div>
     </div>
 
@@ -1404,7 +1404,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
       <h3>ヘッダーのレイアウト</h3>
       <table class="help-table">
         <tr><th>位置</th><th>内容</th></tr>
-        <tr><td>左側</td><td>ロゴ v1.43.0 / 参照モードバナー / 編集中バッジ / 編集開始・完了ボタン / ストレージ表示 / ─ / ＋タスク追加 / ↩Undo / 🕐変更履歴</td></tr>
+        <tr><td>左側</td><td>ロゴ v1.44.0 / 参照モードバナー / 編集中バッジ / 編集開始・完了ボタン / ストレージ表示 / ─ / ＋タスク追加 / ↩Undo / 🕐変更履歴</td></tr>
         <tr><td>右側</td><td>↑エクスポート / ↓インポート / ❓ヘルプ / ─ / 👤ユーザー</td></tr>
       </table>
 
@@ -1449,7 +1449,7 @@ svg.icon-svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2
   </div>
   <!-- バージョン情報フッター -->
   <div style="padding:8px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
-    <span style="font-size:11px;color:var(--text3)">WBS Manager <b style="color:var(--text2)">v1.43.0</b></span>
+    <span style="font-size:11px;color:var(--text3)">WBS Manager <b style="color:var(--text2)">v1.44.0</b></span>
     <button onclick="closeHelpModal()" class="btn btn-sm">閉じる</button>
   </div>
 </div>
@@ -1698,7 +1698,7 @@ async function saveToCsvDir(data){
   try{
     const fh = await csvDirHandle.getFileHandle('wbs_data.json', {create:true});
     const w  = await fh.createWritable();
-    await w.write(JSON.stringify(data, null, 2));
+    await w.write(JSON.stringify(data)); // 整形なし → ファイルサイズ削減・書き込み高速化
     await w.close();
     // ロックファイルは編集モードのときのみ更新（writeLockFileで統一フォーマット）
     if(isEditMode){
@@ -2046,7 +2046,7 @@ async function runBackup(){
     const dataW = await dataFh.createWritable();
     try{
       const dataObj = {projects, currentProjectId, _projUid, _uid, users, currentUserId, _savedAt: Date.now()};
-      await dataW.write(JSON.stringify(dataObj, null, 2));
+      await dataW.write(JSON.stringify(dataObj)); // 整形なし → ファイルサイズ削減・書き込み高速化
     }finally{
       await dataW.close();
     }
@@ -2055,7 +2055,7 @@ async function runBackup(){
     const fbFh = await snapDir.getFileHandle('wbs_feedback.json', {create:true});
     const fbW = await fbFh.createWritable();
     try{
-      await fbW.write(JSON.stringify({feedbacks, _fbUid}, null, 2));
+      await fbW.write(JSON.stringify({feedbacks, _fbUid})); // 整形なし → 高速化
     }finally{
       await fbW.close();
     }
@@ -2096,12 +2096,13 @@ async function checkin(){
   const ok=await loadFromCsvDir();
   if(ok){ syncTasks(); updateProjectUI(); renderAll(); }
   await loadFeedbackFromCsv();
-  // バックアップ実行（失敗しても編集モードは開始する）
-  await runBackup();
+  // ロックを先に取得してから、バックアップはバックグラウンドで非同期実行
   await writeLockFile(true);
   isEditMode=true;
   updateEditModeUI();
   showToastNotice('✏️ 編集モードを開始しました。完了後は「編集完了」を押してください。','success');
+  // バックアップは await せず並行実行（UIをブロックしない）
+  runBackup();
 }
 
 async function checkout(){
@@ -3087,7 +3088,8 @@ let ganttDragState=null;
 let ganttDepLinkState=null;
 let ganttHoverDepTarget=null;
 let showLightningLine=false;
-let _ganttFirstRender=true; // Todayを中央表示するのは初回のみ
+// ガントバードラッグ直後のauto-scrollをスキップするフラグ
+let _ganttJustDragged=false;
 
 // ── スケール設定 ──
 let ganttScale='day'; // 'day'|'week'|'month'|'quarter'|'year'
@@ -3917,6 +3919,28 @@ function attachGanttDragEvents(){
   document.addEventListener('mouseup',   onGanttMouseUp);
 }
 
+// スケールに応じた「dx(ピクセル差)→日数差」変換
+function dragDxToDeltaDays(dx, origStart){
+  const targetX = ganttScaleDateToX(origStart) + dx;
+  // スケール別の概算px/日
+  const cw = SCALE_COL_W[ganttScale];
+  const pxPerDay =
+    ganttScale==='day'     ? cw :
+    ganttScale==='week'    ? cw / 7 :
+    ganttScale==='month'   ? cw / 30.5 :
+    ganttScale==='quarter' ? cw / 91 :
+                             cw / 365;
+  let delta = Math.round(dx / pxPerDay);
+  // ±3日の範囲で targetX に最も近い整数日数を選んでスケール歪みを補正
+  let best = delta;
+  let bestDiff = Math.abs(ganttScaleDateToX(addDays(origStart, delta)) - targetX);
+  for(let d = delta - 3; d <= delta + 3; d++){
+    const diff = Math.abs(ganttScaleDateToX(addDays(origStart, d)) - targetX);
+    if(diff < bestDiff){ bestDiff = diff; best = d; }
+  }
+  return best;
+}
+
 function onGanttMouseMove(e){
   if(!ganttDragState)return;
   const {id,action,startOffX,origStart,origEnd,origDur}=ganttDragState;
@@ -3924,7 +3948,7 @@ function onGanttMouseMove(e){
   if(!t)return;
 
   const dx=e.clientX-startOffX;
-  const deltaDays=Math.round(dx/DAY_W);
+  const deltaDays=dragDxToDeltaDays(dx, origStart);
   if(deltaDays!==0)ganttDragState.moved=true;
 
   let newStart=origStart, newEnd=origEnd;
@@ -3939,18 +3963,19 @@ function onGanttMouseMove(e){
     if(newEnd<=newStart)newEnd=addDays(newStart,1);
   }
 
-  // live-update bar DOM
-  const bar=document.querySelector(`.gantt-bar[data-id="${id}"]`);
+  // live-update bar DOM（ganttScaleDateToX ベースで座標更新）
+  const bar=document.querySelector(`.gantt-bar[data-id="${id}"]`)
+           || document.querySelector(`[data-action="move"][data-id="${id}"]`)?.closest('.gantt-bar-wrap')?.querySelector('.gantt-bar');
   if(bar){
-    const left=dateToOff(newStart)*DAY_W;
-    const right=(dateToOff(newEnd)+1)*DAY_W;
-    const width=Math.max(right-left,DAY_W);
+    const left=Math.max(0, ganttScaleDateToX(newStart));
+    const right=ganttScaleDateToX(addDays(newEnd, 1));
+    const minW=Math.max(SCALE_COL_W[ganttScale]/7, 4);
     bar.style.left=left+'px';
-    bar.style.width=width+'px';
+    bar.style.width=Math.max(right-left, minW)+'px';
+    bar.style.opacity='1';
   }
-  // update dep arrows live
   updateDepArrows(id, newStart, newEnd);
-  showTooltip(`${d2s(newStart)} → ${d2s(newEnd)} (${Math.round((newEnd-newStart)/86400000)+1}日間)`);
+  showTooltip(`${d2s(newStart)} → ${d2s(newEnd)} (${Math.round((s2d(d2s(newEnd))-s2d(d2s(newStart)))/86400000)+1}日間)`);
 }
 
 function onGanttMouseUp(e){
@@ -3961,12 +3986,43 @@ function onGanttMouseUp(e){
   document.body.style.cursor='';
   hideTooltip();
 
-  if(!moved)return;
-
-  const dx=e.clientX-startOffX;
-  const deltaDays=Math.round(dx/DAY_W);
   const t=tasks.find(x=>x.id===id);
+
+  // ── ドラッグ未移動 or データ変更不要 ──
+  // moved フラグはムーブ中に整数日数が1以上変化したときのみ true
+  if(!moved){
+    // バーを確実に元の座標に戻す（ドラッグ中の一時移動をリセット）
+    if(t){
+      const bar=document.querySelector(`.gantt-bar[data-id="${id}"]`);
+      if(bar){
+        const left=Math.max(0, ganttScaleDateToX(origStart));
+        const right=ganttScaleDateToX(addDays(origEnd, 1));
+        const minW=Math.max(SCALE_COL_W[ganttScale]/7, 4);
+        bar.style.left=left+'px';
+        bar.style.width=Math.max(right-left, minW)+'px';
+      }
+    }
+    return; // データ変更・再描画なし
+  }
+
+  // ── 日程変更を確定 ──
   if(!t)return;
+  const dx=e.clientX-startOffX;
+  const deltaDays=dragDxToDeltaDays(dx, origStart);
+
+  // deltaDays=0 で moved=true のケース（ドラッグ中は動いたが戻した場合）
+  // → データ変更なし・バーを元に戻すだけ
+  if(deltaDays===0){
+    const bar=document.querySelector(`.gantt-bar[data-id="${id}"]`);
+    if(bar){
+      const left=Math.max(0, ganttScaleDateToX(origStart));
+      const right=ganttScaleDateToX(addDays(origEnd, 1));
+      const minW=Math.max(SCALE_COL_W[ganttScale]/7, 4);
+      bar.style.left=left+'px';
+      bar.style.width=Math.max(right-left, minW)+'px';
+    }
+    return;
+  }
 
   pushUndo('日程変更：'+t.name);
   if(action==='move'){
@@ -3983,8 +4039,23 @@ function onGanttMouseUp(e){
   }
 
   saveToLS();
-  // re-render to sync list panel dates too
+
+  // ── 再描画：スクロール位置（上下・左右）を保存して復元 ──
+  _ganttJustDragged=true;
+  const ganttRoot=document.getElementById('gantt-root');
+  const savedScrollLeft=ganttRoot?ganttRoot.scrollLeft:0;
+  const savedScrollTop =ganttRoot?ganttRoot.scrollTop:0;
+
   renderAll();
+
+  requestAnimationFrame(()=>{
+    const el=document.getElementById('gantt-root');
+    if(el){
+      el.scrollLeft=savedScrollLeft;
+      el.scrollTop =savedScrollTop;
+    }
+    _ganttJustDragged=false;
+  });
 }
 
 function updateDepArrows(movingId, newStart, newEnd){
@@ -4408,6 +4479,8 @@ function updateStats(){
   const leafTasks=tasks.filter(t=>t.type==='task');
   const done=leafTasks.filter(t=>t.status==='done').length;
   const doing=leafTasks.filter(t=>t.status==='doing').length;
+  // 非表示フィルターボタンの件数・表示/非表示を常に最新に保つ
+  updateHiddenBtn();
   const today=new Date();today.setHours(0,0,0,0);
   const overdue=tasks.filter(t=>t.type!=='folder'&&t.end&&new Date(t.end)<today&&t.status!=='done').length;
   const pct=leafTasks.length?Math.round(done/leafTasks.length*100):0;
@@ -4523,7 +4596,8 @@ function selectTask(id){
   document.getElementById('detail-panel').classList.add('open');
   renderList();
   // ガントチャート表示中はタスクの開始日にスクロール
-  if(currentTab==='gantt'&&t.start&&ganttMinD){
+  // ただしバードラッグ直後はスクロールせず現在位置を維持する
+  if(currentTab==='gantt'&&t.start&&ganttMinD&&!_ganttJustDragged){
     requestAnimationFrame(()=>{
       const el=document.getElementById('gantt-root');
       if(!el) return;
@@ -4536,6 +4610,9 @@ function selectTask(id){
 
 let _dpUndoTimer=null;
 let _dpUndoField=null;
+// 詳細パネルの再描画ループを防ぐフラグ
+let _dpRendering=false;
+
 function dpUpdate(field,val){
   if(guardReadOnly()) return;
   const t=tasks.find(x=>x.id===selectedTaskId);if(!t)return;
@@ -4545,11 +4622,25 @@ function dpUpdate(field,val){
     _dpUndoField=field;
   }
   clearTimeout(_dpUndoTimer);
-  _dpUndoTimer=setTimeout(()=>{_dpUndoField=null;},1000); // 1秒操作がなければ次の編集は新規履歴
+  _dpUndoTimer=setTimeout(()=>{_dpUndoField=null;},1000);
   t[field]=val;
   if(field==='name')document.getElementById('dp-title').textContent=val;
-  saveToLS();
-  renderAll();
+  // localStorage への即時保存（軽量）
+  saveCurrentTasks();
+  try{ localStorage.setItem(LS_KEY, JSON.stringify({projects,currentProjectId,_projUid,_uid,users,currentUserId,_savedAt:Date.now()})); }catch(e){}
+  // 再描画＋OneDrive保存はデバウンスして300ms後に1回だけ実行
+  clearTimeout(dpUpdate._timer);
+  dpUpdate._timer=setTimeout(()=>{
+    if(_dpRendering) return;
+    _dpRendering=true;
+    renderAll();
+    // OneDrive保存はrenderAllの後に一度だけ実行
+    if(storageMode==='csvFile'&&csvDirHandle&&isEditMode){
+      const data={projects,currentProjectId,_projUid,_uid,users,currentUserId,_savedAt:Date.now()};
+      saveToCsvDir(data);
+    }
+    _dpRendering=false;
+  },300);
 }
 
 function dpUpdateDeps(val){
